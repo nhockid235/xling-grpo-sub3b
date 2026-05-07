@@ -1,0 +1,29 @@
+# SFT config cho Qwen2.5-1.5B-Instruct
+# Chạy: bash scripts/train_sft.sh qwen15b <condition> <seed>
+
+extends: base.yaml
+
+model_short: qwen15b
+model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+
+sft:
+  learning_rate: 5.0e-6
+  num_train_epochs: 1
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4   # effective 16
+  max_seq_length: 2048
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  bf16: true
+  gradient_checkpointing: true
+  save_strategy: epoch
+  logging_steps: 10
+  packing: false
+
+lora:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj]
+  task_type: CAUSAL_LM

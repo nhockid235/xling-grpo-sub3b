@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this code or paper, please cite it as below."
+title: "Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning"
+type: software
+authors:
+  - family-names: "Dang"
+    given-names: "Vu"
+    email: "vu.dh4494@gmail.com"
+date-released: "2026-05-07"
+license: Apache-2.0
+repository-code: "https://github.com/anonymous/xling-grpo-sub3b"
+preferred-citation:
+  type: article
+  title: "Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning"
+  authors:
+    - family-names: "Dang"
+      given-names: "Vu"
+  journal: "arXiv preprint"
+  year: 2026

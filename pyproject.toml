@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xling-grpo-sub3b"
+version = "0.1.0"
+description = "Cross-lingual GRPO transfer study for sub-3B math reasoning models"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Vu Dang", email = "vu.dh4494@gmail.com" }]
+requires-python = ">=3.11,<3.13"
+
+dependencies = [
+    "torch==2.4.1",
+    "transformers==4.46.3",
+    "trl>=0.15.0,<0.16.0",
+    "vllm==0.7.2",
+    "accelerate==1.2.1",
+    "peft==0.14.0",
+    "datasets>=2.21.0",
+    "sympy<1.13",
+    "math-verify>=0.5.0",
+    "fasttext-wheel>=0.9.2",
+    "datasketch>=1.6.0",
+    "xxhash>=3.0",
+    "wandb>=0.18.0",
+    "pandas>=2.2.0",
+    "numpy<2.0",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6.0",
+    "mypy>=1.10",
+]
+analysis = [
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "scipy>=1.13",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true

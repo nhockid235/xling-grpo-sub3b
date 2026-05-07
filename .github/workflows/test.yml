@@ -1,0 +1,89 @@
+name: tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pytest:
+    name: pytest (no GPU)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install lightweight deps (no torch/transformers/trl/vllm)
+        run: |
+          python -m pip install --upgrade pip
+          # Pin only what is needed cho non-GPU tests:
+          pip install \
+            pytest \
+            pytest-cov \
+            pyyaml \
+            "datasets>=2.21.0" \
+            "datasketch>=1.6.0" \
+            xxhash \
+            "sympy<1.13" \
+            math-verify \
+            pandas \
+            matplotlib
+
+      - name: Skip lid.176.bin tests (CI doesn't download fastText)
+        run: |
+          # Tests đã đánh dấu skip với reason="needs lid.176.bin" — pytest tự handle.
+          # Tests cần torch/transformers/trl sẽ tự fail ImportError nếu try, nên ta
+          # whitelist các test files không phụ thuộc heavy ML deps.
+          echo "Running CI-safe test subset"
+
+      - name: Run pytest (CI-safe subset)
+        working-directory: .
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -v --tb=short \
+            tests/test_io.py \
+            tests/test_seed.py \
+            tests/test_eval_parsing.py \
+            tests/test_dataset_utils.py \
+            tests/test_grpo_reward_path.py \
+            tests/test_rewards_correctness.py \
+            tests/test_rewards_format.py \
+            tests/test_rewards_length.py \
+            tests/test_rewards_tag.py \
+            tests/test_rewards_lang.py \
+            tests/test_decontaminate.py \
+            tests/test_eval_adapters.py \
+            tests/test_eval_amc23.py \
+            tests/test_analysis.py \
+            tests/test_make_tables.py \
+            tests/test_sanity_check.py
+
+      - name: Upload coverage (placeholder)
+        if: success() && false   # disabled until codecov token added
+        run: echo "TODO: pytest --cov=src --cov-report=xml + codecov upload"
+
+  lint:
+    name: ruff
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check src/ scripts/ data/ tests/ --output-format=github
+        continue-on-error: true   # warn only — do not block PR

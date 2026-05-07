@@ -1,0 +1,52 @@
+# Shared base config — common settings, paths, wandb
+# Mọi config khác extend từ đây
+
+project: xling-grpo-sub3b
+seed: 42
+seeds_to_run: [42, 123, 7]  # 3 seeds for reproducibility (run 1 first, scale up)
+
+paths:
+  data_root: data/
+  data_processed: data/processed/
+  data_raw: data/raw/
+  test_sets: data/test_sets/
+  results_root: results/
+  sft_ckpt_root: results/sft/
+  grpo_ckpt_root: results/grpo/
+  eval_root: results/eval/
+  master_csv: results/master.csv
+  fasttext_model: data/raw/lid.176.bin
+
+wandb:
+  project: xling-grpo-sub3b
+  entity: null  # set via env or CLI
+
+precision:
+  training: bfloat16
+  eval: bfloat16
+
+decontamination:
+  ngram: 8
+  test_sets: [gsm8k, math500, aime2024, mgsm, msvamp]
+
+# Models — short name → HF ID
+models:
+  qwen15b: Qwen/Qwen2.5-1.5B-Instruct
+  qwen3b: Qwen/Qwen2.5-3B-Instruct
+  llama3b: meta-llama/Llama-3.2-3B-Instruct
+  deepseek_r1_distill_15b: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B  # cho W2 gating
+
+# Conditions
+conditions:
+  en:
+    train_dataset: data/processed/en_train_7k.jsonl
+    rewards: [correctness, format, length, tag]
+    reward_weights: [1.0, 1.0, 1.0, 1.0]
+  vi:
+    train_dataset: data/processed/vi_train_7k.jsonl
+    rewards: [correctness, format, length, tag]
+    reward_weights: [1.0, 1.0, 1.0, 1.0]
+  enlang:
+    train_dataset: data/processed/en_train_7k.jsonl
+    rewards: [correctness, format, length, tag, lang]
+    reward_weights: [1.0, 1.0, 1.0, 1.0, 1.0]

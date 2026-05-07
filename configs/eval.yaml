@@ -1,0 +1,83 @@
+# Eval config — vLLM settings cho tất cả benchmarks
+
+extends: base.yaml
+
+vllm:
+  dtype: bfloat16
+  max_model_len: 16384         # bumped: long CoT thinking needs >4096
+  gpu_memory_utilization: 0.85
+  enforce_eager: false
+  trust_remote_code: false
+
+generation:
+  temperature: 0.0           # greedy cho pass@1
+  top_p: 1.0
+  max_tokens: 8192            # bumped: Open-RS uses 32768; long CoT needs >4096
+  stop: []                    # KHÔNG stop sớm — let model emit \\boxed{} naturally
+  seed: 42
+
+# Per-benchmark settings (override generation)
+benchmarks:
+  gsm8k:
+    hf_id: openai/gsm8k
+    config: main
+    split: test
+    n_samples: null            # null = all
+    fields:
+      problem: question
+      answer: answer
+    extract_pattern: '#### (.+)'   # GSM8K answer pattern
+    metrics: [pass_at_1]
+
+  math500:
+    hf_id: HuggingFaceH4/MATH-500
+    split: test
+    n_samples: 500
+    fields:
+      problem: problem
+      answer: answer
+      level: level
+    metrics: [pass_at_1]
+
+  aime2024:
+    hf_id: Maxwell-Jia/AIME_2024
+    split: train               # AIME_2024 chỉ có "train" split
+    n_samples: 30
+    fields:
+      problem: Problem            # CAPITAL — AIME 2024 schema
+      answer: Answer
+      id: ID
+    metrics: [pass_at_1, maj_at_8]
+    n_seeds_for_maj8: 8
+
+  amc23:
+    hf_id: knoveleng/AMC-23      # W2 gating benchmark — match Open-RS evaluate.py
+    split: train                  # 40 problems, single split
+    n_samples: 40
+    fields:
+      problem: problem            # also has 'question' alias
+      answer: answer
+      id: id
+    metrics: [pass_at_1, maj_at_4]
+    n_seeds_for_maj: 4
+    note: "License unspecified on Hub. Cite as 'AoPS wiki 2023 AMC 12A/12B'."
+
+  mgsm:
+    hf_id: juletxara/mgsm
+    split: test
+    languages: [en, es, fr, de, ru, zh, ja, th, sw, bn]   # 10 guaranteed
+    n_samples: 250
+    fields:
+      problem: question
+      answer: answer_number
+    metrics: [pass_at_1, lang_consistency]
+
+  msvamp:
+    hf_id: Mathoctopus/MSVAMP
+    split: test
+    languages: [bn, zh, en, fr, de, ja, ru, es, sw, th]
+    n_samples: null
+    fields:
+      problem: question
+      answer: answer_number
+    metrics: [pass_at_1, lang_consistency]

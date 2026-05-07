@@ -1,0 +1,52 @@
+# GRPO config — Cond A (English-only training)
+# Verified Open-RS Exp2 hyperparams (CLAUDE.md § Hyperparameters)
+
+extends: base.yaml
+
+condition: en
+train_dataset: data/processed/en_train_7k.jsonl
+
+rewards:
+  - name: correctness
+    weight: 1.0
+  - name: format
+    weight: 1.0
+  - name: length
+    weight: 1.0
+  - name: tag
+    weight: 1.0
+# Cond A KHÔNG dùng lang reward
+
+grpo:
+  learning_rate: 1.0e-6
+  num_generations: 6              # Open-RS verified
+  max_prompt_length: 512
+  max_completion_length: 3584     # Open-RS Exp2
+  temperature: 0.7                # Open-RS verified
+  beta: 0.04                      # KL
+  per_device_train_batch_size: 6
+  gradient_accumulation_steps: 16  # 1× A100, eff batch = 96
+  max_steps: 500
+  save_steps: 50                   # peak ckpt @ 50-100
+  logging_steps: 5
+  warmup_ratio: 0.1
+  lr_scheduler_type: cosine_with_min_lr
+  lr_scheduler_kwargs:
+    min_lr_rate: 0.1
+  bf16: true
+  attn_implementation: flash_attention_2
+  gradient_checkpointing: true
+  gradient_checkpointing_kwargs:
+    use_reentrant: false
+  use_vllm: true
+  vllm_gpu_memory_utilization: 0.7
+  vllm_max_model_len: 4608
+  num_train_epochs: 1
+
+# LoRA fallback nếu OOM trên 3B; mặc định full-param theo Open-RS
+lora:
+  enabled: false
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj]

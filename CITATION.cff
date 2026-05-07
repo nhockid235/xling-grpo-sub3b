@@ -8,7 +8,7 @@ authors:
     email: "vu.dh4494@gmail.com"
 date-released: "2026-05-07"
 license: Apache-2.0
-repository-code: "https://github.com/anonymous/xling-grpo-sub3b"
+repository-code: "https://github.com/nhockid235/xling-grpo-sub3b"
 preferred-citation:
   type: article
   title: "Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning"

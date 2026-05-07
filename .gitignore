@@ -72,4 +72,4 @@ paper/*.toc
 paper/*.synctex.gz
 paper/*.fls
 paper/*.fdb_latexmk
-paper/main.pdf
+# paper/main.pdf — keep PDF in repo for GitHub preview

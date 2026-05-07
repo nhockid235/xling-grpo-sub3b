@@ -1,0 +1,52 @@
+name: Reproduction report
+description: Share results from running the pipeline at different hyperparameters / scale
+title: "[Reproduction] "
+labels: ["reproduction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying to reproduce. Reproduction reports — both successful and partial — are highly valued.
+
+  - type: input
+    id: setup
+    attributes:
+      label: Hardware setup
+      description: GPU model, count, VRAM
+      placeholder: 1× A100 80GB
+    validations:
+      required: true
+
+  - type: input
+    id: arm
+    attributes:
+      label: Which arm did you run?
+      description: A1 / A2 / A3 / a custom variant
+      placeholder: A1 (reproduce Open-RS RS2)
+    validations:
+      required: true
+
+  - type: textarea
+    id: results
+    attributes:
+      label: Eval results
+      description: AMC23 / MATH-500 / AIME-2024 pass@1 (and maj@N if applicable)
+      placeholder: |
+        AMC23 pass@1: 56.0%
+        MATH-500 pass@1: 60.0%
+        AIME-2024 pass@1: 12.5%
+    validations:
+      required: true
+
+  - type: textarea
+    id: deltas
+    attributes:
+      label: Deviations from the published configs
+      description: List anything you changed — base model, hyperparameters, data, seed
+      placeholder: seed=123 (default 42), G=4 instead of 6 to fit memory
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Issues encountered, surprises, follow-up questions

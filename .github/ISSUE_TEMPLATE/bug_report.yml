@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a bug in the training, eval, or analysis code
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill out the sections below.
+
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the codebase? (e.g., src/rewards/format.py, src/eval/runner.py, scripts/train_grpo.sh)
+      placeholder: src/eval/aime.py
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal commands or code that triggers the bug
+      render: bash
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Output of `pip list | grep -E "torch|transformers|trl|vllm|peft|accelerate"` and `nvidia-smi --query-gpu=name,driver_version --format=csv,noheader`
+      render: text
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error log / stack trace
+      render: shell

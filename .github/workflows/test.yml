@@ -71,9 +71,8 @@ jobs:
             tests/test_make_tables.py \
             tests/test_sanity_check.py
 
-      - name: Upload coverage (placeholder)
-        if: success() && false   # disabled until codecov token added
-        run: echo "TODO: pytest --cov=src --cov-report=xml + codecov upload"
+      # Coverage upload disabled until codecov token added.
+      # Re-enable later: pytest --cov=src --cov-report=xml && codecov upload
 
   lint:
     name: ruff

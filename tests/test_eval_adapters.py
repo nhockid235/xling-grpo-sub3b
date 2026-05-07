@@ -246,9 +246,13 @@ def test_msvamp_accepts_each_listed_language():
 
 
 def test_build_prompt_default_system():
+    """Phase 8: DEFAULT_SYSTEM_PROMPT is None (Open-RS style — no system message,
+    eval template embedded in user message via EVAL_QUERY_TEMPLATE)."""
     p = build_prompt("What is 2+2?")
-    assert DEFAULT_SYSTEM_PROMPT in p
+    assert DEFAULT_SYSTEM_PROMPT is None
     assert "What is 2+2?" in p
+    # Open-RS template signature
+    assert "step by step" in p.lower() or "boxed" in p.lower()
 
 
 def test_build_prompt_with_tokenizer_chat_template():

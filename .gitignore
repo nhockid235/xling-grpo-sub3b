@@ -73,3 +73,7 @@ paper/*.synctex.gz
 paper/*.fls
 paper/*.fdb_latexmk
 # paper/main.pdf — keep PDF in repo for GitHub preview
+
+# arXiv submission bundle (regenerable via paper/build_arxiv_bundle.sh)
+paper/arxiv_submission/
+paper/arxiv_submission.tar.gz

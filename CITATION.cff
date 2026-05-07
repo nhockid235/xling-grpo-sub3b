@@ -6,14 +6,22 @@ authors:
   - family-names: "Dang"
     given-names: "Vu"
     email: "vu.dh4494@gmail.com"
+    affiliation: "Independent Researcher"
 date-released: "2026-05-07"
 license: Apache-2.0
 repository-code: "https://github.com/nhockid235/xling-grpo-sub3b"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20061328"
+    description: "Zenodo archive (preprint)"
 preferred-citation:
   type: article
   title: "Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning"
   authors:
     - family-names: "Dang"
       given-names: "Vu"
-  journal: "arXiv preprint"
+      affiliation: "Independent Researcher"
+  doi: "10.5281/zenodo.20061328"
+  url: "https://doi.org/10.5281/zenodo.20061328"
   year: 2026
+  publisher: "Zenodo"

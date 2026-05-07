@@ -1,11 +1,17 @@
 # xling-grpo-sub3b
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20061328.svg)](https://doi.org/10.5281/zenodo.20061328)
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Paper License](https://img.shields.io/badge/Paper-CC--BY--4.0-orange.svg)](https://creativecommons.org/licenses/by/4.0/)
+
 Code, configs, and checkpoints for the paper:
 
 > **Beyond English-Only GRPO: Training Language and Auxiliary Reward as
 > Implicit Regularizers in Sub-3B Math Reasoning**
 > *Vu Dang, 2026.*
-> [arXiv:TBD] · [PDF: paper/main.pdf]
+> Zenodo: [doi:10.5281/zenodo.20061328](https://doi.org/10.5281/zenodo.20061328)
+> · arXiv: TBD (pending endorsement)
+> · PDF: [paper/main.pdf](paper/main.pdf)
 
 We compare three GRPO post-training arms at sub-3B scale on a single A100 + LoRA budget:
 
@@ -75,15 +81,17 @@ Verbatim Open-RS `lighteval` `MATH_QUERY_TEMPLATE` (no system prompt; template e
 
 ```bibtex
 @misc{dang2026beyond,
-  title={Beyond English-Only GRPO: Training Language and Auxiliary Reward
-         as Implicit Regularizers in Sub-3B Math Reasoning},
-  author={Dang, Vu},
-  year={2026},
-  eprint={TBD},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+  title  = {Beyond English-Only GRPO: Training Language and Auxiliary Reward
+            as Implicit Regularizers in Sub-3B Math Reasoning},
+  author = {Dang, Vu},
+  year   = {2026},
+  doi    = {10.5281/zenodo.20061328},
+  url    = {https://doi.org/10.5281/zenodo.20061328},
+  publisher = {Zenodo}
 }
 ```
+
+(arXiv preprint pending endorsement; will add `eprint` field once published.)
 
 ## License
 

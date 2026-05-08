@@ -80,3 +80,10 @@ paper/arxiv_submission.tar.gz
 
 # Internal development logs and notes — kept local only
 reports/
+
+# IEEE build intermediates (regenerable via paper/ieee/build.sh)
+paper/ieee/main.aux
+paper/ieee/main.bbl
+paper/ieee/main.out
+paper/ieee/main.log
+paper/ieee/main.toc

@@ -20,9 +20,18 @@
 \usepackage{amsmath, amssymb}
 \usepackage{hyperref}
 \usepackage{tcolorbox}
+\usepackage{url}
 
 % Embed fonts cho arXiv (pdftex only --- comment out cho tectonic/xelatex)
 \ifdefined\pdfinclusioncopyfonts \pdfinclusioncopyfonts=1 \fi
+
+% Soft line-breaking để giảm overfull hbox warnings (long URLs, paths)
+\setlength{\emergencystretch}{3em}
+\hyphenpenalty=1000   % discourage normal-word hyphenation
+\sloppy
+
+% Allow breaking long texttt strings at slashes/hyphens
+\renewcommand{\UrlBreaks}{\do\/\do-\do_\do.\do=\do?\do&\do\@}
 
 % Macros
 \newcommand{\armA}{\textsc{a1}}
@@ -141,7 +150,8 @@ on Chinese; our setup admits direct extension to other languages.
 \label{sec:method}
 
 \subsection{Base model and training pipeline}
-All three arms start from \texttt{deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B}~\cite{deepseekR1_2025},
+All three arms start from
+\path{deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B}~\cite{deepseekR1_2025},
 the strongest publicly-available sub-2B distilled reasoning checkpoint. We \emph{do not}
 use a separate SFT stage (matching Open-RS): training is GRPO directly from the
 distilled base. Each cell is a single (arm, seed) pair: $\textsc{base}
@@ -151,18 +161,24 @@ distilled base. Each cell is a single (arm, seed) pair: $\textsc{base}
 \label{sec:rewards}
 All arms share two rewards (Open-RS RS2 setup):
 \begin{itemize}\itemsep0pt
-\item $R_1$ \textbf{correctness}: $\mathbb{1}[\text{Math-Verify}(\hat{y}, y^\star)]$,
-extracting $\hat{y}$ from \texttt{<answer>} tag, then \texttt{\textbackslash boxed\{$\cdot$\}},
-then last-number fallback.
-\item $R_2$ \textbf{format}: $\mathbb{1}[\text{regex match
-  \texttt{<think>...</think>...<answer>...</answer>}}]$, matching the
-training system prompt template.
+\item $R_1$ \textbf{correctness}: indicator of Math-Verify equivalence between
+extracted answer $\hat{y}$ and gold $y^\star$. Extraction priority:
+\texttt{<answer>} tag, then \texttt{\textbackslash boxed\{\}}, then last-number fallback.
+\item $R_2$ \textbf{format}: indicator that the completion matches a regex requiring
+both \texttt{<think>...</think>} and \texttt{<answer>...</answer>} blocks, in that
+order. Matches the training system prompt template.
 \end{itemize}
-Arm \armC{} adds $R_5$ \textbf{lang-consistency}:
-\[ R_5(\textbf{p}, \textbf{c}) = \begin{cases}
-0 & |\textbf{c}| < 10 \text{ tokens (langID unreliable)} \\
-\mathbb{1}[\text{fastText}(\textbf{c}) = \text{lang}(\textbf{p})] & \text{otherwise}
-\end{cases} \]
+Arm \armC{} adds $R_5$ \textbf{lang-consistency}, which fires only when the completion
+is at least 10 tokens (fastText is unreliable on shorter strings); above that
+threshold, $R_5 = 1$ if fastText predicts the prompt language matches the completion
+language and $0$ otherwise. Formally:
+\[
+R_5(\mathbf{p}, \mathbf{c}) =
+\begin{cases}
+0 & |\mathbf{c}| < 10 \\
+\mathbb{1}[\text{lang}(\mathbf{c}) = \text{lang}(\mathbf{p})] & \text{else.}
+\end{cases}
+\]
 fastText langID uses the public \texttt{lid.176.bin} model. Note: with English
 training data, $R_5$ fires uniformly at 1.0 across nearly all generations
 (model rarely code-switches on English prompts). We discuss the implication in §\ref{sec:discussion}.
@@ -172,9 +188,9 @@ training data, $R_5$ fires uniformly at 1.0 across nearly all generations
 \item[\armA{} (English-only):] training data = \texttt{knoveleng/open-rs}
 (7K English problems, no SFT). Rewards: $R_1+R_2$.
 \item[\armB{} (Vietnamese-translated):] training data =
-\texttt{5CD-AI/Vietnamese-MetaMathQA-40K-gg-translated} (5{,}203 records extracted
+\path{5CD-AI/Vietnamese-MetaMathQA-40K-gg-translated} (5{,}203 records extracted
 from a 7K random subset, after filtering responses that lack the
-``Đáp án là'' answer pattern). Rewards: $R_1+R_2$.
+``\DJ\'ap \'an l\`a'' (Vietnamese for ``the answer is'') pattern). Rewards: $R_1+R_2$.
 \item[\armC{} (English + $R_5$):] same training data as \armA{}, rewards
 $R_1+R_2+R_5$ with $R_5$'s ``no\_penalty\_for\_en'' flag disabled so it can fire
 on every prompt.
@@ -338,7 +354,7 @@ Our findings about \emph{relative} arm comparisons may interact with LoRA's
 limited update capacity in unknown ways.
 
 \textbf{\armB{} dataset is not a faithful translation of \armA{}.} \armB{} uses
-\texttt{5CD-AI/Vietnamese-MetaMathQA-40K-gg-translated}, a Google-translated
+\path{5CD-AI/Vietnamese-MetaMathQA-40K-gg-translated}, a Google-translated
 MetaMathQA, not a translation of the same Open-RS subset used in \armA{}.
 Confounds between dataset content and language make our Finding 2 a
 language-\emph{plus}-distribution effect rather than a clean language-only effect.

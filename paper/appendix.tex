@@ -47,13 +47,13 @@ prompt (template embedded in user message).
 \begin{itemize}\itemsep0pt
 \item \armA{}, \armC{} training: \texttt{knoveleng/open-rs} (MIT, 7K, \texttt{split=train}).
 \item \armB{} training:
-\texttt{5CD-AI/Vietnamese-meta-math-MetaMathQA-40K-gg-translated}; license unset
+\path{5CD-AI/Vietnamese-meta-math-MetaMathQA-40K-gg-translated}; license unset
 on Hub (parent MetaMathQA = MIT). We extracted 5{,}203 records from a 7K random
 subset by retaining only those whose Vietnamese response contains the
 ``\DJ\'ap \'an l\`a'' (Vietnamese for ``the answer is'') answer marker.
-\item Eval: \texttt{HuggingFaceH4/MATH-500} (500 test), \texttt{Maxwell-Jia/AIME\_2024}
+\item Eval: \path{HuggingFaceH4/MATH-500} (500 test), \path{Maxwell-Jia/AIME_2024}
 (MIT, 30 records; field names capitalized: \texttt{Problem}, \texttt{Solution},
-\texttt{Answer}, \texttt{ID}), \texttt{knoveleng/AMC-23} (40 records; license
+\texttt{Answer}, \texttt{ID}), \path{knoveleng/AMC-23} (40 records; license
 unspecified on Hub, originally AoPS wiki content).
 \end{itemize}
 
@@ -115,9 +115,9 @@ verified independent of this bug.
 \item Eval pipeline reports a $-12.9$ pp gap to Open-RS reported AMC23 base
 (50.0\% vs 62.9\%) and a $-23.4$ pp gap on MATH-500 (59.4\% vs 82.8\%) even with
 verbatim Open-RS \texttt{lighteval} prompt. Suspected causes: \texttt{Math-Verify}
-configuration differences between our adapter and Open-RS's
-\texttt{LatexExtractionConfig(boxed\_match\_priority=0)}, or vLLM tokenizer edge
-cases. We report numbers vs our own base rather than vs Open-RS reported.
+configuration differences between our adapter and Open-RS's parser config (boxed-match
+priority), or vLLM tokenizer edge cases. We report numbers vs our own base rather
+than vs Open-RS reported.
 \item AIME-2024 baseline is closer to Open-RS reported ($26.7$\% vs $28.8$\%, gap
 $-2.1$ pp), suggesting eval pipeline issues are problem-difficulty-dependent.
 \end{itemize}

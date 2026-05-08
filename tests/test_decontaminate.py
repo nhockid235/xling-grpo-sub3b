@@ -1,7 +1,7 @@
-"""Pytest cho 8-gram decontamination.
+"""Tests for 8-gram decontamination.
 
-Synthetic fixtures only — no HF download. Test sets are local JSONL files
-materialised inside `tmp_path` and consumed via `--tests <dir>`.
+Synthetic fixtures only -- no HF download. Test sets are local JSONL files
+materialised inside ``tmp_path`` and consumed via ``--tests <dir>``.
 """
 
 from __future__ import annotations
@@ -75,12 +75,11 @@ def test_ngrams_short_input_falls_back_to_full_join():
 
 
 # ---------------------------------------------------------------------------
-# Required Phase 2 tests
 # ---------------------------------------------------------------------------
 
 
 def test_decontam_removes_exact_match(tmp_path: Path):
-    """Training sample chứa nguyên text test → must be removed."""
+    """Training sample containing the full test text must be removed."""
     tests_dir = _write_test_dir(tmp_path)
     train_path = tmp_path / "train.jsonl"
     out_path = tmp_path / "clean.jsonl"
@@ -111,7 +110,7 @@ def test_decontam_removes_exact_match(tmp_path: Path):
 
 
 def test_decontam_keeps_unrelated(tmp_path: Path):
-    """Training sample không match test 8-gram → kept."""
+    """Training samples not matching any test 8-gram must be kept."""
     tests_dir = _write_test_dir(tmp_path)
     train_path = tmp_path / "train.jsonl"
     out_path = tmp_path / "clean.jsonl"
@@ -149,7 +148,7 @@ def test_decontam_keeps_unrelated(tmp_path: Path):
 def test_decontam_asymmetric(tmp_path: Path):
     """Test files must remain byte-for-byte identical after decontamination.
 
-    CLAUDE.md pitfall #12: never filter test data.
+    Decontamination is asymmetric: never filter test data.
     """
     tests_dir = _write_test_dir(tmp_path)
     gsm_path = tests_dir / "gsm8k.jsonl"

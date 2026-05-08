@@ -1,8 +1,7 @@
 """Pytest cho R2 format reward — Open-RS verbatim format.
 
 Phase 8.2 (2026-05-06): R2 require BOTH `<think>...</think>` AND
-`<answer>...</answer>` blocks (matches Open-RS training system_prompt spec).
-"""
+`<answer>...</answer>` blocks (matches Open-RS training system_prompt spec)."""
 
 from __future__ import annotations
 
@@ -10,7 +9,7 @@ import pytest
 
 
 def test_r2_both_tags_returns_one():
-    """Open-RS native: cần cả 2 cặp tag."""
+    """"""
     from src.rewards.format import r2_format
     out = r2_format(
         prompts=["p"] * 3,
@@ -37,7 +36,7 @@ def test_r2_no_tags_returns_zero():
 
 
 def test_r2_only_think_returns_zero():
-    """Có `<think>...</think>` nhưng thiếu `<answer>` → 0."""
+    """"""
     from src.rewards.format import r2_format
     out = r2_format(
         prompts=["p"],
@@ -47,7 +46,7 @@ def test_r2_only_think_returns_zero():
 
 
 def test_r2_only_answer_returns_zero():
-    """Có `<answer>` nhưng không `<think>...</think>` → 0."""
+    """"""
     from src.rewards.format import r2_format
     out = r2_format(
         prompts=["p"],
@@ -57,7 +56,7 @@ def test_r2_only_answer_returns_zero():
 
 
 def test_r2_wrong_order_returns_zero():
-    """`<answer>` trước `<think>` → KHÔNG match (regex order required)."""
+    """"""
     from src.rewards.format import r2_format
     out = r2_format(
         prompts=["p"],

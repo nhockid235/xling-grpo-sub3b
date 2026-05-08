@@ -56,7 +56,7 @@ def test_gsm8k_too_low():
 
 
 def test_mgsm_gap_too_small():
-    """Cond A và Cond B same MGSM-vi → gap < 1pp → fail."""
+    """"""
     df = _make_df(
         ("qwen15b_en_42", "qwen15b", "en", 42, "grpo", 500, "gsm8k", "", 0.55, "", "", 300, 1300),
         ("qwen15b_en_42", "qwen15b", "en", 42, "grpo", 500, "mgsm", "vi", 0.500, "", 0.85, 300, 250),

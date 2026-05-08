@@ -1,14 +1,12 @@
 """R5 — Language consistency reward (fastText langID).
 
-Reward 1.0 nếu fastText predicts response language match prompt language.
 ONLY active for non-EN prompts. EN prompts return 0.0 (no penalty).
 Short responses (<10 tokens) return 0.0 (fastText unreliable).
 
 Used in: Cond C (enlang) only.
 
 Setup:
-    wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P data/raw/
-"""
+    wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P data/raw/"""
 
 from __future__ import annotations
 
@@ -18,13 +16,11 @@ from typing import Any
 
 from src.rewards import register
 
-# Module-level cache cho fastText model: load once, reuse cho mọi call.
-# Key = absolute path string; value = loaded model object hoặc None nếu file thiếu.
 _FT_MODEL: dict[str, Any] = {}
 
 
 def _load_fasttext(path: str | Path) -> Any | None:
-    """Lazy load fastText model. Return None nếu file thiếu (graceful degrade)."""
+    """Load fastText langID model with caching; warns and returns None on failure."""
     abs_path = str(Path(path).expanduser().resolve())
     if abs_path in _FT_MODEL:
         return _FT_MODEL[abs_path]
@@ -43,7 +39,6 @@ def _load_fasttext(path: str | Path) -> Any | None:
     try:
         import fasttext  # type: ignore
 
-        # fastText prints C-level warnings on load; suppress nếu có thể
         model = fasttext.load_model(abs_path)
         _FT_MODEL[abs_path] = model
         return model
@@ -58,11 +53,8 @@ def _load_fasttext(path: str | Path) -> Any | None:
 
 
 def _detect_lang(model: Any, text: str) -> str | None:
-    """Detect ISO-639-1 language code (e.g. 'en', 'vi', 'zh') from text.
-
-    fastText label format: '__label__<iso>'. Input phải là single line.
-    """
-    # IMPORTANT: fastText input must be single-line — strip newlines/CR
+    """Detect ISO-639-1 language code (e.g. 'en', 'vi', 'zh') from text."""
+    # IMPORTANT: fastText input must be single-line -- strip newlines/CR
     cleaned = text.replace("\n", " ").replace("\r", " ").strip()
     if not cleaned:
         return None
@@ -70,7 +62,6 @@ def _detect_lang(model: Any, text: str) -> str | None:
         labels, _probs = model.predict(cleaned, k=1)
         if not labels:
             return None
-        # labels là tuple/list, mỗi item dạng '__label__en'
         label = labels[0]
         if label.startswith("__label__"):
             return label[len("__label__"):]
@@ -88,12 +79,10 @@ def r5_lang_consistency(
     min_response_tokens: int = 10,
     **kwargs: Any,
 ) -> list[float]:
-    """fastText langID reward — match prompt language.
+    """fastText langID reward -- 1.0 if completion language matches the prompt language.
 
-    Args:
-        fasttext_model: path đến lid.176.bin.
-        no_penalty_for_en: nếu True, prompts EN luôn return 0 (no penalty/bonus).
-        min_response_tokens: dưới ngưỡng → return 0 (fastText unreliable on short text).
+    EN prompts return 0.0 (no penalty) when ``no_penalty_for_en`` is True.
+    Completions shorter than ``min_response_tokens`` return 0.0.
 
     Returns:
         list[float] of length len(prompts), values in {0.0, 1.0}.
@@ -106,12 +95,10 @@ def r5_lang_consistency(
     n = len(prompts)
     model = _load_fasttext(fasttext_model)
     if model is None:
-        # Graceful: file thiếu → return tất cả 0.0 thay vì crash
         return [0.0] * n
 
     rewards: list[float] = []
     for prompt, completion in zip(prompts, completions):
-        # Edge: completion quá ngắn (whitespace tokens) → fastText không reliable
         if len(completion.split()) < min_response_tokens:
             rewards.append(0.0)
             continue
@@ -121,7 +108,6 @@ def r5_lang_consistency(
             rewards.append(0.0)
             continue
 
-        # No-penalty rule: prompt EN → 0.0 bất kể completion lang
         if no_penalty_for_en and expected_lang == "en":
             rewards.append(0.0)
             continue

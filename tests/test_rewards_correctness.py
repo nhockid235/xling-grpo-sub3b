@@ -41,7 +41,7 @@ def test_r1_wrong_answer_returns_zero():
 
 
 def test_r1_sympy_equivalence():
-    """Math-Verify nên match equivalent forms: 1/2 == 0.5 == 0.50."""
+    """"""
     from src.rewards.correctness import r1_correctness
 
     out = r1_correctness(

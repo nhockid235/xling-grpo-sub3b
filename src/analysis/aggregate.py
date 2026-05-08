@@ -1,11 +1,11 @@
-"""Aggregate eval JSONs → master.csv.
+"""Aggregate eval JSONs into master.csv.
 
-Schema (matching CLAUDE.md):
+Schema:
     run_id, model, condition, seed, stage, step, benchmark, language,
     pass_at_1, maj_at_8, lang_consistency, avg_tokens, n_samples
 
-Parse run_id pattern `{model}_{condition}_{seed}`. Edge case: reproduce
-Open-RS run có pattern `reproduce_openrs_rs2_{seed}` → handle riêng.
+Parses run_id pattern ``{model}_{condition}_{seed}``. Open-RS reproduction runs
+use the special pattern ``reproduce_openrs_rs2_{seed}`` and are handled separately.
 
 Usage:
     python src/analysis/aggregate.py --eval_dir results/eval/ --output results/master.csv
@@ -26,7 +26,6 @@ RUN_ID_PATTERN = re.compile(
     r"_(?P<condition>en|vi|enlang|baseline)"
     r"_(?P<seed>\d+)(?:_step\d+)?$"
 )
-# Reproduce Open-RS pattern (đặc biệt)
 REPRODUCE_PATTERN = re.compile(
     r"^reproduce_openrs_(?P<exp>rs[123])_(?P<seed>\d+)(?:_step\d+)?$"
 )
@@ -38,7 +37,6 @@ A_SERIES_PATTERN = re.compile(
 CKPT_PATTERN = re.compile(r"^ckpt(?P<step>\d+)_v\d+$")
 # Base model eval runs (untrained)
 BASE_PATTERN = re.compile(r"^base(?:_v\d+)?(?:_(?P<model>.+))?$")
-# Step extraction từ model_path metadata: ".../checkpoint-50/" → 50; "checkpoint-final" → "final"
 CKPT_STEP_PATTERN = re.compile(r"checkpoint-(?P<step>\d+|final)")
 
 
@@ -105,7 +103,7 @@ def parse_run_id(run_id: str) -> dict[str, str]:
 
 
 def parse_step(model_path: str | None) -> str:
-    """Extract step từ model_path string. Fallback 'unknown'."""
+    """Extract step from a model_path string. Falls back to 'unknown'."""
     if not model_path:
         return "unknown"
     m = CKPT_STEP_PATTERN.search(model_path)
@@ -113,7 +111,7 @@ def parse_step(model_path: str | None) -> str:
 
 
 def parse_stage(model_path: str | None) -> str:
-    """Suy ra stage (sft/grpo) từ path. Fallback 'unknown'."""
+    """Infer stage (sft/grpo) from a path. Falls back to 'unknown'."""
     if not model_path:
         return "unknown"
     if "/grpo/" in model_path or "\\grpo\\" in model_path:
@@ -124,7 +122,7 @@ def parse_stage(model_path: str | None) -> str:
 
 
 def eval_json_to_row(json_path: Path) -> dict[str, Any]:
-    """Đọc 1 eval JSON → dict tương ứng 1 row CSV."""
+    """Read one eval JSON and return a dict for one CSV row."""
     with json_path.open(encoding="utf-8") as f:
         data = json.load(f)
 
@@ -152,14 +150,13 @@ def eval_json_to_row(json_path: Path) -> dict[str, Any]:
 
 
 def aggregate(eval_dir: Path, output: Path) -> int:
-    """Walk `eval_dir/**/*.json`, parse each, write `output` CSV. Trả về số rows."""
+    """Walk `eval_dir/**/*.json`, parse each, write `output` CSV. Returns row count."""
     rows: list[dict[str, Any]] = []
     json_files = sorted(eval_dir.rglob("*.json"))
     for jf in json_files:
         try:
             rows.append(eval_json_to_row(jf))
         except (json.JSONDecodeError, KeyError) as exc:
-            # Bỏ qua file lỗi nhưng log để debug
             print(f"[aggregate] WARNING: skipping {jf}: {exc}")
             continue
 

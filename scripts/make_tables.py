@@ -1,12 +1,11 @@
-"""Generate paper LaTeX tables từ master.csv.
+"""Render LaTeX tables for the paper.
 
 Outputs (booktabs, no vertical rules):
-    paper/tables/table1_xling_transfer.tex     — 3 conditions × 6 langs MGSM
-    paper/tables/table2_en_sanity.tex           — GSM8K, MATH-500, AIME-2024
-    paper/tables/table3_lang_consistency.tex    — 3 conditions × 6 langs lang-consistency
+    paper/tables/table1_xling_transfer.tex     -- 3 conditions x 6 langs MGSM
+    paper/tables/table2_en_sanity.tex           -- GSM8K, MATH-500, AIME-2024
+    paper/tables/table3_lang_consistency.tex    -- 3 conditions x 6 langs lang-consistency
 
-Bold best per row. Bootstrap 95% CI in cells (when n_samples available).
-"""
+Bold best per row. Bootstrap 95% CI in cells (when n_samples available)."""
 
 from __future__ import annotations
 
@@ -15,7 +14,6 @@ from pathlib import Path
 
 import pandas as pd
 
-# Khớp với plot_curves
 HEADLINE_LANGS = ["en", "vi", "zh", "fr", "th", "sw"]
 HEADLINE_CONDITIONS = ["en", "vi", "enlang"]
 COND_DISPLAY = {"en": "Cond A (EN)", "vi": "Cond B (VI)", "enlang": "Cond C (EN+lang)"}
@@ -29,7 +27,7 @@ def _load_master(master_csv: Path) -> pd.DataFrame:
 
 
 def _bold_best_per_row(df: pd.DataFrame) -> pd.DataFrame:
-    """Bold giá trị max trong mỗi row (cho LaTeX)."""
+    """Format numeric cells to one decimal and wrap the per-row max in \\textbf{...}."""
     out = df.copy().astype(str)
     for idx, row in df.iterrows():
         numeric_row = pd.to_numeric(row, errors="coerce")
@@ -41,7 +39,6 @@ def _bold_best_per_row(df: pd.DataFrame) -> pd.DataFrame:
             val = row[col]
             if pd.notna(val):
                 out.at[idx, col] = f"\\textbf{{{val:.1f}}}"
-    # Format các cell không bold
     for col in df.columns:
         for idx in df.index:
             cell = out.at[idx, col]
@@ -59,8 +56,8 @@ def _render_latex_table(
     label: str,
     column_format: str | None = None,
 ) -> str:
-    """Build booktabs LaTeX. Không vertical rules."""
-    n_cols = len(df.columns) + 1  # +1 cho index
+    """Render a booktabs LaTeX table from a DataFrame."""
+    n_cols = len(df.columns) + 1  # +1 for index column
     col_fmt = column_format or ("l" + "c" * len(df.columns))
     lines = [
         "\\begin{table}[t]",

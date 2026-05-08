@@ -1,7 +1,7 @@
 # xling-grpo-sub3b
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20061328.svg)](https://doi.org/10.5281/zenodo.20061328)
-[![tests](https://github.com/nhockid235/xling-grpo-sub3b/actions/workflows/test.yml/badge.svg)](https://github.com/nhockid235/xling-grpo-sub3b/actions/workflows/test.yml)
+[![tests](https://github.com/vudang4494/xling-grpo-sub3b/actions/workflows/test.yml/badge.svg)](https://github.com/vudang4494/xling-grpo-sub3b/actions/workflows/test.yml)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/Code-Apache--2.0-blue.svg)](LICENSE)
 [![Paper License](https://img.shields.io/badge/Paper-CC--BY--4.0-orange.svg)](https://creativecommons.org/licenses/by/4.0/)

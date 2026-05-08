@@ -1,9 +1,8 @@
 """AIME 2024 eval adapter.
 
-HF: Maxwell-Jia/AIME_2024 (30 records, AIME I + II). Split = "train" (only one).
-⚠️ Schema fields are CAPITALIZED: Problem, Solution, Answer, ID. Lowercase = KeyError.
-Metrics: pass@1 (greedy) + maj@8 (8 different sampling seeds, majority vote).
-"""
+HF: Maxwell-Jia/AIME_2024 (30 records, AIME I + II). Single "train" split.
+Schema fields are CAPITALIZED: Problem, Solution, Answer, ID. Lowercase access raises KeyError.
+Metrics: pass@1 (greedy) + maj@8 (8 stochastic samples, majority vote)."""
 
 from __future__ import annotations
 
@@ -47,10 +46,10 @@ def evaluate(
     dataset: Any | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
-    """AIME 2024 eval — pass@1 (greedy) + maj@8 (8 stochastic seeds).
+    """AIME 2024 eval -- pass@1 (greedy) + maj@8 (8 stochastic seeds).
 
-    `sampling_params_maj` should be temperature>0 (e.g., 0.7) so the 8 samples
-    differ. Caller cấu hình từ runner.py.
+    `sampling_params_maj` should use temperature > 0 (e.g., 0.7) so the 8
+    samples diverge.
     """
     metadata = make_metadata(model_path, max_tokens, temperature, seed)
 
@@ -91,7 +90,6 @@ def evaluate(
     maj_at_8: float | None = None
     if n_seeds_for_maj8 and n_seeds_for_maj8 > 0 and model is not None:
         # Generate K completions per prompt; vLLM supports `n` in SamplingParams,
-        # nhưng để tương thích mock, ta loop K lần và stack results theo prompt index.
         all_runs: list[list[str]] = []
         for k in range(n_seeds_for_maj8):
             sp_k = _maybe_with_seed(sampling_params_maj, base_seed=seed, k=k)
@@ -122,15 +120,10 @@ def evaluate(
 
 
 def _maybe_with_seed(sp: Any, base_seed: int, k: int) -> Any:
-    """Clone SamplingParams with deterministic per-k seed.
-
-    vLLM SamplingParams hỗ trợ field `seed`. Nếu sp là None, return None
-    (mock model sẽ ignore).
-    """
+    """Clone SamplingParams with deterministic per-k seed."""
     if sp is None:
         return None
     try:
-        # Cố gắng copy + override seed nếu có
         import copy
 
         sp_new = copy.copy(sp)

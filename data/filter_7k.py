@@ -1,15 +1,14 @@
-"""Filter decontaminated training pool xuống 7K samples (match Open-RS scale).
+"""Subsample a JSONL training file to N records.
 
-Strategy options:
-    - random sample với fixed seed (default).
-    - difficulty stratified sampling — preserve per-`level` proportions.
+Strategies:
+    - random: uniform random sample, seeded.
+    - difficulty: stratified by ``level`` field, preserving per-level proportions.
 
 Usage:
     python data/filter_7k.py \
         --input data/processed/en_train_clean.jsonl \
         --output data/processed/en_train_7k.jsonl \
-        --n 7000 --seed 42
-"""
+        --n 7000 --seed 42"""
 
 from __future__ import annotations
 

@@ -1,13 +1,11 @@
 """Prepare NuminaMath-CoT (EN) → JSONL.
 
 HF: AI-MO/NuminaMath-CoT, ~860K. Schema: {problem, solution, source}.
-Output: data/processed/en_train_full.jsonl (rồi qua decontaminate + filter_7k).
 
 Usage:
     python data/prepare_numinamath.py --output data/processed/en_train_full.jsonl
     # Quick dev test:
-    python data/prepare_numinamath.py --output /tmp/sample.jsonl --limit 100
-"""
+    python data/prepare_numinamath.py --output /tmp/sample.jsonl --limit 100"""
 
 from __future__ import annotations
 

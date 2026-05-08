@@ -1,4 +1,4 @@
-"""Eval runner — vLLM batch generation + scoring orchestration.
+"""Eval runner -- vLLM batch generation + scoring orchestration.
 
 Usage:
     python src/eval/runner.py \\
@@ -11,7 +11,7 @@ Output JSON file per benchmark (per language for multilingual):
     {output_dir}/{run_id}_{benchmark}.json                 (single-lang)
     {output_dir}/{run_id}_{benchmark}_{lang}.json          (multilingual)
 
-Schema follows CLAUDE.md § Logging schema. ALWAYS includes `responses` array.
+Always writes the `responses` array.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ _BENCHMARK_MODULES = {
     "gsm8k": "src.eval.gsm8k",
     "math500": "src.eval.math500",
     "aime2024": "src.eval.aime",
-    "amc23": "src.eval.amc23",         # W2 gating
+    "amc23": "src.eval.amc23",
     "mgsm": "src.eval.mgsm",
     "msvamp": "src.eval.msvamp",
 }
@@ -76,7 +76,7 @@ def _build_sampling_params(SamplingParams, gen_cfg: dict[str, Any], seed: int):
 
 
 def _build_sampling_params_maj(SamplingParams, gen_cfg: dict[str, Any], seed: int):
-    """Stochastic sampling params cho maj@K (temperature > 0)."""
+    """Stochastic sampling params for maj@K (temperature > 0)."""
     return SamplingParams(
         temperature=gen_cfg.get("temperature_maj", 0.7),
         top_p=gen_cfg.get("top_p_maj", 0.95),
@@ -187,8 +187,7 @@ def main() -> None:
     seed_everything(args.seed)
     cfg = load_config(args.config)
 
-    # Derive run_id từ checkpoint path nếu không truyền explicit.
-    # E.g. results/grpo/qwen15b_en_42/checkpoint-500 → "qwen15b_en_42"
+    # E.g. results/grpo/qwen15b_en_42/checkpoint-500 -> "qwen15b_en_42"
     run_id = args.run_id
     if run_id is None:
         ckpt = args.checkpoint

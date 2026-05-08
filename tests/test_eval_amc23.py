@@ -1,4 +1,4 @@
-"""Pytest cho AMC23 eval adapter — schema + dispatch verification."""
+"""Tests for the AMC23 eval adapter -- schema and dispatch verification."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from src.eval import amc23
 
 
 class _MockLLM:
-    """Mock vLLM LLM trả về fixed completions matching prompt order."""
+    """Mock vLLM LLM returning fixed completions in prompt order."""
 
     def __init__(self, responses: list[str]) -> None:
         self._responses = responses
@@ -27,7 +27,7 @@ class _MockLLM:
 
 @pytest.fixture
 def mock_records() -> list[dict]:
-    """3-row mock matching knoveleng/AMC-23 schema."""
+    """3-row mock matching the knoveleng/AMC-23 schema."""
     return [
         {"id": "1", "problem": "What is 2+2?", "question": "What is 2+2?",
          "answer": "4", "url": "x"},
@@ -39,7 +39,7 @@ def mock_records() -> list[dict]:
 
 
 def test_amc23_evaluate_returns_schema(mock_records):
-    """Greedy responses match all 3 → pass@1 = 1.0; tất cả CLAUDE.md keys có mặt."""
+    """Greedy responses match all 3 -> pass@1 = 1.0; all schema keys present."""
     correct = ["<answer>4</answer>", "<answer>35</answer>", "<answer>55</answer>"]
     model = _MockLLM(correct)
 
@@ -66,7 +66,7 @@ def test_amc23_evaluate_returns_schema(mock_records):
 
 
 def test_amc23_partial_correct(mock_records):
-    """1/3 correct → pass@1 ≈ 0.333."""
+    """1/3 correct -> pass@1 ~= 0.333."""
     responses = ["<answer>4</answer>", "<answer>WRONG</answer>", "<answer>WRONG</answer>"]
     model = _MockLLM(responses)
 
@@ -83,7 +83,7 @@ def test_amc23_partial_correct(mock_records):
 
 
 def test_amc23_n_samples_limit(mock_records):
-    """n_samples=2 → chỉ chấm 2 records dù dataset có 3."""
+    """n_samples=2 should score only 2 records even if the dataset has 3."""
     responses = ["<answer>4</answer>", "<answer>35</answer>"]
     model = _MockLLM(responses)
 
@@ -100,7 +100,7 @@ def test_amc23_n_samples_limit(mock_records):
 
 
 def test_amc23_metadata_includes_hf_dataset(mock_records):
-    """Metadata phải reference HF dataset ID đúng."""
+    """Metadata must reference the correct HF dataset id."""
     model = _MockLLM(["<answer>4</answer>"])
     result = amc23.evaluate(
         model=model,
@@ -116,15 +116,9 @@ def test_amc23_metadata_includes_hf_dataset(mock_records):
 
 
 def test_amc23_maj_at_4_majority_vote(mock_records):
-    """3 rollouts vote 'WRONG'/'4'/'4' → majority = '4'; gold = '4' → correct."""
-    # 4 rollouts × 1 problem = 4 calls. Mỗi call nhận 1 prompt.
-    # Mock: rotate 4 responses qua các call (mỗi rollout 1 list)
-    # MockLLM hardcoded responses[i % len], nên với 1 prompt và rotation seed thì
-    # ta cần MockLLM mới mỗi call. Đơn giản nhất: cung cấp responses lặp lại theo pattern.
+    """Rollouts vote 'WRONG'/'4'/'4'/'4' -> majority='4'; gold='4' -> correct."""
     rotation = ["<answer>WRONG</answer>", "<answer>4</answer>",
                 "<answer>4</answer>", "<answer>4</answer>"]
-    # MockLLM dùng prompt index để lookup; với 1 prompt thì luôn responses[0].
-    # Để có rotation, ta cần mock generate khác — wrap với call counter.
 
     class _RotatingLLM:
         def __init__(self, rot: list[str]) -> None:
@@ -163,7 +157,7 @@ def test_amc23_maj_at_4_majority_vote(mock_records):
 
 
 def test_amc23_runner_dispatch_includes_amc23():
-    """Smoke check: runner._BENCHMARK_MODULES có entry 'amc23'."""
+    """Smoke check: runner._BENCHMARK_MODULES has an entry for 'amc23'."""
     from src.eval.runner import _BENCHMARK_MODULES
 
     assert "amc23" in _BENCHMARK_MODULES
@@ -171,7 +165,7 @@ def test_amc23_runner_dispatch_includes_amc23():
 
 
 def test_amc23_empty_dataset_returns_empty_result(mock_records):
-    """Empty dataset → schema-compliant empty result."""
+    """Empty dataset -> schema-compliant empty result."""
     model = _MockLLM([])
     result = amc23.evaluate(
         model=model,

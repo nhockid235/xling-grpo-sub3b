@@ -1,4 +1,4 @@
-"""Reproducibility — seed everything."""
+"""Reproducibility -- seed everything."""
 
 from __future__ import annotations
 

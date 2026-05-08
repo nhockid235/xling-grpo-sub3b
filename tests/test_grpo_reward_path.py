@@ -1,7 +1,4 @@
-"""Pytest cho reward registry integration trong GRPO trainer.
-
-Verify reward functions register-able và có thể call như TRL sẽ call.
-"""
+"""Tests for the reward registry integration in the GRPO trainer."""
 
 from __future__ import annotations
 
@@ -30,7 +27,7 @@ def test_get_reward_unknown_raises():
 
 
 def test_format_reward_call_signature():
-    """Verify format reward chấp nhận call signature TRL sẽ dùng."""
+    """Format reward returns a list[float] with one entry per prompt."""
     from src.rewards import get_reward
 
     fn = get_reward("format")
@@ -47,7 +44,7 @@ def test_format_reward_call_signature():
 
 
 def test_correctness_reward_handles_kwargs():
-    """Reward must accept extra dataset columns qua **kwargs."""
+    """Reward must accept extra dataset columns via **kwargs."""
     from src.rewards import get_reward
 
     fn = get_reward("correctness")
@@ -62,7 +59,7 @@ def test_correctness_reward_handles_kwargs():
 
 
 def test_partial_lang_reward():
-    """R5 có thể partial-bind config-time args (như grpo.py làm)."""
+    """Lang reward can be partial-bound with config args (mirrors GRPO trainer setup)."""
     from functools import partial
     from src.rewards import get_reward
 
@@ -73,9 +70,7 @@ def test_partial_lang_reward():
         no_penalty_for_en=True,
         min_response_tokens=10,
     )
-    # Partial phải callable với same TRL signature
     out = bound(prompts=["p"], completions=["short"])
     assert isinstance(out, list)
     assert len(out) == 1
-    # Dù path không tồn tại, lang.py phải gracefully return 0.0 không crash
     assert out[0] == 0.0

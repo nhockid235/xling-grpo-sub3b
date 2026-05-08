@@ -1,7 +1,4 @@
-"""Internal helpers chia sẻ giữa các benchmark adapters.
-
-Không export public — chỉ dùng nội bộ trong `src.eval`.
-"""
+"""Internal helpers shared between benchmark adapters. Not part of the public API."""
 
 from __future__ import annotations
 
@@ -17,10 +14,10 @@ from src.utils.parsing import (
 
 
 def extract_prediction(completion: str) -> str | None:
-    """Ưu tiên: <answer>...</answer> → \\boxed{...} → last number.
+    """Extract prediction in priority order: <answer>...</answer> -> \\boxed{...} -> last number.
 
-    Trùng logic với `src.rewards.correctness._extract_prediction`. Tách ra
-    helper riêng để tránh import vòng (rewards module có @register decorator).
+    Mirrors `src.rewards.correctness._extract_prediction`; kept separate to
+    avoid circular imports with the rewards registry.
     """
     inside = extract_answer_tag(completion)
     if inside is not None:
@@ -50,7 +47,7 @@ def normalize_number_string(s: str | None) -> str | None:
 
 
 def numeric_match(pred: str | None, gold: str | None) -> bool:
-    """So sánh số: thử cast float trước, nếu fail thì exact-string sau normalize."""
+    """Compare numbers: try float cast first, then exact-string match after normalization."""
     p = normalize_number_string(pred)
     g = normalize_number_string(gold)
     if p is None or g is None:
@@ -62,7 +59,7 @@ def numeric_match(pred: str | None, gold: str | None) -> bool:
 
 
 def math_verify_match(pred: str | None, gold: str | None) -> bool:
-    """Math-Verify wrapper với fallback graceful."""
+    """Math-Verify wrapper with graceful fallback to numeric match."""
     if pred is None or gold is None:
         return False
     try:
@@ -72,7 +69,6 @@ def math_verify_match(pred: str | None, gold: str | None) -> bool:
         pred_parsed = parse(str(pred))
         return bool(verify(gold_parsed, pred_parsed))
     except Exception:
-        # Sympy/Math-Verify thiếu hoặc parse fail → fallback numeric match
         return numeric_match(pred, gold)
 
 
@@ -89,17 +85,16 @@ def vllm_generate(
     prompts: list[str],
     sampling_params: Any | None = None,
 ) -> list[str]:
-    """Wrap vLLM `LLM.generate(...)` → list of completion strings.
+    """Wrap vLLM `LLM.generate(...)` into a list of completion strings.
 
-    Hỗ trợ mock model: nếu `model` có method `generate` trả list-like với
-    `outputs[0].text`, ta đọc ra.
+    Supports mocks: any object whose `generate` returns items with
+    `outputs[0].text` is accepted.
     """
     if model is None:
-        # Dry-run mode: trả empty completions với cùng length.
         return ["" for _ in prompts]
 
     # vLLM signature: model.generate(prompts, sampling_params)
-    # SamplingParams optional khi mock.
+    # SamplingParams is optional for mocks.
     if sampling_params is not None:
         outs = model.generate(prompts, sampling_params)
     else:
@@ -118,7 +113,7 @@ def vllm_generate(
 
 
 def avg_response_tokens(responses: list[str]) -> float:
-    """Whitespace-token approximation (chính xác đủ cho avg)."""
+    """Whitespace-token approximation (sufficient for averages)."""
     if not responses:
         return 0.0
     total = sum(len(r.split()) for r in responses)
@@ -154,7 +149,7 @@ def empty_result(
     language: str | None,
     metadata: dict[str, Any],
 ) -> dict[str, Any]:
-    """Skeleton dict đầy đủ keys theo CLAUDE.md schema, mọi metric None/empty."""
+    """Skeleton dict with all eval-schema keys; metrics set to None/empty."""
     return {
         "run_id": run_id,
         "benchmark": benchmark,

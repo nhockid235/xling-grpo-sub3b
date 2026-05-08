@@ -18,14 +18,14 @@ def test_r4_no_tags_returns_zero():
 
 
 def test_r4_partial_credit():
-    """Chỉ có <think>...</think> (2/4 tags) → 0.5."""
+    """"""
     from src.rewards.tag import r4_tag_count
     out = r4_tag_count(prompts=["p"], completions=["<think>x</think>"])
     assert out == [0.5]
 
 
 def test_r4_duplicate_tags_returns_less():
-    """<think> xuất hiện 2 lần → tag count cho think không đúng → < 1.0."""
+    """"""
     from src.rewards.tag import r4_tag_count
     out = r4_tag_count(
         prompts=["p"],

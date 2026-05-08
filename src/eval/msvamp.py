@@ -2,8 +2,7 @@
 
 HF: Mathoctopus/MSVAMP, ~1K/lang × 10 langs.
 Languages: bn, zh, en, fr, de, ja, ru, es, sw, th.
-Schema: {id, question, answer, answer_number}.
-"""
+Schema: {id, question, answer, answer_number}."""
 
 from __future__ import annotations
 
@@ -22,7 +21,6 @@ from src.eval.prompts import build_prompts
 MSVAMP_LANGS = ["bn", "zh", "en", "fr", "de", "ja", "ru", "es", "sw", "th"]
 
 # Mathoctopus/MSVAMP layout: per-language config or per-language split — verify
-# at runtime. Phần lớn release of Mathoctopus dùng config name = language.
 _MSVAMP_HF_ID = "Mathoctopus/MSVAMP"
 
 
@@ -53,8 +51,7 @@ def evaluate(
     if dataset is None:
         from datasets import load_dataset
 
-        # Mathoctopus/MSVAMP: config name = uppercase lang code per HF card,
-        # nhưng số release dùng lowercase. Thử cả hai.
+        # Mathoctopus/MSVAMP: config name = uppercase lang code per HF card.
         try:
             dataset = load_dataset(_MSVAMP_HF_ID, language, split="test")
         except Exception:

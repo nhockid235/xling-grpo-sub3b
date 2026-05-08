@@ -1,5 +1,4 @@
-"""Generate paper figures từ master.csv + training logs.
-
+"""
 Outputs (300 DPI, embed fonts cho arXiv):
     fig1_arm_comparison.pdf — bar chart 4 cells × 4 metrics
     fig2_training_curves.pdf — reward signal R1/R2/R5 + total per arm over 50 steps
@@ -10,8 +9,7 @@ Usage:
     python paper/figures/make_figures.py \\
         --master /path/to/master.csv \\
         --training_logs /path/to/training/ \\
-        --output paper/figures/
-"""
+        --output paper/figures/"""
 
 from __future__ import annotations
 
@@ -133,7 +131,7 @@ DICT_RE = re.compile(r"(\{[^{}]*['\"]loss['\"][^{}]*\})")
 
 
 def _parse_metrics_from_log(log_path: Path) -> pd.DataFrame:
-    """Extract per-step metric dicts từ training.log (matches extract_metrics.py)."""
+    """"""
     if not log_path.exists():
         return pd.DataFrame()
     text = log_path.read_text(errors="ignore")

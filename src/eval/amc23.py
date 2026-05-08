@@ -1,14 +1,12 @@
-"""AMC23 eval adapter — W2 gating benchmark.
+"""AMC23 eval adapter.
 
 HF: ``knoveleng/AMC-23`` (40 problems, single ``train`` split, AoPS 2023 AMC 12A+12B).
-Schema: ``{id, problem, question, answer, url}``.
-Confirmed match với Open-RS evaluate.py.
+Schema: ``{id, problem, question, answer, url}``. Matches Open-RS evaluate.py.
 
-⚠️ License unspecified on Hub metadata. Paper citation: "AoPS wiki, 2023 AMC 12A/12B,
+License unspecified on Hub metadata. Cite as "AoPS wiki, 2023 AMC 12A/12B,
 redistributed via knoveleng/AMC-23".
 
-Metrics: pass@1 (greedy) + maj@4 (4 stochastic rollouts). Cần để match Open-RS Table 1
-AMC23 80.0% (RS2 @ 50 steps).
+Metrics: pass@1 (greedy) + maj@4 (4 stochastic rollouts).
 """
 
 from __future__ import annotations
@@ -32,14 +30,14 @@ SPLIT = "train"
 
 
 def _amc_match(pred: str | None, gold: str | None) -> bool:
-    """AMC answers thường là số (int/decimal), đôi khi LaTeX → numeric trước, math-verify sau."""
+    """AMC answers are usually numeric (int/decimal), occasionally LaTeX. Try numeric match first, then math-verify."""
     if numeric_match(pred, gold):
         return True
     return math_verify_match(pred, gold)
 
 
 def _maybe_with_seed(sp: Any, base_seed: int, k: int) -> Any:
-    """Clone SamplingParams với seed = base_seed + k. Giống pattern của aime.py."""
+    """Clone SamplingParams with seed = base_seed + k (mirrors aime.py)."""
     if sp is None:
         return None
     try:
@@ -70,21 +68,21 @@ def evaluate(
     dataset: Any | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
-    """AMC23 eval — pass@1 (greedy) + maj@N (N stochastic seeds).
+    """AMC23 eval -- pass@1 (greedy) + maj@N (N stochastic seeds).
 
     Args:
-        model: vLLM ``LLM`` hoặc mock có ``.generate(prompts, sampling_params)``.
-        n_samples: limit cho dev. None = full 40.
-        n_seeds_for_maj: số rollouts cho maj@N. Đặt 1 để skip maj.
-        seed: base seed cho stochastic rollouts.
+        model: vLLM ``LLM`` or mock exposing ``.generate(prompts, sampling_params)``.
+        n_samples: dev limit. None = full 40.
+        n_seeds_for_maj: number of rollouts for maj@N. Set to 1 to skip maj.
+        seed: base seed for stochastic rollouts.
         sampling_params: greedy params (temperature 0).
         sampling_params_maj: stochastic params (temperature > 0).
         run_id, model_path: metadata.
-        chat_template_tokenizer: HF tokenizer cho chat template (optional).
-        dataset: injectable cho test mock; None = load HF.
+        chat_template_tokenizer: HF tokenizer for chat template (optional).
+        dataset: injectable for test mocks; None = load from HF.
 
     Returns:
-        Dict matching CLAUDE.md eval JSON schema, với key ``maj_at_{N}``.
+        Dict matching the eval JSON schema, with key ``maj_at_{N}``.
     """
     metadata = make_metadata(model_path, max_tokens, temperature, seed)
     metadata["hf_dataset"] = HF_ID

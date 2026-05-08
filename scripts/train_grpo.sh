@@ -1,5 +1,4 @@
 #!/bin/bash
-# Train một GRPO cell on top of SFT checkpoint.
 # Usage: bash scripts/train_grpo.sh <model_short> <condition> <seed>
 # Example: bash scripts/train_grpo.sh qwen15b en 42
 

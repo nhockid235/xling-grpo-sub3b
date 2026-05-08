@@ -1,10 +1,8 @@
-"""MGSM eval adapter — multilingual GSM8K.
+"""MGSM eval adapter -- multilingual GSM8K.
 
 HF: juletxara/mgsm, split=test, 250/lang.
-⚠️ 10 langs guaranteed: en, es, fr, de, ru, zh, ja, th, sw, bn (NOT 11 — Telugu may be missing).
-Schema: {question, answer, answer_number, equation_solution}.
-Metrics: pass@1 + lang_consistency (compute từ responses[] post-hoc).
-"""
+10 guaranteed languages: en, es, fr, de, ru, zh, ja, th, sw, bn (Telugu may be missing).
+Schema: {question, answer, answer_number, equation_solution}."""
 
 from __future__ import annotations
 
@@ -86,7 +84,7 @@ def evaluate(
         "n_samples": n,
         "pass_at_1": n_correct / n if n > 0 else 0.0,
         "maj_at_8": None,
-        # lang_consistency computed post-hoc qua src/eval/lang_consistency.py
+        # lang_consistency computed post-hoc via src/eval/lang_consistency.py
         "lang_consistency_rate": None,
         "avg_response_tokens": avg_response_tokens(completions),
         "responses": completions,

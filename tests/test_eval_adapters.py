@@ -3,7 +3,7 @@
 Strategy:
   - Mock the LLM with a stub class returning fixed completions per prompt index.
   - Provide in-memory list[dict] datasets to bypass HF `load_dataset`.
-  - Verify schema (CLAUDE.md § Logging schema) keys & types, plus correctness
+  - Verify schema (the eval schema) keys & types, plus correctness
     of language validation and AIME field handling.
 """
 

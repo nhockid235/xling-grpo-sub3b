@@ -1,5 +1,4 @@
 # GRPO config — Cond A (English-only training)
-# Verified Open-RS Exp2 hyperparams (CLAUDE.md § Hyperparameters)
 
 extends: base.yaml
 
@@ -15,7 +14,6 @@ rewards:
     weight: 1.0
   - name: tag
     weight: 1.0
-# Cond A KHÔNG dùng lang reward
 
 grpo:
   learning_rate: 1.0e-6
@@ -43,7 +41,6 @@ grpo:
   vllm_max_model_len: 4608
   num_train_epochs: 1
 
-# LoRA fallback nếu OOM trên 3B; mặc định full-param theo Open-RS
 lora:
   enabled: false
   r: 16

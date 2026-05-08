@@ -77,3 +77,6 @@ paper/*.fdb_latexmk
 # arXiv submission bundle (regenerable via paper/build_arxiv_bundle.sh)
 paper/arxiv_submission/
 paper/arxiv_submission.tar.gz
+
+# Internal development logs and notes — kept local only
+reports/

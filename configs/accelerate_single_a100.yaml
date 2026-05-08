@@ -1,5 +1,4 @@
 # Accelerate config cho 1× A100 80GB (RunPod default)
-# Chạy: accelerate launch --config_file configs/accelerate_single_a100.yaml ...
 
 compute_environment: LOCAL_MACHINE
 distributed_type: NO

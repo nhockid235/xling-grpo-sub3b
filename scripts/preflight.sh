@@ -1,6 +1,4 @@
 #!/bin/bash
-# Pre-flight check trước khi launch training trên RunPod.
-# Verify env hoàn chỉnh để tránh lãng phí $$ vào job sẽ crash.
 #
 # Usage: bash scripts/preflight.sh
 # Exit code 0 = pass; 1 = fail
@@ -25,28 +23,27 @@ PY_MINOR=$(echo "$PY_VERSION" | cut -d. -f2)
 if [[ "$PY_MAJOR" == "3" && "$PY_MINOR" == "11" ]]; then
     _pass "Python $PY_VERSION"
 elif [[ "$PY_MAJOR" == "3" ]]; then
-    _warn "Python $PY_VERSION (CLAUDE.md pin 3.11; có thể work nhưng untested)"
+    _warn "Python $PY_VERSION (project pins 3.11; may work but untested)"
 else
-    _fail "Python $PY_VERSION (cần >=3.11)"
+    _fail "Python $PY_VERSION (need >=3.11)"
 fi
 
-# Disk space — cross-platform via Python (df flag khác BSD/GNU)
 DISK_FREE_GB=$(python -c "import shutil; print(int(shutil.disk_usage('.').free / 1024**3))" 2>/dev/null || echo "0")
 if [[ "${DISK_FREE_GB:-0}" -ge 60 ]]; then
     _pass "Disk free: ${DISK_FREE_GB}GB"
 elif [[ "${DISK_FREE_GB:-0}" -ge 30 ]]; then
-    _warn "Disk free: ${DISK_FREE_GB}GB (recommend 60GB+; có thể OOM disk khi save ckpts)"
+    _warn "Disk free: ${DISK_FREE_GB}GB (recommend 60GB+; may exhaust disk on checkpoint saves)"
 else
-    _fail "Disk free: ${DISK_FREE_GB}GB (cần tối thiểu 30GB)"
+    _fail "Disk free: ${DISK_FREE_GB}GB (minimum 30GB required)"
 fi
 
-# RAM
+
 if command -v free >/dev/null 2>&1; then
     RAM_GB=$(free -g | awk '/^Mem:/ {print $2}')
     if [[ "$RAM_GB" -ge 32 ]]; then
         _pass "RAM: ${RAM_GB}GB"
     else
-        _warn "RAM: ${RAM_GB}GB (recommend 32GB+ cho dataset preprocessing)"
+        _warn "RAM: ${RAM_GB}GB (recommend 32GB+ for dataset preprocessing)"
     fi
 fi
 
@@ -60,17 +57,17 @@ if command -v nvidia-smi >/dev/null 2>&1; then
         GPU_MEM_MB=$(echo "$GPU_INFO" | cut -d, -f2 | xargs)
         GPU_MEM_GB=$((GPU_MEM_MB / 1024))
         if [[ "$GPU_MEM_GB" -ge 70 ]]; then
-            _pass "GPU: $GPU_NAME (${GPU_MEM_GB}GB) — đủ cho 1.5B/3B GRPO full-param"
+            _pass "GPU: $GPU_NAME (${GPU_MEM_GB}GB) - sufficient for 1.5B/3B GRPO full-param"
         elif [[ "$GPU_MEM_GB" -ge 40 ]]; then
-            _warn "GPU: $GPU_NAME (${GPU_MEM_GB}GB) — OK cho 1.5B; 3B cần LoRA fallback"
+            _warn "GPU: $GPU_NAME (${GPU_MEM_GB}GB) - OK for 1.5B; 3B requires LoRA fallback"
         else
-            _fail "GPU: $GPU_NAME (${GPU_MEM_GB}GB) — không đủ; cần ≥40GB"
+            _fail "GPU: $GPU_NAME (${GPU_MEM_GB}GB) - insufficient; need >=40GB"
         fi
     else
-        _fail "nvidia-smi available but không detect GPU"
+        _fail "nvidia-smi available but no GPU detected"
     fi
 else
-    _warn "nvidia-smi không có (CPU-only env? OK cho unit tests, FAIL cho training)"
+    _warn "nvidia-smi not found (CPU-only env? OK for unit tests, FAIL for training)"
 fi
 
 # --- Python dependencies ---
@@ -149,7 +146,7 @@ if [[ -f "$FT_PATH" ]]; then
         _warn "fastText file present but size ${FT_MB}MB (expected ~131MB) — corrupt?"
     fi
 else
-    _warn "fastText langID missing. Cond C (enlang) sẽ skip R5 reward."
+    _warn "fastText langID missing. Condition C (enlang) will skip the R5 reward."
     echo "       Download: wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P data/raw/"
 fi
 
@@ -159,14 +156,14 @@ _section "HuggingFace access"
 if python -c "from huggingface_hub import HfApi; HfApi().list_repo_files('Qwen/Qwen2.5-1.5B-Instruct', timeout=10)" 2>/dev/null; then
     _pass "HF Hub reachable + can list Qwen2.5-1.5B-Instruct files"
 else
-    _warn "HF Hub không reachable hoặc rate-limited. Verify HF_TOKEN nếu private."
+    _warn "HF Hub unreachable or rate-limited. Verify HF_TOKEN if private."
 fi
 
-# Check HF_TOKEN cho gated models (Llama)
+# Check HF_TOKEN for gated models (Llama)
 if [[ -n "${HF_TOKEN:-}" ]] || [[ -f "$HOME/.cache/huggingface/token" ]]; then
-    _pass "HF_TOKEN present (cần cho meta-llama/Llama-3.2-3B-Instruct)"
+    _pass "HF_TOKEN present (required for meta-llama/Llama-3.2-3B-Instruct)"
 else
-    _warn "HF_TOKEN không set. Nếu plan train Llama-3.2 → cần huggingface-cli login"
+    _warn "HF_TOKEN not set. To train Llama-3.2 run: huggingface-cli login"
 fi
 
 # --- Wandb ---
@@ -175,7 +172,7 @@ _section "Wandb"
 if [[ -n "${WANDB_API_KEY:-}" ]] || wandb login --verify >/dev/null 2>&1; then
     _pass "Wandb authenticated"
 else
-    _warn "Wandb chưa login. Run: wandb login"
+    _warn "Wandb not logged in. Run: wandb login"
 fi
 
 # --- Final verdict ---
@@ -185,12 +182,12 @@ echo "  Pass: $PASS_COUNT, Warn: $WARN_COUNT, Fail: $FAIL_COUNT"
 echo
 
 if [[ $FAIL_COUNT -gt 0 ]]; then
-    echo "❌ PRE-FLIGHT FAILED — fix errors trước khi launch training."
+    echo "❌ PRE-FLIGHT FAILED - fix errors before launching training."
     exit 1
 elif [[ $WARN_COUNT -gt 5 ]]; then
-    echo "⚠️  PRE-FLIGHT PASSED WITH MANY WARNINGS — review trước khi launch."
+    echo "⚠️  PRE-FLIGHT PASSED WITH MANY WARNINGS - review before launching."
     exit 0
 else
-    echo "✅ PRE-FLIGHT PASSED — sẵn sàng launch training."
+    echo "✅ PRE-FLIGHT PASSED - ready to launch training."
     exit 0
 fi

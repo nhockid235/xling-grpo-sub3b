@@ -1,8 +1,7 @@
-"""R1 — Correctness reward via Math-Verify.
+"""R1 -- Correctness reward via Math-Verify.
 
-Returns 1.0 nếu predicted answer match gold answer (sympy equivalence), 0.0 otherwise.
-Used in: all conditions (en, vi, enlang).
-"""
+Returns 1.0 if the predicted answer matches the gold answer (sympy equivalence),
+otherwise 0.0. Used in all conditions (en, vi, enlang)."""
 
 from __future__ import annotations
 
@@ -17,41 +16,31 @@ from src.utils.parsing import (
 
 
 def _extract_prediction(completion: str) -> str | None:
-    """Ưu tiên: <answer>...</answer> → \\boxed{...} → last number.
-
-    Math-Verify parse hoạt động tốt nhất khi input là một biểu thức gọn,
-    nên ta cố gắng trích đoạn đáp án trước khi pass cho parse().
-    """
-    # Step 1: thử lấy nội dung trong <answer> tag
+    """Extract prediction: <answer>...</answer> -> \\boxed{...} -> last number."""
     inside = extract_answer_tag(completion)
     if inside is not None:
-        # Trong <answer> có thể vẫn bọc \boxed{...} → unwrap thêm một lớp
         boxed_inner = extract_boxed(inside)
         return boxed_inner if boxed_inner is not None else inside
 
-    # Step 2: \boxed{...} ở bất kỳ đâu trong completion
     boxed = extract_boxed(completion)
     if boxed is not None:
         return boxed
 
-    # Step 3: fallback — số cuối cùng (GSM8K-style)
     return extract_last_number(completion)
 
 
 def _math_verify_match(pred: str | None, gold: str | None) -> float:
-    """Wrap Math-Verify với try/except. Return 1.0 nếu match else 0.0."""
+    """Math-Verify equivalence as 1.0/0.0; returns 0.0 on parse failure."""
     if pred is None or gold is None:
         return 0.0
     try:
-        # Lazy import để tránh fail nếu math-verify không có lúc import module
         from math_verify import parse, verify  # type: ignore
 
         gold_parsed = parse(str(gold))
         pred_parsed = parse(str(pred))
-        # Math-Verify trả về True/False (or có thể truthy object)
         return 1.0 if verify(gold_parsed, pred_parsed) else 0.0
     except Exception:
-        # Parse fail (LaTeX errors, sympy timeout, ...) → 0.0
+        # Parse failure (LaTeX errors, sympy timeout, ...) -> 0.0
         return 0.0
 
 
@@ -73,10 +62,8 @@ def r1_correctness(
         list[float] of length N, values in {0.0, 1.0}.
     """
     n = len(prompts)
-    # Cho phép nhận key 'answer' (mặc định) hoặc 'gold' (alias)
     golds = kwargs.get("answer", kwargs.get("gold"))
     if golds is None:
-        # Không có gold → không thể chấm → tất cả 0.0
         return [0.0] * n
     if len(golds) != n:
         raise ValueError(

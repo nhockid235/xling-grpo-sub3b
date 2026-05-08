@@ -2,8 +2,6 @@
 
 Usage:
     python src/trainers/sft.py --config configs/sft_qwen15b.yaml --condition en --seed 42
-
-Stage 1 của pipeline: SFT trên NuminaMath EN hoặc MetaMathQA-VI.
 """
 
 from __future__ import annotations
@@ -17,7 +15,7 @@ from src.utils.seed import seed_everything
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="SFT trainer cho xling-grpo-sub3b")
+    parser = argparse.ArgumentParser(description="SFT trainer for xling-grpo-sub3b")
     parser.add_argument("--config", type=Path, required=True, help="YAML config")
     parser.add_argument("--condition", choices=["en", "vi", "enlang"], required=True)
     parser.add_argument("--seed", type=int, default=42)
@@ -30,7 +28,6 @@ def main() -> None:
     args = parse_args()
     cfg = load_config(args.config)
 
-    # Resolve run_id và output dir mặc định
     model_short = cfg.get("model_short", "model")
     run_id = f"{model_short}_{args.condition}_{args.seed}"
     output_dir = args.output_dir or Path(cfg["paths"]["sft_ckpt_root"]) / run_id
@@ -39,7 +36,7 @@ def main() -> None:
 
     seed_everything(args.seed)
 
-    # Lazy heavy imports — let CLI parsing fail fast khi config sai
+    # Lazy heavy imports -- fail fast on bad CLI/config before importing torch.
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTConfig, SFTTrainer
@@ -50,7 +47,6 @@ def main() -> None:
         prepare_sft_dataset,
     )
 
-    # Wandb (skip nếu disabled)
     if os.environ.get("WANDB_DISABLED") != "1":
         import wandb
         wandb.init(
@@ -73,7 +69,6 @@ def main() -> None:
         attn_implementation="flash_attention_2",
     )
 
-    # LoRA wiring (TRL tự apply qua peft_config)
     peft_config = None
     if cfg.get("lora", {}).get("enabled", False):
         from peft import LoraConfig
@@ -82,7 +77,6 @@ def main() -> None:
         lora_cfg.pop("enabled", None)
         peft_config = LoraConfig(**lora_cfg)
 
-    # Resolve dataset path từ condition
     train_dataset_path = cfg["conditions"][args.condition]["train_dataset"]
     system_prompt = (
         DEFAULT_SYSTEM_PROMPT_VI if args.condition == "vi" else DEFAULT_SYSTEM_PROMPT_EN

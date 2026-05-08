@@ -1,5 +1,4 @@
 #!/bin/bash
-# Train A2 (VI) hoặc A3 (enlang) cell.
 # Usage: bash scripts/train_a2_a3.sh {a2|a3}
 # Example: bash scripts/train_a2_a3.sh a3
 

@@ -1,17 +1,12 @@
-"""W3 mid-run sanity gate.
+"""Mid-run sanity gate against ``master.csv``.
 
-Mục đích: sau khi train 3 cells đầu (qwen15b × 3 conditions), đánh giá xem
-có signal cross-lingual transfer không. Nếu gap EN/VI < 1pp → pivot trước
-khi spend $100+ cho 6 cells còn lại.
-
-Decision rule:
-    - GSM8K (en condition): tối thiểu pass@1 ≥ 0.30 (sanity, không broken)
-    - MGSM-vi gap: |pass_at_1(cond=en) - pass_at_1(cond=vi)| ≥ 0.01 (1pp signal)
-    - Lang-consistency rate Cond C MGSM-vi ≥ 0.50 (R5 reward đang work)
+Decision rules:
+    - GSM8K Cond A pass@1 >= 0.30
+    - MGSM-vi gap: |pass_at_1(cond=en) - pass_at_1(cond=vi)| >= 0.01 (1pp signal)
+    - Cond C lang-consistency on MGSM-vi >= 0.50
 
 Usage:
-    python scripts/sanity_check.py --output results/sanity_w3.json
-"""
+    python scripts/sanity_check.py --output results/sanity_w3.json"""
 
 from __future__ import annotations
 
@@ -19,7 +14,6 @@ import argparse
 import json
 from pathlib import Path
 
-# Tránh đụng src/analysis import phức tạp — load CSV nhẹ
 import pandas as pd
 
 GATING_GSM8K_MIN = 0.30
@@ -48,7 +42,7 @@ def evaluate_gates(df: pd.DataFrame) -> dict:
     if qwen15b.empty:
         return {
             "verdict": "no_data",
-            "reason": "No qwen15b runs found in master.csv. Run W3 first 3 cells.",
+            "reason": "No qwen15b runs found in master.csv.",
             "gates": {},
         }
 
@@ -84,9 +78,9 @@ def evaluate_gates(df: pd.DataFrame) -> dict:
     return {
         "verdict": "pass" if overall_pass else "fail",
         "reason": (
-            "All 3 W3 gates passed — proceed with full 9-cell sweep."
+            "All 3 sanity gates passed -- proceed with the full sweep."
             if overall_pass
-            else "Some gates failed — review before spending $100+ on 6 remaining cells."
+            else "Some gates failed -- review before launching remaining cells."
         ),
         "gates": {
             "gsm8k_en_min30": {

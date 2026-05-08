@@ -4,8 +4,7 @@ HF: knoveleng/open-rs, single 'train' split, 7K rows.
 Schema: {problem, solution, answer, level} where level ∈ {Hard, Easy}.
 NO Stage-1 split — single flat file.
 
-Output: data/processed/open_rs_7k.jsonl
-"""
+Output: data/processed/open_rs_7k.jsonl"""
 
 from __future__ import annotations
 

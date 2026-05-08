@@ -1,7 +1,7 @@
 """Decontamination — 8-gram match against test sets.
 
 Test sets: GSM8K, MATH-500, AIME-2024, MGSM (10 langs), MSVAMP (10 langs).
-Asymmetric: filter training data only, NEVER test data (CLAUDE.md pitfall #12).
+Asymmetric: filter training data only, NEVER test data ( pitfall #12).
 
 Algorithm:
     - Tokenize problem text -> whitespace-split, lowercase, strip basic punctuation.
@@ -44,7 +44,6 @@ if str(_REPO_ROOT) not in sys.path:
 
 from src.utils.io import read_jsonl, write_jsonl  # noqa: E402
 
-# Punctuation table giữ chữ và số, bỏ dấu câu cơ bản (ASCII).
 _PUNCT_TABLE = str.maketrans({c: " " for c in string.punctuation})
 _WS_RE = re.compile(r"\s+")
 
@@ -63,8 +62,6 @@ def normalize(text: str) -> list[str]:
 def ngrams(tokens: list[str], n: int) -> list[str]:
     """Generate space-joined n-grams. Returns empty list when len(tokens) < n."""
     if len(tokens) < n:
-        # Fallback: dùng toàn bộ chuỗi như 1 shingle để vẫn có thể match
-        # (test record quá ngắn vẫn cần index).
         if not tokens:
             return []
         return [" ".join(tokens)]

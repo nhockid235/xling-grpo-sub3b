@@ -9,7 +9,6 @@ model_short: deepseek_r1_distill_15b
 model_name_or_path: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
 condition: vi
 
-# Use 5CD-AI VI math (~7K subset) preprocessed thành JSONL với fields chuẩn.
 # Different distribution than Open-RS but enables clean language axis comparison.
 train_dataset: data/processed/vi_train_7k.jsonl   # local JSONL after prep_vi_train.py
 train_split: train

@@ -7,7 +7,7 @@ import pytest
 
 @pytest.mark.skip(reason="needs lid.176.bin")
 def test_r5_en_prompt_returns_zero_no_penalty():
-    """EN prompts → reward 0 dù response language gì (no penalty for EN)."""
+    """"""
     from src.rewards.lang import r5_lang_consistency
     out = r5_lang_consistency(
         prompts=["What is 2+2?"],

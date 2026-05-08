@@ -1,9 +1,7 @@
 """MATH-500 eval adapter.
 
 HF: HuggingFaceH4/MATH-500, split=test (500 records).
-Schema: {problem, solution, answer, subject, level, unique_id}. Math-Verify
-(sympy equivalence) là chuẩn chấm — fallback numeric match khi parse fail.
-"""
+Schema: {problem, solution, answer, subject, level, unique_id}. Scoring uses Math-Verify."""
 
 from __future__ import annotations
 

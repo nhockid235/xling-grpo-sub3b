@@ -1,9 +1,6 @@
-"""Dataset preparation helpers cho SFT và GRPO trainers.
+"""Dataset preparation for SFT and GRPO training (chat template rendering).
 
-SFT: emit column ``"text"`` đã apply chat template (system + user + assistant).
-GRPO: emit columns ``["prompt", "answer"]`` — prompt qua chat template với
-``add_generation_prompt=True``.
-"""
+GRPO prompts are built with ``add_generation_prompt=True``."""
 
 from __future__ import annotations
 
@@ -15,8 +12,6 @@ from datasets import Dataset, load_dataset
 from src.utils.io import read_jsonl
 
 # Open-RS verbatim training system prompt (recipes/grpo.yaml).
-# Phase 8.2 fix (2026-05-06): Verified từ knoveleng/open-rs repo. Train prompt
-# yêu cầu cả <think> và <answer> tags + \boxed{} answer. Match đúng để R2 fires.
 DEFAULT_SYSTEM_PROMPT_EN = (
     "A conversation between User and Assistant. The user asks a question, and the "
     "Assistant solves it. The assistant first thinks about the reasoning process in "
@@ -27,7 +22,6 @@ DEFAULT_SYSTEM_PROMPT_EN = (
     "Note that respond by English, NOT use other languages."
 )
 
-# VI version (giữ structure same, dịch sát instruction).
 DEFAULT_SYSTEM_PROMPT_VI = (
     "Cuộc hội thoại giữa User và Assistant. User đặt câu hỏi và Assistant giải đáp. "
     "Assistant trước tiên suy nghĩ trong đầu rồi đưa ra đáp án, đặt đáp án cuối "
@@ -43,7 +37,7 @@ def _is_jsonl(source: str | Path) -> bool:
 
 
 def _load_source(source: str | Path, split: str = "train") -> Dataset:
-    """Load JSONL hoặc HF dataset id thành ``datasets.Dataset``."""
+    """Load a HF Dataset from a local JSONL file or a HF dataset id."""
     if _is_jsonl(source):
         records = read_jsonl(Path(source))
         return Dataset.from_list(records)
@@ -57,22 +51,22 @@ def prepare_sft_dataset(
     system_prompt: str = DEFAULT_SYSTEM_PROMPT_EN,
     split: str = "train",
 ) -> Dataset:
-    """Build dataset cho SFTTrainer với column ``"text"`` (rendered chat template).
+    """Render an SFT dataset to a single ``text`` column via the chat template.
 
     Args:
-        source: JSONL path hoặc HF dataset id.
-        tokenizer: HuggingFace tokenizer (cần chat template).
-        system_prompt: system message — pick EN/VI tuỳ condition.
-        split: HF split nếu source là HF id.
+        source: JSONL path or HF dataset id with ``problem`` and ``solution`` columns.
+        tokenizer: HF tokenizer.
+        system_prompt: system message (EN or VI).
+        split: HF split name (ignored for JSONL).
 
     Returns:
-        Dataset với column duy nhất ``"text"``.
+        Dataset with a single ``text`` column.
     """
     ds = _load_source(source, split=split)
 
     if "problem" not in ds.column_names or "solution" not in ds.column_names:
         raise ValueError(
-            f"Dataset phải có 'problem' và 'solution'; got {ds.column_names}"
+            f"Dataset must have 'problem' and 'solution'; got {ds.column_names}"
         )
 
     def _render(example: dict[str, Any]) -> dict[str, str]:
@@ -94,24 +88,22 @@ def prepare_grpo_dataset(
     system_prompt: str = DEFAULT_SYSTEM_PROMPT_EN,
     split: str = "train",
 ) -> Dataset:
-    """Build dataset cho GRPOTrainer với cột ``["prompt", "answer"]``.
-
-    Reward functions sẽ nhận ``answer`` qua ``**kwargs`` từ TRL.
+    """Render a GRPO dataset with ``prompt`` and ``answer`` columns.
 
     Args:
-        source: JSONL path hoặc HF dataset id.
+        source: JSONL path or HF dataset id with at least a ``problem`` column.
         tokenizer: HF tokenizer.
-        system_prompt: system message (EN/VI).
-        split: HF split nếu source là HF id.
+        system_prompt: system message (EN or VI).
+        split: HF split name (ignored for JSONL).
 
     Returns:
-        Dataset với cột ``["prompt", "answer"]``. ``"answer"`` là string.
+        Dataset with columns ``prompt`` and ``answer``.
     """
     ds = _load_source(source, split=split)
 
     if "problem" not in ds.column_names:
         raise ValueError(
-            f"Dataset phải có 'problem'; got columns: {ds.column_names}"
+            f"Dataset must have 'problem'; got columns: {ds.column_names}"
         )
 
     has_answer = "answer" in ds.column_names
@@ -124,7 +116,6 @@ def prepare_grpo_dataset(
         prompt = tokenizer.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
         )
-        # Nếu dataset không có 'answer' → derive từ 'solution' (fallback cuối)
         if has_answer:
             answer = str(example.get("answer", ""))
         else:

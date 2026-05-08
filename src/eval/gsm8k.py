@@ -2,8 +2,8 @@
 
 HF: openai/gsm8k, config=main, split=test (1.32K records).
 Schema: {question, answer}. Gold extraction: '#### (.+)'. Pred extraction:
-<answer> → \\boxed{} → last number, then numeric match (string compare sau khi
-strip commas/units).
+<answer> -> \\boxed{} -> last number, then numeric match (string compare
+after stripping commas/units).
 """
 
 from __future__ import annotations
@@ -37,19 +37,19 @@ def evaluate(
     dataset: Any | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
-    """Run GSM8K eval. Returns dict matching CLAUDE.md eval JSON schema.
+    """Run GSM8K eval. Returns dict matching the eval JSON schema.
 
     Args:
-        model: vLLM `LLM` instance (or mock w/ `.generate`). Pass None for dry-run.
+        model: vLLM `LLM` instance (or mock with `.generate`). Pass None for dry-run.
         n_samples: limit number of samples; None = all.
         seed: deterministic shuffle seed (not strictly needed for ordered eval).
         sampling_params: vLLM SamplingParams instance.
         run_id: e.g. "qwen15b_en_42".
         dataset: optional pre-loaded list[dict] or HF Dataset for testing.
-            Mỗi record có keys ``question`` và ``answer``.
+            Each record needs ``question`` and ``answer`` keys.
 
     Returns:
-        Dict matching CLAUDE.md § Logging schema.
+        Dict matching the eval schema.
     """
     metadata = make_metadata(model_path, max_tokens, temperature, seed)
 

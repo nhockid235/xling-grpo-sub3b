@@ -1,5 +1,4 @@
 # SFT config cho Qwen2.5-1.5B-Instruct
-# Chạy: bash scripts/train_sft.sh qwen15b <condition> <seed>
 
 extends: base.yaml
 

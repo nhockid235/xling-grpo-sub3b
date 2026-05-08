@@ -1,11 +1,9 @@
-"""R3 — Length cosine reward (DAPO-style).
+"""R3 -- Length cosine reward (DAPO-style).
 
-Cosine schedule based on response length. Encourages medium-length CoT,
-penalizes too-short and too-long.
-Used in: all conditions.
+Cosine schedule on response length. Encourages medium-length CoT,
+penalizes too-short and too-long. Used in all conditions.
 
-Reference: DAPO arXiv:2503.14476 (token-level normalization).
-"""
+Reference: DAPO arXiv:2503.14476 (token-level normalization)."""
 
 from __future__ import annotations
 
@@ -16,10 +14,7 @@ from src.rewards import register
 
 
 def _token_count(text: str) -> int:
-    """Whitespace split — đủ chính xác cho reward signal.
-
-    Không cần model-tokenizer thật vì reward chỉ cần đại lượng tỉ lệ với độ dài.
-    """
+    """Whitespace-token approximation."""
     return len(text.split())
 
 
@@ -31,19 +26,11 @@ def r3_length_cosine(
     max_length: int = 3584,
     **kwargs: Any,
 ) -> list[float]:
-    """Cosine schedule: reward peak ở length tối ưu, drop về 0 ở 2 đầu.
+    """Cosine reward over response length.
 
-    Công thức: 0.5 * (1 + cos(pi * (L - mid) / span)) với
-        mid = (min_length + max_length) / 2
-        span = (max_length - min_length) / 2
-
-    Khi L == mid → cos(0) = 1 → reward = 1.0.
-    Khi L == min_length hoặc L == max_length → cos(±pi) = -1 → reward = 0.0.
-    Ngoài [min, max] → clamp về 0.0.
-
-    Args:
-        min_length: tokens dưới ngưỡng → reward 0.
-        max_length: tokens trên ngưỡng → reward 0.
+    Defines mid = (min_length + max_length) / 2 and span = (max_length - min_length) / 2.
+    When length == mid, cos(0) = 1 -> reward = 1.0. Outside [min_length, max_length]
+    the reward is 0.0.
 
     Returns:
         list[float] of length len(prompts), values in [0.0, 1.0].
@@ -66,9 +53,7 @@ def r3_length_cosine(
         if length < min_length or length > max_length:
             rewards.append(0.0)
             continue
-        # Cosine schedule, peak ở mid
         x = math.pi * (length - mid) / span
         val = 0.5 * (1.0 + math.cos(x))
-        # Clamp numerical noise vào [0, 1]
         rewards.append(float(max(0.0, min(1.0, val))))
     return rewards

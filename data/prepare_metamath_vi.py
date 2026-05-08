@@ -5,8 +5,7 @@ HF: 5CD-AI/Vietnamese-meta-math-MetaMathQA-40K-gg-translated, 40K.
 Schema upstream: {query_vi, response_vi, query (EN), response (EN), ...}.
 
 Usage:
-    python data/prepare_metamath_vi.py --output data/processed/vi_train_full.jsonl
-"""
+    python data/prepare_metamath_vi.py --output data/processed/vi_train_full.jsonl"""
 
 from __future__ import annotations
 

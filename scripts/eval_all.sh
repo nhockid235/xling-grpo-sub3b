@@ -1,5 +1,4 @@
 #!/bin/bash
-# Evaluate một checkpoint trên 5 benchmarks.
 # Usage: bash scripts/eval_all.sh <checkpoint_dir>
 # Example: bash scripts/eval_all.sh results/grpo/qwen15b_en_42/checkpoint-500
 

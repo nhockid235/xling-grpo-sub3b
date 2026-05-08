@@ -1,4 +1,4 @@
-"""Plot 3 headline figures cho paper.
+"""Plot the three headline figures for the paper.
 
 Fig 1: per-language transfer gap (pre / SFT / GRPO).
 Fig 2: lang-consistency curve over training steps.
@@ -11,8 +11,7 @@ ACL template requirements:
     - color-blind friendly palette (tab10)
 
 Usage:
-    python src/analysis/plot_curves.py --master results/master.csv --output paper/figures/
-"""
+    python src/analysis/plot_curves.py --master results/master.csv --output paper/figures/"""
 
 from __future__ import annotations
 
@@ -39,7 +38,7 @@ _RC_PARAMS = {
     "axes.spines.right": False,
 }
 
-# Default 6 target languages cho Fig 1/2 (subset of MGSM 10)
+# Default 6 target languages for Fig 1/2 (subset of MGSM 10).
 HEADLINE_LANGS = ["en", "vi", "zh", "fr", "th", "sw"]
 HEADLINE_CONDITIONS = ["en", "vi", "enlang"]
 
@@ -55,7 +54,7 @@ def _setup_style() -> None:
 
 def _load_master(master_csv: Path) -> pd.DataFrame:
     df = pd.read_csv(master_csv)
-    # Cast numeric columns; '' → NaN
+    # Cast numeric columns; '' -> NaN.
     for col in ("pass_at_1", "maj_at_8", "lang_consistency", "avg_tokens", "n_samples", "step"):
         df[col] = pd.to_numeric(df[col], errors="coerce")
     return df
@@ -67,7 +66,6 @@ def fig1_transfer_gap(df: pd.DataFrame, output: Path) -> Path:
 
     sub = df[(df["benchmark"] == "mgsm") & (df["condition"] == "en")].copy()
     if sub.empty:
-        # Stub khi chưa có data thật — vẽ placeholder rồi bỏ qua
         fig, ax = plt.subplots(figsize=(5.0, 3.0))
         ax.text(0.5, 0.5, "Fig 1 — no MGSM data yet", ha="center", va="center")
         ax.axis("off")
@@ -103,8 +101,8 @@ def fig1_transfer_gap(df: pd.DataFrame, output: Path) -> Path:
 def fig2_lang_consistency_curve(df: pd.DataFrame, output: Path) -> Path:
     """Fig 2: lang-consistency rate vs GRPO step, per condition.
 
-    Note: cần multiple checkpoints per run để vẽ curve. Khi chỉ có ckpt-final
-    → degenerates thành scatter.
+    Requires multiple checkpoints per run to draw a curve; with only the
+    final checkpoint, the figure degrades to a single point per condition.
     """
     import matplotlib.pyplot as plt
 

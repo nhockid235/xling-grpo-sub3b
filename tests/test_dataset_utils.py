@@ -1,4 +1,4 @@
-"""Pytest cho dataset_utils — chat template rendering + column shaping."""
+"""Tests for dataset_utils -- chat template rendering and column shaping."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from src.utils.io import write_jsonl
 
 
 class _MockTokenizer:
-    """Minimal fake tokenizer cho unit test mà không cần HF download."""
+    """Minimal tokenizer mock that renders messages into a [ROLE]: text format."""
 
     def apply_chat_template(
         self,
@@ -24,7 +24,6 @@ class _MockTokenizer:
         tokenize: bool = False,
         add_generation_prompt: bool = False,
     ) -> str:
-        # Format đơn giản: [ROLE]: content\n
         parts = []
         for m in messages:
             parts.append(f"[{m['role'].upper()}]: {m['content']}")
@@ -58,7 +57,6 @@ def test_sft_dataset_has_text_column(mock_tokenizer, sample_jsonl):
     )
     assert ds.column_names == ["text"]
     assert len(ds) == 2
-    # System prompt + user + assistant đều phải xuất hiện
     sample = ds[0]["text"]
     assert "[SYSTEM]:" in sample
     assert "[USER]:" in sample
@@ -85,13 +83,12 @@ def test_grpo_dataset_has_prompt_and_answer(mock_tokenizer, sample_jsonl):
     assert set(ds.column_names) == {"prompt", "answer"}
     assert len(ds) == 2
     sample = ds[0]
-    # Prompt phải có generation prompt cuối
     assert sample["prompt"].endswith("[ASSISTANT]:")
     assert sample["answer"] == "4"
 
 
 def test_grpo_dataset_no_solution_column(mock_tokenizer, sample_jsonl):
-    """GRPO không được giữ 'solution' (sẽ leak training signal vào reward kwargs)."""
+    """GRPO dataset must drop original problem/solution columns."""
     ds = prepare_grpo_dataset(
         source=sample_jsonl,
         tokenizer=mock_tokenizer,
@@ -102,7 +99,7 @@ def test_grpo_dataset_no_solution_column(mock_tokenizer, sample_jsonl):
 
 
 def test_grpo_dataset_falls_back_to_solution_when_no_answer(mock_tokenizer, tmp_path: Path):
-    """Nếu dataset không có 'answer' → fallback dùng 'solution' làm answer."""
+    """When ``answer`` is missing, GRPO dataset falls back to ``solution``."""
     records = [{"problem": "Q1", "solution": "S1"}]  # no 'answer'
     p = tmp_path / "no_answer.jsonl"
     write_jsonl(records, p)

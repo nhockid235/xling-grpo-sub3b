@@ -3,7 +3,6 @@
 # Target: AMC23 pass@1 ∈ [77, 83] (80.0 ± 3pp) sau 50 GRPO steps.
 # Source: reports/phase0_03_open_rs_reproduction.md
 #
-# Cost: ~$10-12 trên 1× A100 80GB (RunPod $1.19/hr).
 #
 # Usage: bash scripts/reproduce_open_rs.sh
 
@@ -31,7 +30,6 @@ accelerate launch \
         --output_dir "${OUTPUT}" \
         --wandb_run_name "${RUN_ID}"
 
-# Eval ckpt-50 (target match) và ckpt-100 (sanity)
 for STEP in 50 100; do
     CKPT="${OUTPUT}/checkpoint-${STEP}"
     if [[ -d "${CKPT}" ]]; then

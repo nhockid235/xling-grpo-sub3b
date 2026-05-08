@@ -1,8 +1,4 @@
-"""Bootstrap 95% CI cho headline numbers.
-
-Percentile method, 1000 samples mặc định.
-Pure numpy — không phụ thuộc scipy.
-"""
+"""Bootstrap 95% CI for headline numbers."""
 
 from __future__ import annotations
 
@@ -20,10 +16,9 @@ def bootstrap_ci(
     """Return (mean, lower, upper) at given confidence.
 
     Args:
-        values: per-sample correctness/scores (e.g., 0/1 cho pass@1).
-        n_bootstrap: số bootstrap samples.
-        confidence: 0.95 → return 2.5th/97.5th percentiles.
-        seed: random seed cho reproducibility.
+        values: per-sample correctness/scores (e.g., 0/1 for pass@1).
+        confidence: 0.95 returns the 2.5th and 97.5th percentiles.
+        seed: random seed for reproducibility.
 
     Returns:
         (mean, ci_lower, ci_upper)
@@ -47,7 +42,7 @@ def bootstrap_ci(
 
 
 def format_ci(mean: float, lower: float, upper: float, as_percent: bool = True) -> str:
-    """Render '45.6% [42.1, 49.0]' kiểu paper."""
+    """Format a (mean, lower, upper) tuple as a 'mean [lo, hi]' string."""
     scale = 100.0 if as_percent else 1.0
     suffix = "%" if as_percent else ""
     return f"{mean * scale:.1f}{suffix} [{lower * scale:.1f}, {upper * scale:.1f}]"

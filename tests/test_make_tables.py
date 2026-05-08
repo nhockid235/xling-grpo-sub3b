@@ -1,4 +1,4 @@
-"""Pytest cho make_tables.py — verify LaTeX output cấu trúc đúng."""
+"""Tests for scripts/make_tables.py -- LaTeX table rendering."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-# scripts/ chưa có __init__.py nên import trực tiếp từ path
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
@@ -17,7 +16,7 @@ import make_tables  # noqa: E402
 
 @pytest.fixture
 def synthetic_master() -> pd.DataFrame:
-    """3 cells × 6 langs MGSM + 3 cells × 3 EN benchmarks (dummy)."""
+    """3 cells x 6 langs MGSM + 3 cells x 3 EN benchmarks (dummy)."""
     rows = []
     for cond in ["en", "vi", "enlang"]:
         # MGSM 6 langs
@@ -83,7 +82,7 @@ def test_table3_lang_consistency_compiles(synthetic_master):
 def test_tables_bold_max_per_row(synthetic_master):
     """Max value per row should be \\textbf-wrapped."""
     latex = make_tables.table1_xling_transfer(synthetic_master)
-    assert "\\textbf{" in latex   # ít nhất 1 cell bold
+    assert "\\textbf{" in latex
 
 
 def test_no_vertical_rules(synthetic_master):
@@ -94,8 +93,5 @@ def test_no_vertical_rules(synthetic_master):
         make_tables.table3_lang_consistency,
     ):
         latex = fn(synthetic_master)
-        # tabular column format không nên có '|'
-        # (`\\` trong \\\\ row terminator vẫn OK)
-        # Dùng heuristic: không có "|c" hoặc "c|"
         assert "|c" not in latex
         assert "c|" not in latex

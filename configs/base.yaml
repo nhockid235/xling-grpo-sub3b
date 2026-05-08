@@ -1,5 +1,4 @@
 # Shared base config — common settings, paths, wandb
-# Mọi config khác extend từ đây
 
 project: xling-grpo-sub3b
 seed: 42

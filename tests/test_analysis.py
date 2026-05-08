@@ -1,4 +1,4 @@
-"""Pytest cho analysis tools — bootstrap CI, aggregate run-id parsing."""
+"""Tests for analysis tools -- bootstrap CI and aggregate run-id parsing."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from src.analysis.bootstrap import bootstrap_ci, format_ci
 
 
 def test_bootstrap_ci_all_ones():
-    """Mọi value = 1.0 → mean=1.0, CI cũng [1.0, 1.0]."""
+    """All-ones input: mean and CI bounds collapse to 1.0."""
     mean, lo, hi = bootstrap_ci([1.0] * 100, n_bootstrap=100, seed=42)
     assert mean == pytest.approx(1.0)
     assert lo == pytest.approx(1.0)
@@ -38,12 +38,11 @@ def test_bootstrap_ci_all_zeros():
 
 
 def test_bootstrap_ci_half_correct():
-    """Mean ≈ 0.5; CI bao quanh 0.5."""
+    """Mean ~= 0.5; CI brackets 0.5."""
     values = [1.0] * 50 + [0.0] * 50
     mean, lo, hi = bootstrap_ci(values, n_bootstrap=1000, seed=42)
     assert mean == pytest.approx(0.5)
     assert lo < mean < hi
-    # CI khá rộng cho n=100, nhưng nằm trong [0.3, 0.7]
     assert 0.3 < lo < 0.5
     assert 0.5 < hi < 0.7
 
@@ -199,4 +198,4 @@ def test_aggregate_skips_invalid_json(tmp_path: Path, capsys):
 
     out_csv = tmp_path / "master.csv"
     n = aggregate(eval_dir, out_csv)
-    assert n == 1   # bad.json bị skip, good.json vẫn ghi
+    assert n == 1

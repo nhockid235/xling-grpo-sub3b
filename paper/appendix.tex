@@ -1,11 +1,11 @@
 % Appendix --- reproducibility details
-% Compiled inline với main.tex via \input{appendix.tex} sau \appendix
+% Compiled inline with main.tex via \input{appendix.tex} after \appendix
 
 \section{Reproducibility}
 \label{sec:reproducibility}
 
 \subsection{Code and data}
-Code public at \url{https://github.com/nhockid235/xling-grpo-sub3b} (Apache-2.0).
+Code public at \url{https://github.com/vudang4494/xling-grpo-sub3b} (Apache-2.0).
 Three LoRA adapters (one per arm), all evaluation JSONs (full \texttt{responses[]}
 arrays included), per-step training logs, and reward time series will be released
 with the paper.
@@ -89,8 +89,8 @@ Python 3.12.3, \texttt{torch==2.5.1+cu124}, \texttt{transformers==4.49.0},
 spawns vLLM in-process; TRL 0.16.0+ requires an external vLLM server. Our pipeline
 targets the 0.15.2 in-process model.
 
-\textbf{Note on sympy version.} The CLAUDE.md project specification originally
-pinned \texttt{sympy<1.13} citing Math-Verify breakage; in practice
+\textbf{Note on sympy version.} Earlier project notes pinned
+\texttt{sympy<1.13} citing potential Math-Verify breakage; in practice
 \texttt{math\_verify==0.9.0} works correctly with \texttt{sympy==1.13.1}
 (verified by running \texttt{verify(parse(``1/2''), parse(``0.5''))}).
 

@@ -4,16 +4,13 @@ Usage:
     python src/trainers/grpo.py --config configs/grpo_en.yaml --model qwen15b --seed 42 \\
         --sft_checkpoint results/sft/qwen15b_en_42/checkpoint-final
 
-Stage 2: GRPO post-training on top of SFT checkpoint, hoặc trực tiếp từ base model
-cho `reproduce_open_rs.yaml`.
+Also supports `reproduce_open_rs.yaml` (skip ``--sft_checkpoint`` to start from base).
 
-Critical setup (verified Open-RS Exp2 + TRL 0.15+ API):
-    - reward_funcs = list of callables; signature (prompts, completions, **kwargs) -> list[float]
-    - Dataset MUST có column "prompt"
+Required setup (Open-RS Exp2 + TRL 0.15+ API):
+    - reward_funcs: list of callables with signature
+      ``(prompts, completions, **kwargs) -> list[float]``
     - processing_class=tokenizer (deprecated: tokenizer=)
-    - num_generations=6, max_completion_length=3584, temperature=0.7
-    - GRPOConfig.reward_weights yêu cầu TRL >= 0.15.0
-"""
+    - num_generations=6, max_completion_length=3584, temperature=0.7"""
 
 from __future__ import annotations
 
@@ -27,7 +24,7 @@ from src.utils.seed import seed_everything
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="GRPO trainer cho xling-grpo-sub3b")
+    parser = argparse.ArgumentParser(description="GRPO trainer for xling-grpo-sub3b")
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--model", type=str, required=True, help="model_short")
     parser.add_argument("--seed", type=int, default=42)
@@ -35,7 +32,7 @@ def parse_args() -> argparse.Namespace:
         "--sft_checkpoint",
         type=Path,
         default=None,
-        help="SFT checkpoint path. Bỏ qua nếu reproduce Open-RS (start từ base).",
+        help="SFT checkpoint path. Omit when reproducing Open-RS (start from base).",
     )
     parser.add_argument("--output_dir", type=Path, default=None)
     parser.add_argument("--wandb_run_name", type=str, default=None)
@@ -43,11 +40,11 @@ def parse_args() -> argparse.Namespace:
 
 
 def _resolve_model_path(args: argparse.Namespace, cfg: dict) -> str:
-    """Quyết định model start point — SFT ckpt (merge LoRA nếu có) hoặc base."""
+    """Resolve the starting model: SFT checkpoint (LoRA-merged) or base model."""
     if args.sft_checkpoint is not None:
         if not (args.sft_checkpoint / "config.json").exists():
             raise FileNotFoundError(
-                f"SFT checkpoint không hợp lệ (thiếu config.json): {args.sft_checkpoint}"
+                f"Invalid SFT checkpoint (missing config.json): {args.sft_checkpoint}"
             )
         from src.trainers.checkpoint_utils import merge_lora_if_needed
         merged = merge_lora_if_needed(args.sft_checkpoint)
@@ -56,7 +53,7 @@ def _resolve_model_path(args: argparse.Namespace, cfg: dict) -> str:
 
 
 def _build_rewards(cfg: dict) -> tuple[list, list[float]]:
-    """Lookup reward functions theo registry, partial-bind config-time args cho R5."""
+    """Look up reward functions from the registry; partial-bind config-time args for R5."""
     from src.rewards import get_reward
 
     reward_funcs: list = []
@@ -64,10 +61,8 @@ def _build_rewards(cfg: dict) -> tuple[list, list[float]]:
     for r in cfg["rewards"]:
         name = r["name"]
         fn = get_reward(name)
-        # R5 (lang) cần config-time params bind trước khi pass cho TRL
         if name == "lang" and r.get("config"):
             fn = partial(fn, **r["config"])
-            # TRL log reward theo __name__ → set lại để wandb có metric tên đúng
             try:
                 fn.__name__ = "r5_lang_consistency"  # type: ignore[attr-defined]
             except (AttributeError, TypeError):
@@ -78,7 +73,7 @@ def _build_rewards(cfg: dict) -> tuple[list, list[float]]:
 
 
 def _validate_fasttext_for_enlang(cfg: dict) -> None:
-    """Pre-flight check: Cond C cần lid.176.bin tồn tại."""
+    """Ensure the fastText langID model is present when condition=enlang."""
     if cfg.get("condition") != "enlang":
         return
     lang_cfg = next((r for r in cfg.get("rewards", []) if r["name"] == "lang"), None)
@@ -87,8 +82,8 @@ def _validate_fasttext_for_enlang(cfg: dict) -> None:
     ft_path = Path(lang_cfg.get("config", {}).get("fasttext_model", "data/raw/lid.176.bin"))
     if not ft_path.exists():
         raise FileNotFoundError(
-            f"Cond C (enlang) yêu cầu fastText model tại {ft_path}. "
-            f"Tải qua: wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P data/raw/"
+            f"Cond C (enlang) requires the fastText model at {ft_path}. "
+            f"Download via: wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P data/raw/"
         )
 
 
@@ -125,15 +120,13 @@ def main() -> None:
             dir=str(output_dir),
         )
 
-    # Resolve model path (SFT-merged hoặc base)
     model_path = _resolve_model_path(args, cfg)
 
     tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "left"  # GRPO rollout decoding cần left pad
+    tokenizer.padding_side = "left"
 
-    # Dataset — nguồn từ JSONL (cfg.train_dataset) hoặc HF (cfg.train_dataset_hf)
     source = cfg.get("train_dataset_hf") or cfg["train_dataset"]
     split = cfg.get("train_split", "train")
     system_prompt = (
@@ -147,13 +140,11 @@ def main() -> None:
     )
     if "prompt" not in train_ds.column_names or "answer" not in train_ds.column_names:
         raise ValueError(
-            f"GRPO dataset phải có 'prompt' và 'answer'; got {train_ds.column_names}"
+            f"GRPO dataset must have 'prompt' and 'answer'; got {train_ds.column_names}"
         )
 
-    # Reward registry → partial-bind cho R5 nếu Cond C
     reward_funcs, reward_weights = _build_rewards(cfg)
 
-    # GRPOConfig — `attn_implementation` không phải field GRPOConfig, pass qua model_init_kwargs
     grpo_kwargs = dict(cfg["grpo"])
     attn_impl = grpo_kwargs.pop("attn_implementation", "flash_attention_2")
     model_init_kwargs = {
@@ -172,7 +163,6 @@ def main() -> None:
         **grpo_kwargs,
     )
 
-    # LoRA fallback (chỉ khi cfg.lora.enabled, mặc định Open-RS = full-param)
     peft_config = None
     if cfg.get("lora", {}).get("enabled", False):
         from peft import LoraConfig
@@ -181,7 +171,6 @@ def main() -> None:
         peft_config = LoraConfig(**lora_cfg)
 
     callbacks = []
-    # Reproduce Open-RS: pin ckpt-50 và ckpt-100 để eval gating
     keep_steps = cfg.get("gating", {}).get("ckpt_step")
     if keep_steps is not None:
         callbacks.append(KeepCheckpointStepsCallback([int(keep_steps)]))
@@ -201,9 +190,9 @@ def main() -> None:
     except torch.cuda.OutOfMemoryError as exc:
         raise RuntimeError(
             "GRPO OOM. Remediation options: "
-            "(1) set lora.enabled=true cho fallback LoRA r=16; "
-            "(2) giảm per_device_train_batch_size từ 6 → 4; "
-            "(3) giảm num_generations từ 6 → 4 (sẽ lệch Open-RS). "
+            "(1) set lora.enabled=true for fallback LoRA r=16; "
+            "(2) reduce per_device_train_batch_size from 6 -> 4; "
+            "(3) reduce num_generations from 6 -> 4 (diverges from Open-RS). "
             f"Original error: {exc}"
         ) from exc
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-# Train một SFT cell.
 # Usage: bash scripts/train_sft.sh <model_short> <condition> <seed>
 # Example: bash scripts/train_sft.sh qwen15b en 42
 

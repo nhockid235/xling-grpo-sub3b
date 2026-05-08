@@ -1,4 +1,4 @@
-"""IO utilities — YAML config loader (with `extends:` support), JSONL helpers."""
+"""IO utilities -- YAML config loader (with `extends:` support) and JSONL helpers."""
 
 from __future__ import annotations
 

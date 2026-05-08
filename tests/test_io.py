@@ -40,7 +40,7 @@ def test_jsonl_roundtrip(tmp_path: Path):
 
 
 def test_jsonl_unicode(tmp_path: Path):
-    """ensure_ascii=False để giữ tiếng Việt nguyên dạng."""
+    """"""
     records = [{"text": "Tính tổng 2 + 2 = ?"}]
     p = tmp_path / "vi.jsonl"
     write_jsonl(records, p)

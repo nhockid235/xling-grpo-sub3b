@@ -1,22 +1,14 @@
 """Language consistency post-hoc analysis.
 
-Run on saved responses[] arrays trong eval JSONs để compute lang_consistency_rate.
-Tách riêng khỏi training reward R5 — đây là analysis tool.
-
-Edge cases handled:
-  - Response too short (< min_response_tokens whitespace tokens) → skip, không
-    tính vào denominator (fastText unreliable on short text).
-  - Empty responses array → return 0.0 + log warning.
-  - fastText `lid.176.bin` returns 'zh-cn'/'zh-tw' style codes; ta strip suffix
-    về 'zh' để match expected_lang.
-  - Newlines trong text confuse fastText → replace với space trước khi predict.
+Edge cases:
+  - Empty responses array -> return 0.0 with a warning.
+  - fastText `lid.176.bin` may emit 'zh-cn'/'zh-tw' codes; suffix is stripped.
 
 Usage:
     python src/eval/lang_consistency.py \\
         --input "results/eval/*_mgsm_*.json" \\
         --output results/lang_consist.csv \\
-        --fasttext_model data/raw/lid.176.bin
-"""
+        --fasttext_model data/raw/lid.176.bin"""
 
 from __future__ import annotations
 
@@ -54,7 +46,7 @@ def _load_fasttext(model_path: str | Path) -> Any:
 
 
 def _normalize_fasttext_label(label: str) -> str:
-    """'__label__zh' → 'zh', '__label__zh-cn' → 'zh'."""
+    """'__label__zh' -> 'zh', '__label__zh-cn' -> 'zh'."""
     s = _LABEL_RE.sub("", label)
     # Truncate at first non-alpha to handle 'zh-cn', 'pt-br', etc.
     return re.split(r"[^a-zA-Z]", s)[0].lower()
@@ -71,16 +63,15 @@ def compute_consistency_rate(
     fasttext_model: str | Path = "data/raw/lid.176.bin",
     min_response_tokens: int = 10,
 ) -> tuple[float, int, int]:
-    """Tỷ lệ responses có top fastText langID match expected_lang.
+    """Compute language-consistency rate against an expected language.
 
     Args:
         responses: list of response strings.
         expected_lang: ISO 639-1 code (e.g., 'vi', 'zh').
         fasttext_model: path to lid.176.bin or pre-loaded fasttext model object.
-        min_response_tokens: dưới ngưỡng → skip (không tính vào denominator).
 
     Returns:
-        (consistency_rate ∈ [0, 1], n_counted, n_skipped)
+        (consistency_rate in [0, 1], n_counted, n_skipped)
     """
     if not responses:
         return 0.0, 0, 0
@@ -123,7 +114,6 @@ def compute_consistency_rate(
     return rate, n_counted, n_skipped
 
 
-# Pattern: {run_id}_{benchmark}_{language}.json hoặc {run_id}_{benchmark}.json
 _FNAME_LANG_RE = re.compile(r"^(?P<run_id>.+?)_(?P<benchmark>[a-z0-9]+)_(?P<lang>[a-z]{2})\.json$")
 _FNAME_NOLANG_RE = re.compile(r"^(?P<run_id>.+?)_(?P<benchmark>[a-z0-9]+)\.json$")
 

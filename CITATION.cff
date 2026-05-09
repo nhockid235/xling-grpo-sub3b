@@ -10,6 +10,15 @@ authors:
 date-released: "2026-05-07"
 license: Apache-2.0
 repository-code: "https://github.com/vudang4494/xling-grpo-sub3b"
+abstract: >-
+  Code and manuscript for an empirical multi-seed study of GRPO post-training
+  at sub-3B scale on a single-GPU LoRA budget, comparing English-only,
+  Vietnamese-translated, and English-with-language-consistency-reward arms
+  on three mathematical reasoning benchmarks (AMC-23, MATH-500, AIME-2024).
+  Source code and manuscript were prepared with AI assistance (Anthropic
+  Claude via Claude Code CLI); all empirical results were independently
+  verified by the author. See README and VERIFICATION.md for the full
+  AI-assistance disclosure.
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20061328"

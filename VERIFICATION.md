@@ -216,3 +216,60 @@ Manifest checksum file: `reports/phase9_runs/manifest.csv`
 - `results/grpo/reproduce_openrs_rs2_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
 
 Manifest checksum file: `reports/phase9_runs/manifest.csv`
+
+## Pipeline run @ 2026-05-09 13:14:28 UTC
+
+- Total artifacts checksummed: **219**
+- Trainer states valid: **12/12**
+- Eval JSONs valid: **30/30**
+- Numerical claims in paper: 6 (unmatched: 4)
+
+### Eval JSONs present
+
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_amc23.json` — pass@1=0.6250, n=40, responses=True
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_math500.json` — pass@1=0.6200, n=500, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_amc23.json` — pass@1=0.5250, n=40, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_math500.json` — pass@1=0.6020, n=500, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_aime2024.json` — pass@1=0.2667, n=30, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_amc23.json` — pass@1=0.5500, n=40, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_math500.json` — pass@1=0.6020, n=500, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_aime2024.json` — pass@1=0.2333, n=30, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_amc23.json` — pass@1=0.5250, n=40, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_math500.json` — pass@1=0.6060, n=500, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_amc23.json` — pass@1=0.4500, n=40, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_math500.json` — pass@1=0.5400, n=500, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_aime2024.json` — pass@1=0.2667, n=30, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_amc23.json` — pass@1=0.5000, n=40, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_math500.json` — pass@1=0.5940, n=500, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_aime2024.json` — pass@1=0.1000, n=30, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_amc23.json` — pass@1=0.5750, n=40, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_math500.json` — pass@1=0.5880, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_aime2024.json` — pass@1=0.2333, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_amc23.json` — pass@1=0.4500, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_math500.json` — pass@1=0.6160, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_aime2024.json` — pass@1=0.1333, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_amc23.json` — pass@1=0.3500, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_math500.json` — pass@1=0.5240, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_aime2024.json` — pass@1=0.1000, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_amc23.json` — pass@1=0.6750, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_math500.json` — pass@1=0.5860, n=500, responses=True
+
+### Trainer states present
+
+- `results/grpo/a2_vi_123/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a2_vi_123/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_123/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_7/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a2_vi_7/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_123/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/reproduce_openrs_rs2_123/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_123/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_7/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/reproduce_openrs_rs2_7/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+
+Manifest checksum file: `reports/phase9_runs/manifest.csv`

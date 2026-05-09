@@ -46,6 +46,9 @@ results/grpo/*
 !results/grpo/.gitkeep
 results/eval/*
 !results/eval/.gitkeep
+# Track eval JSONs as paper evidence (~43 MB total, manageable for git)
+!results/eval/**/
+!results/eval/**/*.json
 results/master.csv
 
 # fastText model

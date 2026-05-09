@@ -206,7 +206,6 @@ def stage6_paper_claim_crosscheck(eval_results: dict[str, dict]) -> list[dict]:
         for m in re.finditer(r"(\d+\.\d+)\s*\\?%", line):
             val = float(m.group(1))
             if 5.0 <= val <= 99.0:
-                matches = abs(val - target) <= 0.5 and val
                 matched = any(abs(val - p) <= 0.5 for p in eval_pass_set)
                 out.append({
                     "line": i,

@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{times}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+\begin{document}
+
+\noindent 11 May 2026
+
+\bigskip
+
+\noindent Editorial Office \\
+IEEE Access
+
+\vspace{1.5em}
+
+\noindent Dear Editorial Office,
+
+\medskip
+
+I am submitting the manuscript titled \textbf{``Beyond English-Only GRPO:
+A Multi-Seed Empirical Study at Sub-3B Scale''} for consideration in
+IEEE Access.
+
+This work provides a multi-seed empirical study of Group Relative Policy
+Optimization (GRPO) post-training of a 1.5B distilled reasoning model under
+a single-GPU LoRA constraint. Building on the recent observation by
+Hochlehnert et al.~(COLM 2025) that small-model RL reasoning gains may not
+survive multi-seed evaluation, we test three training-condition arms across
+three random seeds plus a single-seed mechanism ablation. The manuscript
+makes four contributions:
+
+\begin{enumerate}
+\item Multi-seed empirical evidence that vanilla English GRPO at
+sub-3B~$+$~LoRA scale exhibits $\sigma = 11.3$ percentage points (pp) seed
+variance on AMC-23 and consistently degrades AIME-2024 pass@1, confirming
+single-seed claims unreliable at this scale.
+
+\item Documentation of the auxiliary-reward arm (A3) achieving the only
+positive AIME-2024 maj@8 effect ($+4.4 \pm 1.9$\,pp over the untrained
+base), robust across three seeds.
+
+\item A constant-bias ablation (A4) that partially refutes a pure
+reward-magnitude interpretation of the auxiliary-reward effect.
+
+\item A 10-language MGSM evaluation showing null cross-lingual transfer
+for all training conditions ($\pm 0.5$\,pp of base mean).
+\end{enumerate}
+
+The work fits IEEE Access's broad scope on engineering applications of
+machine learning, with particular relevance to deployment-constrained
+post-training of language models. Our reproducibility commitment (full
+code released under Apache-2.0, LoRA adapters, evaluation JSONs with
+SHA256 manifest, per-step training logs) addresses the IEEE emphasis on
+rigorous and verifiable research.
+
+In compliance with IEEE Access policies on AI-assisted academic work, the
+manuscript and accompanying source code were prepared with assistance from
+Anthropic Claude (via the Claude Code command-line interface). All
+empirical results were independently produced and verified by the author,
+who bears sole responsibility for the technical claims, methodology, and
+any errors. The complete AI-assistance scope is detailed in the manuscript
+and in the \texttt{VERIFICATION.md} audit document of the released
+codebase.
+
+The corresponding author and sole author is Vu Dang, an independent
+researcher based in Vietnam. The work has not been published elsewhere and
+is not under review at any other venue. Code and data are publicly
+available at \url{https://github.com/vudang4494/xling-grpo-sub3b} and
+permanently archived at Zenodo
+DOI~\href{https://doi.org/10.5281/zenodo.20061328}{10.5281/zenodo.20061328}.
+
+Thank you for your consideration.
+
+\vspace{2em}
+
+\noindent Sincerely,
+
+\medskip
+
+\noindent Vu Dang \\
+Independent Researcher, Vietnam \\
+\href{mailto:vu.dh4494@gmail.com}{vu.dh4494@gmail.com}
+
+\end{document}

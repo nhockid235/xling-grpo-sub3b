@@ -64,12 +64,10 @@ are upstream of the evaluation datasets in different domains; in addition,
 Open-RS RS2 itself does not decontaminate. A future ablation will quantify any
 contamination effect via 8-gram overlap statistics.
 
-\subsection{Compute and cost}
-Training+eval: 1$\times$ NVIDIA A100-SXM4-80GB on Vast.ai cloud, \$1.50/h.
-Total wallclock for the three arms (50 steps each + ckpt-50 evaluation on
-3 benchmarks): 11 h 39 min, \$17.50.
-Setup, dependency installation, and failed retries: \$2.25.
-Total project spend: \$19.75 of \$180 budget.
+\subsection{Compute resources}
+Training and evaluation: 1$\times$ NVIDIA A100-SXM4-80GB GPU on commodity
+cloud infrastructure. Total wallclock for the three arms (50 steps each
+plus ckpt-50 evaluation on three benchmarks): 11 hours 39 minutes.
 
 \subsection{Random seeds}
 All training: \texttt{seed=42}. AIME-2024 maj@8 uses seeds 42--49 (8 stochastic

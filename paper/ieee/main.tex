@@ -76,8 +76,8 @@ and the role of auxiliary reward components remain poorly understood at the
 deployment-relevant single-GPU scale.
 
 \noindent\textbf{Methods.} On the DeepSeek-R1-Distill-Qwen-1.5B base, we run a
-controlled three-arm GRPO study under a single A100~80\,GB LoRA budget
-(rank $r{=}16$, total compute cost \$20). The arms vary exactly one axis:
+controlled three-arm GRPO study under a single A100~80\,GB LoRA constraint
+(rank $r{=}16$). The arms vary exactly one axis:
 \armA{} (English training data, accuracy and format rewards),
 \armB{} (Vietnamese-translated training data, identical rewards), and
 \armC{} (English training data, with an additional fastText-based
@@ -161,7 +161,7 @@ policy? If so, through what mechanism?
 We make four contributions:
 \begin{enumerate}
 \item A reproducible single-GPU LoRA recipe for sub-3\,B GRPO that achieves
-$+7.5$\,pp on AMC-23 over its untrained base on \$20 of compute, and an
+$+7.5$\,pp on AMC-23 over its untrained base, and an
 honest documentation of the 22.5\,pp residual gap to Open-RS reported numbers
 attributable to LoRA versus full-parameter training (Section~\ref{sec:method}).
 \item Empirical evidence that English-only GRPO at 50 steps causes
@@ -360,8 +360,8 @@ disabled so it can fire on every prompt regardless of input language.
 \end{itemize}
 
 \subsection{Compute and hyperparameters}
-Hardware: 1$\times$ NVIDIA A100-SXM4-80\,GB on Vast.ai cloud
-(\$1.50\,/\,hour). LoRA: $r{=}16$, $\alpha{=}32$, dropout $0.05$,
+Hardware: 1$\times$ NVIDIA A100-SXM4-80\,GB on commodity cloud infrastructure.
+LoRA: $r{=}16$, $\alpha{=}32$, dropout $0.05$,
 \texttt{bias=none}, target modules $\{q,k,v,o\}\_\mathrm{proj}$. GRPO:
 $G{=}6$ rollouts per prompt, \texttt{max\_completion\_length}$=3584$
 tokens, \texttt{temperature}$=0.7$, $\beta_{\text{KL}}=0.04$, learning rate
@@ -683,9 +683,9 @@ conclusions drawn.
 %% =================== ACKNOWLEDGMENT ==================================
 \section*{Acknowledgment}
 The author thanks the Hugging Face open community for hosting the data and
-model artifacts cited herein, and the Vast.ai cloud team for accessible
-A100 80\,GB compute pricing that makes single-GPU GRPO research feasible
-for independent investigators.
+model artifacts cited herein, and the broader open-source ecosystem
+(\texttt{vLLM}, \texttt{TRL}, \texttt{PEFT}) that makes single-GPU GRPO
+research feasible for independent investigators.
 
 %% =================== BIBLIOGRAPHY ====================================
 \bibliographystyle{IEEEtran}

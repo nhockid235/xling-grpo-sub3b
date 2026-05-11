@@ -63,8 +63,8 @@ on AMC23 but loses 16.7 pp on AIME-2024 --- a benchmark-specific overfit at 50 s
 \textbf{Adding the language-consistency reward $R_5$, even when it fires uniformly at
 1.0 on English training data, recovers 13.3 pp on AIME-2024 and produces the highest
 mean accuracy across four hard math metrics.} Vietnamese-translated training data
-shows a milder version of the same regularization effect. Both findings hold on a
-\$20 single-GPU LoRA budget, suggesting that auxiliary reward components and
+shows a milder version of the same regularization effect. Both findings hold under
+a single-GPU LoRA constraint, suggesting that auxiliary reward components and
 out-of-domain training data offer cheap regularization mechanisms for sub-3B GRPO.
 We release training/eval scripts, all checkpoints, and per-step reward traces.
 \end{abstract}
@@ -91,9 +91,9 @@ data shows the same regularization signature at smaller magnitude.
 
 \paragraph{Why sub-3B and a single GPU?}
 Sub-3B reasoning models are the deployment frontier for resource-constrained
-applications. We deliberately target the budget ceiling at which most independent
-researchers can reproduce GRPO results: a single A100 80GB on commodity cloud
-($\sim$\$1.50/h). Open-RS~\cite{openRS_2025} reports 80\% AMC23 with 4$\times$A40
+applications. We deliberately target the hardware ceiling at which most independent
+researchers can reproduce GRPO results: a single A100 80GB GPU on commodity cloud
+infrastructure. Open-RS~\cite{openRS_2025} reports 80\% AMC23 with 4$\times$A40
 full-parameter training (192 GB total VRAM); we use LoRA $r{=}16$ as the natural
 fallback at one-quarter VRAM and reach 57.5\%, a 22.5 pp gap that we document
 explicitly.
@@ -197,7 +197,7 @@ on every prompt.
 \end{description}
 
 \subsection{Compute and hyperparameters}
-1$\times$ NVIDIA A100-SXM4-80GB on Vast.ai. LoRA $r{=}16$,
+1$\times$ NVIDIA A100-SXM4-80GB GPU. LoRA $r{=}16$,
 $\alpha{=}32$, dropout 0.05, target = $\{q, k, v, o\}$\_proj. GRPO: $G{=}6$,
 \texttt{max\_completion\_length}{=}3584, \texttt{temperature}{=}0.7,
 $\beta_{\text{KL}}{=}0.04$, learning rate $10^{-6}$,

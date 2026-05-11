@@ -34,7 +34,7 @@ Three findings (see `paper/main.tex` for full discussion):
 
 ## Quick reproduction
 
-Hardware: 1× NVIDIA A100 80GB. Total budget: ~$20 GPU.
+Hardware required: 1× NVIDIA A100 80GB GPU.
 
 ```bash
 git clone <this repo>
@@ -52,7 +52,7 @@ bash scripts/train_a2_a3.sh a2
 bash scripts/train_a2_a3.sh a3
 ```
 
-Each arm: ~3-4h training + 15min eval = ~$5-7 on Vast.ai A100 spot.
+Each arm requires approximately 3–4 hours of training plus 15 minutes of evaluation.
 
 ## Repository layout
 

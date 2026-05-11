@@ -89,12 +89,16 @@ language or adding a language-consistency reward --- and ask whether either acts
 an effective regularizer at sub-3B scale.
 
 \boxedclaim{%
-\textbf{Main claim.} On DeepSeek-R1-Distill-Qwen-1.5B with a 50-step Open-RS Stage-1
-GRPO recipe (LoRA $r{=}16$, single A100), pure English GRPO trades AMC23 gains for
-AIME-2024 losses (+7.5 pp / $-$16.7 pp). Adding a fastText language-consistency reward
-$R_5$ --- without changing training data --- recovers 13.3 pp on AIME-2024 and yields the
-highest mean accuracy across four math benchmarks. Vietnamese-translated training
-data shows the same regularization signature at smaller magnitude.
+\textbf{Main claim.} On DeepSeek-R1-Distill-Qwen-1.5B with a 50-step Open-RS
+Stage-1 GRPO recipe (LoRA $r{=}16$, single A100), multi-seed evaluation reveals
+three orthogonal patterns: (i)~the language-consistency reward arm \armC{}
+achieves the highest mean AIME-2024 maj@8 ($+4.4 \pm 1.9$\,pp over base across
+three seeds); (ii)~vanilla English GRPO \armA{} exhibits $\sigma = 11.3$\,pp
+seed variance on AMC-23 and consistently degrades AIME-2024 pass@1 by $-12.2 \pm
+7.7$\,pp; (iii)~on 10-language MGSM, all training conditions converge to within
+$\pm 0.5$\,pp of the untrained base, indicating no cross-lingual transfer at
+this scale. A constant-bias control partially refutes a pure reward-magnitude
+explanation for finding (i).
 }
 
 \paragraph{Why sub-3B and a single GPU?}
@@ -116,15 +120,19 @@ controlled study where exactly one axis (language or reward) is changed at a tim
 on a single base model and budget.
 
 \paragraph{Contributions.}
-(1) A reproducible single-GPU LoRA GRPO pipeline that achieves $+7.5$ pp on AMC23
-over base (vs Open-RS reported $+17$ pp on 4$\times$A40); we document the gap honestly.
-(2) Empirical evidence that English-only GRPO at 50 steps causes
-\emph{benchmark-specific overfit}: gains concentrate on AMC23, losses concentrate
-on AIME-2024.
-(3) A surprising finding: a language-consistency reward $R_5$ --- even firing uniformly
-at 1.0 on English data --- acts as an \emph{implicit regularizer}, recovering 13.3 pp
-on AIME-2024 and improving mean accuracy. We hypothesize this is a reward-magnitude
-effect on PPO clipping geometry, not a content effect.
+(1) Multi-seed empirical evidence (3 seeds $\times$ 3 arms + 1 ablation) that
+single-seed GRPO results at sub-3B + LoRA scale are unreliable, with
+$\sigma = 11.3$\,pp variance on AMC-23 for vanilla English training.
+(2) Documentation of the auxiliary-reward arm \armC{}'s positive effect on the
+hardest benchmark in our suite: $+4.4 \pm 1.9$\,pp on AIME-2024 maj@8 over the
+untrained base, robust across three seeds.
+(3) A constant-bias ablation (\armD{}) that partially but not fully reproduces
+\armC{}'s effect, refuting a pure reward-magnitude interpretation and leaving
+the mechanism as an open question for future work.
+(4) A 10-language MGSM evaluation showing that the GRPO recipe at this scale
+\emph{preserves but does not improve} multilingual capability regardless of
+training-language choice, in contrast to the cross-lingual transfer initially
+hypothesized.
 
 % =====================================================================
 \section{Related Work}

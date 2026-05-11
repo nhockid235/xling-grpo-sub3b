@@ -187,7 +187,7 @@ Every step must be ✅ before the paper is submission-ready.
 - [ ] **41.** Submit to HuggingFace Papers (instant)
 - [ ] **42.** Submit to TMLR
 - [ ] **43.** Submit to NeurIPS MATH-AI workshop (when call opens)
-- [ ] **44.** Cold email 5 arXiv endorsers (parallel)
+- [x] **44.** (skipped — arXiv submission not pursued, no endorser available)
 - [ ] **45.** Track all submissions in spreadsheet
 
 ---

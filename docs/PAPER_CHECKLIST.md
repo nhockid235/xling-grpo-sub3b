@@ -139,7 +139,7 @@ Each JSON contains:
 | Author email | ✅ | vu.dh4494@gmail.com |
 | **ORCID iD** | ❌ | **User task** — register at orcid.org/register |
 | HuggingFace upload | ❌ pending | Phase 9.7 — paper PDF + adapters |
-| arXiv listing | ❌ blocked | Endorsement needed |
+| arXiv listing | ❌ skipped | No endorser available; using TMLR/IEEE/HF instead |
 
 ---
 
@@ -242,6 +242,6 @@ These items, if lost, would make the paper unsubmittable:
 | Vast.ai instance crashes | Local mirror SHA256-verified |
 | Local disk dies | Git remote (GitHub) + Zenodo backup |
 | GitHub repo goes down | Zenodo permanent DOI archive |
-| arXiv endorsement never comes | TMLR/IEEE Access/HF Papers don't need it |
+| arXiv route unavailable | TMLR/IEEE Access/HF Papers cover preprint role |
 | Reviewer demands specific claim verification | All eval JSONs have full responses[] arrays |
 | Reproducibility challenge from reviewer | Public Apache-2.0 code + LoRA adapters |

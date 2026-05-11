@@ -14,7 +14,6 @@ Code, configs, and checkpoints for the paper:
 > Implicit Regularizers in Sub-3B Math Reasoning**
 > *Vu Dang, 2026.*
 > Zenodo: [doi:10.5281/zenodo.20061328](https://doi.org/10.5281/zenodo.20061328)
-> · arXiv: TBD (pending endorsement)
 > · PDF: [paper/main.pdf](paper/main.pdf)
 
 **v2 (May 2026):** Multi-seed extension with A4 constant-bias ablation and 10-language MGSM evaluation. The v1 single-seed findings have been weakened or refuted; this document reflects v2.
@@ -78,8 +77,8 @@ xling-grpo-sub3b/
 ├── data/               — dataset prep, decontamination scripts
 ├── docs/               — project docs (paper checklist, pipeline, submission guide)
 ├── paper/              — LaTeX source, figures, tables, compiled PDFs
-│   ├── main.tex/.pdf   — ACL/arXiv version (v2)
-│   ├── ieee/           — IEEE Access version (v2)
+│   ├── main.tex/.pdf   — primary manuscript (v2)
+│   ├── ieee/           — IEEE Access submission version (v2)
 │   ├── archive/        — v1 Phase 8 PDF (historical)
 │   ├── tables/         — auto-generated LaTeX tables
 │   └── figures/        — multi-seed figures (PDF)
@@ -119,8 +118,6 @@ Verbatim Open-RS `lighteval` `MATH_QUERY_TEMPLATE` (no system prompt; template e
   publisher = {Zenodo}
 }
 ```
-
-(arXiv preprint pending endorsement; will add `eprint` field once published.)
 
 ## License
 

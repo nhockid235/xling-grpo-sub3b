@@ -17,20 +17,27 @@ Code, configs, and checkpoints for the paper:
 > · arXiv: TBD (pending endorsement)
 > · PDF: [paper/main.pdf](paper/main.pdf)
 
-We compare three GRPO post-training arms at sub-3B scale on a single A100 + LoRA budget:
+**v2 (May 2026):** Multi-seed extension with A4 constant-bias ablation and 10-language MGSM evaluation. The v1 single-seed findings have been weakened or refuted; this document reflects v2.
 
-| Arm | Training data | Rewards | AMC23 pass@1 | AIME-2024 pass@1 |
-|---|---|---|---|---|
-| Base (untrained) | — | — | 50.0% | 26.7% |
-| **A1** (EN) | `knoveleng/open-rs` 7K | R1 + R2 | **57.5%** | 10.0% |
-| **A2** (VI) | `5CD-AI/Vietnamese-MetaMathQA` 5.2K | R1 + R2 | 52.5% | 16.7% |
-| **A3** (EN+R5) | `knoveleng/open-rs` 7K | R1 + R2 + R5 | 52.5% | **23.3%** |
+We compare four GRPO post-training arms at sub-3B scale on a single A100 + LoRA constraint, across three random seeds per primary arm.
 
-Three findings (see `paper/main.tex` for full discussion):
+Mean ± σ across 3 seeds (single seed for A4):
 
-1. **English-only GRPO causes benchmark-specific overfit** — A1 gains +7.5pp on AMC23 but loses 16.7pp on AIME-2024.
-2. **Vietnamese training acts as a regularizer** — A2 preserves AIME-2024 maj@8 at base level (33.3%).
-3. **Lang-consistency reward is an implicit regularizer** — A3's R5 fires uniformly at 1.0 on English data (no content signal) yet recovers 13.3pp on AIME-2024.
+| Arm | Training data | Rewards | AMC23 | MATH-500 | AIME p@1 | AIME m@8 |
+|---|---|---|---|---|---|---|
+| Base (untrained) | — | — | 50.0 | 59.4 | 26.7 | 33.3 |
+| **A1** (EN) | `knoveleng/open-rs` 7K | R1 + R2 | 56.7 ± 11.3 | 59.7 ± 1.7 | 14.4 ± 7.7 | 32.2 ± 6.9 |
+| **A2** (VI) | `5CD-AI/Vietnamese-MetaMathQA` 5.2K | R1 + R2 | 56.7 ± 5.2 | 60.8 ± 1.0 | 20.0 ± 5.8 | 34.4 ± 1.9 |
+| **A3** (EN+R5) | `knoveleng/open-rs` 7K | R1 + R2 + R5 | 57.5 ± 6.6 | 60.7 ± 0.6 | 21.1 ± 1.9 | **37.8 ± 1.9** |
+| **A4** (EN+const) | `knoveleng/open-rs` 7K | R1 + R2 + 1.0 | 52.5 | 62.0 | 26.7 | 33.3 |
+
+Three orthogonal findings (see `paper/main.pdf` for full discussion):
+
+1. **Positive — A3 best on hardest benchmark.** A3 achieves the highest mean AIME-2024 maj@8 (37.8 ± 1.9%) and is the only arm with a positive Δ over the untrained base (+4.4pp), robust across three seeds.
+2. **Methodological — Vanilla EN GRPO unstable.** A1 exhibits σ = 11.3pp seed variance on AMC-23 and consistently degrades AIME-2024 pass@1 (mean −12.2pp across 3/3 seeds), confirming that single-seed claims at sub-3B + LoRA scale are unreliable.
+3. **Negative — No cross-lingual transfer.** On MGSM 10-language benchmark, all four arms converge to within ±0.5pp of the untrained base mean. Training-language choice does not produce cross-lingual transfer at this scale.
+
+The A4 constant-bias ablation partially but not fully reproduces A3's effect on AIME-2024 maj@8, suggesting the mechanism is not purely reward-magnitude based; the precise decomposition remains an open question.
 
 ## Quick reproduction
 

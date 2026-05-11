@@ -68,41 +68,46 @@ TBD).}}
 
 %% =================== STRUCTURED ABSTRACT =============================
 \begin{abstract}
-\noindent\textbf{Background.} Group Relative Policy Optimization (GRPO) drives
-recent advances in mathematical reasoning for sub-3B language models, but the
-training corpora and reward signals used in published recipes are
-overwhelmingly English. The transfer behavior of such recipes to other languages
-and the role of auxiliary reward components remain poorly understood at the
-deployment-relevant single-GPU scale.
+\noindent\textbf{Background.} Group Relative Policy Optimization (GRPO)
+drives recent advances in mathematical reasoning for sub-3B language models,
+but recent reproducibility analysis~\cite{sober_look_2025} shows that
+small-model RL gains may not survive multi-seed evaluation. The role of
+training-language choice and auxiliary reward components remains
+under-studied at the deployment-relevant single-GPU LoRA scale.
 
-\noindent\textbf{Methods.} On the DeepSeek-R1-Distill-Qwen-1.5B base, we run a
-controlled three-arm GRPO study under a single A100~80\,GB LoRA constraint
-(rank $r{=}16$). The arms vary exactly one axis:
+\noindent\textbf{Methods.} On the DeepSeek-R1-Distill-Qwen-1.5B base, we run
+a controlled multi-seed GRPO study under a single A100~80\,GB LoRA constraint
+(rank $r{=}16$). Three primary arms vary exactly one axis:
 \armA{} (English training data, accuracy and format rewards),
 \armB{} (Vietnamese-translated training data, identical rewards), and
 \armC{} (English training data, with an additional fastText-based
-language-consistency reward~$\R{5}$). All other hyperparameters are held
-verbatim to the Open-RS RS2 recipe. Models are evaluated on AMC-23, MATH-500,
-and AIME-2024.
+language-consistency reward~$\R{5}$). Each arm is trained with three random
+seeds. A single-seed constant-bias ablation \armD{} tests whether the
+auxiliary-reward effect reduces to reward magnitude. Models are evaluated on
+AMC-23, MATH-500, AIME-2024, and 10-language MGSM.
 
-\noindent\textbf{Results.} \armA{} gains $7.5$~percentage points (pp) on
-AMC-23 but loses $16.7$~pp on AIME-2024 pass@1 relative to the untrained base,
-indicating benchmark-specific overfit. \armB{} mitigates this asymmetry
-($+2.5$\,/\,$-10.0$~pp); \armC{} substantially recovers the AIME-2024
-pass@1 deficit ($+13.3$~pp over \armA{}; only $-3.4$~pp from base) and yields
-the highest mean accuracy across the four-metric suite. Critically, $\R{5}$
-fires near-uniformly at $1.0$ on English training data (because the model
-rarely code-switches), so its content-information content is approximately
-zero, yet its presence in the reward sum produces a measurable optimization
-effect.
+\noindent\textbf{Results.} We report three orthogonal findings.
+\textbf{(i) Positive:} on AIME-2024 maj@8, the hardest benchmark in our
+suite, \armC{} achieves the highest mean accuracy ($37.8 \pm 1.9$\%) and the
+only positive effect over the untrained base ($+4.4$\,pp), robust across
+three seeds. \textbf{(ii) Methodological:} \armA{} exhibits
+$\sigma = 11.3$\,pp seed variance on AMC-23 and consistently degrades
+AIME-2024 pass@1 (mean $-12.2$\,pp across 3/3 seeds), confirming that
+single-seed claims at sub-3B + LoRA scale are unreliable.
+\textbf{(iii) Negative:} on the MGSM 10-language benchmark, all four
+training conditions converge to within $\pm 0.5$\,pp of the untrained base
+mean, indicating that training-language choice does not produce cross-lingual
+transfer at this scale. The \armD{} ablation partially but not fully
+reproduces \armC{}'s effect on AIME-2024 maj@8, refuting a pure
+reward-magnitude interpretation.
 
-\noindent\textbf{Conclusion.} Out-of-distribution training data and an additive
-auxiliary reward, even when the latter carries little content signal, both act
-as implicit regularizers for sub-3B GRPO. The auxiliary-reward effect is most
-naturally explained as a perturbation of optimization geometry through PPO
-clipping ratios and KL penalties, rather than as a learned content effect.
-This identifies a low-cost, no-translation regularization mechanism for
-practitioners working under tight compute budgets.
+\noindent\textbf{Conclusion.} The auxiliary language-consistency reward
+$\R{5}$ improves the hardest-benchmark capability while preserving
+multilingual performance, but the mechanism is not purely a reward-magnitude
+perturbation. Multi-seed evaluation reveals that vanilla English GRPO at
+sub-3B + LoRA scale is unreliable; reproducibility studies are essential
+before scaling claims. We release all code, configurations, LoRA adapters,
+evaluation JSONs, and per-step reward traces to support replication.
 \end{abstract}
 
 %% =================== IEEE KEYWORDS ===================================

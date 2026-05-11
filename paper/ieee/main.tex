@@ -428,17 +428,18 @@ intervals will be reported in the multi-seed extension.
 \label{sec:results}
 
 \subsection{Three-arm pass@1 across math benchmarks}
-Table~\ref{tab:three_arm_results} reports pass@1 on the three benchmarks
+Table~\ref{tab:main_v2} reports pass@1 on the three benchmarks
 for the untrained base, our three trained arms, and the Open-RS RS2 reported
 numbers as an upper bound at the larger 4$\times$A40 budget.
 Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
 
-\input{tables/table_results}
-\input{tables/table_delta_vs_base}
+\input{tables/table_main_v2}
+\input{tables/table_delta_v2}
+\input{tables/table_mgsm}
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/fig1_arm_comparison.pdf}
+  \includegraphics[width=0.92\textwidth]{figures/fig1_arm_means_with_ci.pdf}
   \caption{Three-arm GRPO comparison on three mathematical reasoning
   benchmarks (single seed, \texttt{seed=42}). Bar height denotes pass@1
   except for the rightmost panel which is maj@8. The red dashed line shows
@@ -451,7 +452,7 @@ Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
 \subsection{Finding 1: English-only GRPO causes benchmark-specific overfit}
 \label{sec:finding1}
 \armA{} gains $+7.5$\,pp on AMC-23 but loses $-16.7$\,pp on AIME-2024 pass@1
-relative to base (Table~\ref{tab:delta_vs_base}). This is consistent with
+relative to base (Table~\ref{tab:delta_v2}). This is consistent with
 the ``peak-then-degrade'' dynamics reported by Open-RS but observed here at
 smaller absolute scale (50 steps from a distilled base on a single GPU).
 The model concentrates probability mass on AMC-23-style intermediate-difficulty
@@ -473,7 +474,7 @@ as natural regularization}.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/fig2_training_curves.pdf}
+  \includegraphics[width=0.92\textwidth]{figures/fig5_training_curves_multiseed.pdf}
   \caption{Per-step training rewards across 50 GRPO steps for each arm.
   \emph{Left:} $\R{1}$ (correctness) oscillates around 0.20 across all arms,
   with no clear improvement trend within 50 steps. \emph{Middle:} $\R{2}$
@@ -490,7 +491,7 @@ as natural regularization}.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.95\columnwidth]{figures/fig3_effect_sizes.pdf}
+  \includegraphics[width=0.95\columnwidth]{figures/fig4_effect_vs_base.pdf}
   \caption{Effect sizes (in percentage points) of each post-training arm
   relative to the untrained base. Positive values indicate improvement,
   negative values degradation. \armA{}'s AMC-23 gain comes bundled with a

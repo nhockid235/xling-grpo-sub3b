@@ -65,18 +65,36 @@ Each arm requires approximately 3–4 hours of training plus 15 minutes of evalu
 
 ```
 xling-grpo-sub3b/
-├── configs/        — YAML hyperparameters (one per arm + reproduce + eval)
-├── data/           — dataset prep, decontamination
+├── README.md           — this file
+├── LICENSE             — Apache-2.0
+├── CITATION.cff        — citation metadata
+├── CHANGELOG.md        — version history
+├── CONTRIBUTING.md     — contribution guidelines
+├── VERIFICATION.md     — per-component data audit trail
+├── pyproject.toml      — Python deps (pinned versions)
+├── Makefile            — reproduce commands
+│
+├── configs/            — YAML hyperparameters (one per arm + reproduce + eval)
+├── data/               — dataset prep, decontamination scripts
+├── docs/               — project docs (paper checklist, pipeline, submission guide)
+├── paper/              — LaTeX source, figures, tables, compiled PDFs
+│   ├── main.tex/.pdf   — ACL/arXiv version (v2)
+│   ├── ieee/           — IEEE Access version (v2)
+│   ├── archive/        — v1 Phase 8 PDF (historical)
+│   ├── tables/         — auto-generated LaTeX tables
+│   └── figures/        — multi-seed figures (PDF)
+├── reports/            — internal development notes (gitignored)
+├── results/            — eval JSONs (in git) + LoRA adapters (local only)
+├── scripts/            — training + eval + integrity pipeline scripts
 ├── src/
-│   ├── rewards/    — R1 (correctness), R2 (format), R5 (lang) + tests
-│   ├── trainers/   — TRL 0.15 GRPO + LoRA wrappers
-│   ├── eval/       — vLLM-based eval (AMC23, MATH-500, AIME-2024, ...)
-│   └── analysis/   — aggregate.py, bootstrap.py, plot_curves.py
-├── scripts/        — train + eval shell launchers
-├── tests/          — pytest (108 tests pass on CPU-only env)
-├── paper/          — LaTeX source, figures, tables, build script
-└── results/        — checkpoints, eval JSONs, master.csv (released)
+│   ├── rewards/        — R1 (correctness), R2 (format), R5 (lang), R_const
+│   ├── trainers/       — TRL 0.15 GRPO + LoRA wrappers
+│   ├── eval/           — vLLM eval adapters (AMC23, MATH-500, AIME, MGSM, ...)
+│   └── analysis/       — aggregate.py, bootstrap.py, plot_curves.py
+└── tests/              — pytest (104 tests pass on CPU-only env)
 ```
+
+See [`docs/README.md`](docs/README.md) for project documentation index.
 
 ## Reward definitions
 

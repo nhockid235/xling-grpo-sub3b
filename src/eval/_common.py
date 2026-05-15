@@ -21,14 +21,16 @@ def extract_prediction(completion: str) -> str | None:
     """
     inside = extract_answer_tag(completion)
     if inside is not None:
+        inside = inside.strip()
         boxed_inner = extract_boxed(inside)
-        return boxed_inner if boxed_inner is not None else inside
+        return boxed_inner.strip() if boxed_inner is not None else inside
 
     boxed = extract_boxed(completion)
     if boxed is not None:
-        return boxed
+        return boxed.strip()
 
-    return extract_last_number(completion)
+    result = extract_last_number(completion)
+    return result.strip() if result is not None else None
 
 
 def normalize_number_string(s: str | None) -> str | None:

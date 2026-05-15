@@ -12,8 +12,14 @@ generation:
   temperature: 0.0           # greedy cho pass@1
   top_p: 1.0
   max_tokens: 8192            # bumped: Open-RS uses 32768; long CoT needs >4096
-  stop: []                  
+  stop: []
   seed: 42
+
+  # Maj@K sampling — MUST use temperature > 0 so samples diverge.
+  # Bugfix (2026-05-15): without this, vLLM falls back to temperature=0.0,
+  # producing identical samples → maj@K = pass@1 (zero for many problems).
+  temperature_maj: 0.7
+  top_p_maj: 0.95
 
 # Per-benchmark settings (override generation)
 benchmarks:
@@ -64,7 +70,12 @@ benchmarks:
   mgsm:
     hf_id: juletxara/mgsm
     split: test
-    languages: [en, es, fr, de, ru, zh, ja, th, sw, bn]   # 10 guaranteed
+    # All 10 guaranteed langs cho full eval. NOTE: MGSM KHÔNG có 'vi' — VI claim
+    # paper rely on hand-translated MATH-500 subset (math500_vi_hand benchmark).
+    languages: [en, es, fr, de, ru, zh, ja, th, sw, bn]
+    # Headline subset cho fast eval (Phase 9.4): 6 langs covering 4 scripts
+    # (Latin: en/fr/de, Cyrillic: ru, Han: zh, Thai: th). Save ~40% compute.
+    headline_languages: [en, fr, de, zh, th, sw]
     n_samples: 250
     fields:
       problem: question
@@ -75,8 +86,23 @@ benchmarks:
     hf_id: Mathoctopus/MSVAMP
     split: test
     languages: [bn, zh, en, fr, de, ja, ru, es, sw, th]
+    headline_languages: [en, fr, de, zh, th, sw]
     n_samples: null
     fields:
       problem: question
       answer: answer_number
     metrics: [pass_at_1, lang_consistency]
+
+  # Hand-translated 100-sample VI subset of MATH-500 (Phase 9.1.4-9.1.6).
+  # Source: data/processed/math500_vi_100.jsonl (created by user, native VI).
+  math500_vi_hand:
+    local_jsonl: data/processed/math500_vi_100.jsonl
+    n_samples: 100
+    language: vi
+    fields:
+      problem: problem
+      answer: answer
+      level: level
+      subject: subject
+    metrics: [pass_at_1, lang_consistency]
+    note: "Hand-translated from HuggingFaceH4/MATH-500 by author (native Vietnamese speaker). Used to bypass MGSM/MSVAMP not covering Vietnamese."

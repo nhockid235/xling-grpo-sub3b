@@ -1,0 +1,12 @@
+# .mailmap — canonicalize commit author/co-author identities for git log,
+# git shortlog, and GitHub's Contributors tab.
+#
+# Format: <Canonical Name> <canonical@email>  <Old Name> <old@email>
+# See: https://git-scm.com/docs/gitmailmap
+
+# Map AI assistants used during this work to the project owner so the
+# Contributors tab shows only the human author. The actual AI assistance
+# is disclosed in the README under "AI Assistance Disclosure" and in
+# individual commit bodies via Co-authored-by trailers (which remain).
+
+Vu Dang <vu.dh4494@gmail.com>  Cursor <cursoragent@cursor.com>

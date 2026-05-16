@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### In progress (W1, 2026-05-15)
+- W1.7 re-eval all 10 LoRAs × seeds on AMC-23 (post-fix maj@4) — running on A100-SXM4-80GB at vast.ai.
+- W1.9 A4 multi-seed expansion (seeds 123, 7) — queued after W1.7.
+- W1.10 bootstrap 95% CI for AIME-2024 m@8 headline — partial run on existing data, A3 vs Base CI [+3.3, +6.7], significant.
+- W20 update `paper/tables/table_main_v2.tex` + `table_delta_v2.tex` with post-fix maj@4 numbers.
+
+### Fixed (2026-05-15)
+- AMC23 `maj@4` sampling-bug: `configs/eval.yaml` now sets `temperature_maj=0.7`; `src/eval/_common.py::extract_prediction()` strips whitespace at all return paths.
+- 4 Anonymous citations resolved to verified authors (Park 2025, Zhang 2025 ×2, Yong 2025).
+- Eval-pipeline-gap claim refuted: re-evaluating Open-RS's own public RS2 checkpoint with our pipeline gives `maj@4=75.0%` vs paper's `80%` — within 5pp variance. The original 12.9pp gap was a metric mismatch (`pass@1` vs `maj@k`), not a pipeline bug.
+
 ### Planned
-- Tier 2 multi-seed expansion (seeds 42, 123, 7) — push Findings competitiveness
-- MGSM 10-language eval for cross-lingual claim
-- AMC23 `maj@4` sampling-bug fix
-- arXiv preprint listing once endorsement is confirmed
+- MGSM multi-seed eval (optional, acknowledged in Limitations as single-seed).
+- arXiv preprint listing once endorsement is confirmed.
 
 ## [v1.0.0] — 2026-05-07
 

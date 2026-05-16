@@ -81,8 +81,16 @@ paper/*.fdb_latexmk
 paper/arxiv_submission/
 paper/arxiv_submission.tar.gz
 
-# Internal development logs and notes — kept local only
-reports/
+# Internal development logs and notes — kept local only.
+# Use `reports/*` (not `reports/`) so re-includes below work.
+reports/*
+# Keep W1 paper-revision evidence (verification log + execution audit trail
+# + VPS inventory + setup scripts) — these are reproducibility artifacts.
+!reports/W1_PAPER_VERIFICATION_2026-05-16.md
+!reports/W1_2026-05-15_VPS_EXECUTION.md
+!reports/W1_VPS_INVENTORY_2026-05-16.md
+!reports/vps_setup
+reports/vps_setup/__pycache__/
 
 # IEEE build intermediates (regenerable via paper/ieee/build.sh)
 paper/ieee/main.aux

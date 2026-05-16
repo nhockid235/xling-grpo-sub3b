@@ -34,10 +34,14 @@ This document records what was verified, by whom, and when.
 | A1 seed=42 (Phase 8) | ✅ Verified | Self-run on Vast.ai 2026-05-06 |
 | A1 seed=123 (Phase 9.2) | ✅ Verified | Self-run on Vast.ai 2026-05-08 |
 | A1 seed=7 (Phase 9.2) | ✅ Verified | Self-run on Vast.ai 2026-05-08 |
-| A2 multi-seed | 🟡 In progress | Phase 9.2 currently running |
-| A3 multi-seed | ⏳ Pending | Phase 9.2 sequential |
-| A4 ablation | ⏳ Pending | Phase 9.3 planned |
-| MGSM multilingual eval | ⏳ Pending | Phase 9.4 planned |
+| A2 multi-seed (42, 123, 7) | ✅ Verified | Self-run Vast.ai 2026-05-08 |
+| A3 multi-seed (42, 123, 7) | ✅ Verified | Self-run Vast.ai 2026-05-09/10 |
+| A4 ablation (seed 42) | ✅ Verified single-seed | Self-run Vast.ai 2026-05-10 |
+| A4 ablation (seeds 123, 7) | 🟡 In progress | Self-run Vast.ai 2026-05-15 (W1.9) |
+| W1.7 AMC23 maj@4 re-eval (post-fix) | 🟡 In progress | Self-run Vast.ai 2026-05-15 |
+| W1.8 eval-gap diagnosis (Open-RS2 public) | ✅ Verified | Self-run Vast.ai 2026-05-15. Result: pipeline reproduces Open-RS within 5pp on maj@4. Pipeline is sound. |
+| MGSM multilingual eval (single-seed) | ✅ Verified | Phase 9.4 |
+| MGSM multilingual eval (multi-seed) | ⏳ Optional | Acknowledged in Limitations |
 
 ### Citations and prior art
 
@@ -388,6 +392,158 @@ Manifest checksum file: `reports/phase9_runs/manifest.csv`
 - `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_aime2024.json` — pass@1=0.1333, n=30, responses=True
 - `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_amc23.json` — pass@1=0.3500, n=40, responses=True
 - `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_math500.json` — pass@1=0.5240, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_aime2024.json` — pass@1=0.1000, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_amc23.json` — pass@1=0.6750, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_math500.json` — pass@1=0.5860, n=500, responses=True
+
+### Trainer states present
+
+- `results/grpo/a2_vi_123/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a2_vi_123/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_123/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_7/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a2_vi_7/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a2_vi_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a3_enlang_123/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a3_enlang_123/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a3_enlang_123/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a3_enlang_7/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/a3_enlang_7/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/a3_enlang_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_123/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/reproduce_openrs_rs2_123/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_123/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_7/checkpoint-100/trainer_state.json` — step 100/100, n_logs=20
+- `results/grpo/reproduce_openrs_rs2_7/checkpoint-50/trainer_state.json` — step 50/100, n_logs=10
+- `results/grpo/reproduce_openrs_rs2_7/keep_step50/trainer_state.json` — step 50/100, n_logs=10
+
+Manifest checksum file: `reports/phase9_runs/manifest.csv`
+
+## Pipeline run @ 2026-05-11 02:23:22 UTC
+
+- Total artifacts checksummed: **402**
+- Trainer states valid: **18/18**
+- Eval JSONs valid: **119/119**
+- Numerical claims in paper: 3 (unmatched: 0)
+
+### Eval JSONs present
+
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_bn.json` — pass@1=0.1920, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_de.json` — pass@1=0.5360, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_en.json` — pass@1=0.7920, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_es.json` — pass@1=0.6760, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_fr.json` — pass@1=0.6200, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_ja.json` — pass@1=0.3520, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_ru.json` — pass@1=0.5880, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_sw.json` — pass@1=0.0120, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_th.json` — pass@1=0.2240, n=250, responses=True
+- `results/eval/a2_vi_123_mgsm/a2_vi_123_mgsm_mgsm_zh.json` — pass@1=0.6560, n=250, responses=True
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_amc23.json` — pass@1=0.6250, n=40, responses=True
+- `results/eval/a2_vi_123_step50/a2_vi_123_step50_math500.json` — pass@1=0.6200, n=500, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_amc23.json` — pass@1=0.5250, n=40, responses=True
+- `results/eval/a2_vi_42_step50/a2_vi_42_step50_math500.json` — pass@1=0.6020, n=500, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_bn.json` — pass@1=0.1840, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_de.json` — pass@1=0.5520, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_en.json` — pass@1=0.8120, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_es.json` — pass@1=0.6520, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_fr.json` — pass@1=0.6000, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_ja.json` — pass@1=0.3760, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_ru.json` — pass@1=0.6000, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_sw.json` — pass@1=0.0320, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_th.json` — pass@1=0.2240, n=250, responses=True
+- `results/eval/a2_vi_7_mgsm/a2_vi_7_mgsm_mgsm_zh.json` — pass@1=0.7040, n=250, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_aime2024.json` — pass@1=0.2667, n=30, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_amc23.json` — pass@1=0.5500, n=40, responses=True
+- `results/eval/a2_vi_7_step50/a2_vi_7_step50_math500.json` — pass@1=0.6020, n=500, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_bn.json` — pass@1=0.1760, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_de.json` — pass@1=0.5720, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_en.json` — pass@1=0.8200, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_es.json` — pass@1=0.6360, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_fr.json` — pass@1=0.6080, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_ja.json` — pass@1=0.3560, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_ru.json` — pass@1=0.5800, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_sw.json` — pass@1=0.0360, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_th.json` — pass@1=0.2440, n=250, responses=True
+- `results/eval/a3_enlang_123_mgsm/a3_enlang_123_mgsm_mgsm_zh.json` — pass@1=0.6880, n=250, responses=True
+- `results/eval/a3_enlang_123_step50/a3_enlang_123_step50_aime2024.json` — pass@1=0.2000, n=30, responses=True
+- `results/eval/a3_enlang_123_step50/a3_enlang_123_step50_amc23.json` — pass@1=0.5500, n=40, responses=True
+- `results/eval/a3_enlang_123_step50/a3_enlang_123_step50_math500.json` — pass@1=0.6140, n=500, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_aime2024.json` — pass@1=0.2333, n=30, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_amc23.json` — pass@1=0.5250, n=40, responses=True
+- `results/eval/a3_enlang_42_step50/a3_enlang_42_step50_math500.json` — pass@1=0.6060, n=500, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_bn.json` — pass@1=0.2040, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_de.json` — pass@1=0.5480, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_en.json` — pass@1=0.8000, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_es.json` — pass@1=0.6440, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_fr.json` — pass@1=0.5960, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_ja.json` — pass@1=0.3480, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_ru.json` — pass@1=0.5480, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_sw.json` — pass@1=0.0240, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_th.json` — pass@1=0.2360, n=250, responses=True
+- `results/eval/a3_enlang_7_mgsm/a3_enlang_7_mgsm_mgsm_zh.json` — pass@1=0.6920, n=250, responses=True
+- `results/eval/a3_enlang_7_step50/a3_enlang_7_step50_aime2024.json` — pass@1=0.2000, n=30, responses=True
+- `results/eval/a3_enlang_7_step50/a3_enlang_7_step50_amc23.json` — pass@1=0.6500, n=40, responses=True
+- `results/eval/a3_enlang_7_step50/a3_enlang_7_step50_math500.json` — pass@1=0.6020, n=500, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_bn.json` — pass@1=0.1840, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_de.json` — pass@1=0.5560, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_en.json` — pass@1=0.8240, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_es.json` — pass@1=0.6480, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_fr.json` — pass@1=0.6440, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_ja.json` — pass@1=0.3480, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_ru.json` — pass@1=0.5880, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_sw.json` — pass@1=0.0320, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_th.json` — pass@1=0.2360, n=250, responses=True
+- `results/eval/a4_const_bias_42_mgsm/a4_const_bias_42_mgsm_mgsm_zh.json` — pass@1=0.6880, n=250, responses=True
+- `results/eval/a4_const_bias_42_step50/a4_const_bias_42_step50_aime2024.json` — pass@1=0.2667, n=30, responses=True
+- `results/eval/a4_const_bias_42_step50/a4_const_bias_42_step50_amc23.json` — pass@1=0.5250, n=40, responses=True
+- `results/eval/a4_const_bias_42_step50/a4_const_bias_42_step50_math500.json` — pass@1=0.6200, n=500, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_aime2024.json` — pass@1=0.1667, n=30, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_amc23.json` — pass@1=0.4500, n=40, responses=True
+- `results/eval/base_deepseek_r1_distill_15b/base_deepseek_r1_distill_15b_math500.json` — pass@1=0.5400, n=500, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_bn.json` — pass@1=0.1800, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_de.json` — pass@1=0.5720, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_en.json` — pass@1=0.8040, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_es.json` — pass@1=0.6560, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_fr.json` — pass@1=0.6120, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_ja.json` — pass@1=0.3720, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_ru.json` — pass@1=0.5880, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_sw.json` — pass@1=0.0240, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_th.json` — pass@1=0.2360, n=250, responses=True
+- `results/eval/base_distill15b_mgsm/base_distill15b_mgsm_mgsm_zh.json` — pass@1=0.6880, n=250, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_aime2024.json` — pass@1=0.2667, n=30, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_amc23.json` — pass@1=0.5000, n=40, responses=True
+- `results/eval/base_v3_openrs_eval/base_v3_math500.json` — pass@1=0.5940, n=500, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_aime2024.json` — pass@1=0.1000, n=30, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_amc23.json` — pass@1=0.5750, n=40, responses=True
+- `results/eval/ckpt50_v3_openrs_eval/ckpt50_v3_math500.json` — pass@1=0.5880, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_bn.json` — pass@1=0.1920, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_de.json` — pass@1=0.5640, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_en.json` — pass@1=0.8120, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_es.json` — pass@1=0.6680, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_fr.json` — pass@1=0.6280, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_ja.json` — pass@1=0.3640, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_ru.json` — pass@1=0.5920, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_sw.json` — pass@1=0.0320, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_th.json` — pass@1=0.2440, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_mgsm/reproduce_openrs_rs2_123_mgsm_mgsm_zh.json` — pass@1=0.6920, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_aime2024.json` — pass@1=0.2333, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_amc23.json` — pass@1=0.4500, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_123_step50/reproduce_openrs_rs2_123_step50_math500.json` — pass@1=0.6160, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_aime2024.json` — pass@1=0.1333, n=30, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_amc23.json` — pass@1=0.3500, n=40, responses=True
+- `results/eval/reproduce_openrs_rs2_42_step50_v2/reproduce_openrs_rs2_42_step50_v2_math500.json` — pass@1=0.5240, n=500, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_bn.json` — pass@1=0.2160, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_de.json` — pass@1=0.5600, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_en.json` — pass@1=0.8000, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_es.json` — pass@1=0.6040, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_fr.json` — pass@1=0.6200, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_ja.json` — pass@1=0.3720, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_ru.json` — pass@1=0.5920, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_sw.json` — pass@1=0.0120, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_th.json` — pass@1=0.2240, n=250, responses=True
+- `results/eval/reproduce_openrs_rs2_7_mgsm/reproduce_openrs_rs2_7_mgsm_mgsm_zh.json` — pass@1=0.6600, n=250, responses=True
 - `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_aime2024.json` — pass@1=0.1000, n=30, responses=True
 - `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_amc23.json` — pass@1=0.6750, n=40, responses=True
 - `results/eval/reproduce_openrs_rs2_7_step50/reproduce_openrs_rs2_7_step50_math500.json` — pass@1=0.5860, n=500, responses=True

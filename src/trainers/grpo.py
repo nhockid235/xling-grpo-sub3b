@@ -104,6 +104,15 @@ def main() -> None:
     from transformers import AutoTokenizer
     from trl import GRPOConfig, GRPOTrainer
 
+    # Compat shim: transformers >= 4.57 calls `self._get_train_sampler(dataset)` with
+    # positional arg; trl 0.15.2's override takes no args. Wrap so positional arg is dropped.
+    _orig_sampler = GRPOTrainer._get_train_sampler
+
+    def _patched_sampler(self, train_dataset=None):
+        return _orig_sampler(self)
+
+    GRPOTrainer._get_train_sampler = _patched_sampler
+
     from src.trainers.checkpoint_utils import KeepCheckpointStepsCallback
     from src.trainers.dataset_utils import (
         DEFAULT_SYSTEM_PROMPT_EN,

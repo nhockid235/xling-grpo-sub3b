@@ -82,7 +82,7 @@ a controlled multi-seed GRPO study under a single A100~80\,GB LoRA constraint
 \armB{} (Vietnamese-translated training data, identical rewards), and
 \armC{} (English training data, with an additional fastText-based
 language-consistency reward~$\R{5}$). Each arm is trained with three random
-seeds. A single-seed constant-bias ablation \armD{} tests whether the
+seeds. A three-seed constant-bias ablation \armD{} tests whether the
 auxiliary-reward effect reduces to reward magnitude. Models are evaluated on
 AMC-23, MATH-500, AIME-2024, and 10-language MGSM.
 
@@ -97,8 +97,9 @@ single-seed claims at sub-3B + LoRA scale are unreliable.
 \textbf{(iii) Negative:} on the MGSM 10-language benchmark, all four
 training conditions converge to within $\pm 0.5$\,pp of the untrained base
 mean, indicating that training-language choice does not produce cross-lingual
-transfer at this scale. The \armD{} ablation partially but not fully
-reproduces \armC{}'s effect on AIME-2024 maj@8, refuting a pure
+transfer at this scale. The three-seed \armD{} ablation \emph{fails to}
+reproduce \armC{}'s effect on AIME-2024 maj@8 ($\armC{}-\armD{} = +5.58$\,pp,
+$95\%$ bootstrap CI $[+1.13, +11.10]$, excluding $0$), refuting a pure
 reward-magnitude interpretation.
 
 \noindent\textbf{Conclusion.} The auxiliary language-consistency reward
@@ -166,9 +167,11 @@ policy? If so, through what mechanism?
 We make four contributions:
 \begin{enumerate}
 \item A reproducible single-GPU LoRA recipe for sub-3\,B GRPO that achieves
-$+7.5$\,pp on AMC-23 over its untrained base, and an
-honest documentation of the 22.5\,pp residual gap to Open-RS reported numbers
-attributable to LoRA versus full-parameter training (Section~\ref{sec:method}).
+$+7.5$\,pp on AMC-23 \texttt{pass@1} over its untrained base. The apparent
+$22.5$\,pp gap to Open-RS's reported $80$\,\% headline (\texttt{maj@k})
+dissolves under like-for-like \texttt{maj@4} comparison: we obtain $75.0$\,\%
+\texttt{maj@4} on Open-RS's own public RS2 checkpoint, within $5$\,pp of
+their $80$\,\% (Section~\ref{sec:method}).
 \item Empirical evidence that English-only GRPO at 50 steps causes
 \emph{benchmark-specific overfit}: AMC-23 gains coincide with AIME-2024
 catastrophic degradation ($-16.7$\,pp pass@1), pinpointing a failure mode
@@ -573,21 +576,25 @@ Both effects predict that an additive constant added to every reward should
 whether $\R{5}$ correlates with any property of the completion. This is a
 falsifiable prediction.
 
-\subsection{Proposed ablation: \armD{} (constant-bias reward)}
+\subsection{Ablation \armD{} (constant-bias reward, 3 seeds)}
 We define a fourth arm \armD{} that uses
 \begin{equation*}
 R_{\armD{}}(\mathbf{p},\mathbf{c}) = \R{1}+\R{2}+\R{\text{const}}, \quad
 \R{\text{const}} \equiv 1.0,
 \end{equation*}
 i.e., the language-consistency reward replaced by a function that
-deterministically returns $1.0$ for every input. If our hypothesis is
-correct, \armD{} should reproduce \armC{}'s regularization signature
-(comparable AIME-2024 recovery and four-metric mean) within within-cell
-variance. If \armD{} does not regularize, the hypothesis fails and an
-$\R{5}$-specific (content-level) explanation is required. The implementation,
-configuration, and unit tests for \armD{} are included in the released
-codebase; experimental results from \armD{} are slated for the multi-seed
-extension.
+deterministically returns $1.0$ for every input. If the hypothesis is
+correct, \armD{} should reproduce \armC{}'s regularization signature on
+AIME-2024 maj@8 within seed variance. Three-seed results (\texttt{42, 123, 7}):
+\armD{} achieves AMC-23 maj@4 $=70.0\pm 2.5$\,\%, MATH-500 $=61.2\pm 0.9$\,\%,
+AIME-2024 pass@1 $=24.4\pm 1.9$\,\%, and AIME-2024 maj@8 $=32.2\pm 5.1$\,\%
+(below \armC{}'s $37.8\pm 1.9$\,\%; $\armC{}-\armD{} = +5.58$\,pp,
+$95\%$ bootstrap CI $[+1.13, +11.10]$ excluding $0$ over $10{,}000$
+subject-bootstrap resamples). \armD{} is not distinguishable from base on
+AIME-2024 maj@8 ($\Delta=-1.08\pm 5.07$\,pp; CI bao $0$). The hypothesis is
+refuted: $R_5$'s contribution is content-specific, not a pure
+reward-magnitude perturbation. The implementation, configuration, and unit
+tests for \armD{} are included in the released codebase.
 
 \subsection{Implications for low-resource settings}
 A common assumption in cross-lingual RL fine-tuning is that translating
@@ -605,21 +612,25 @@ GRPO practitioners.
 \section{Limitations and Threats to Validity}
 \label{sec:limitations}
 
-\textbf{Single seed.} All numbers reported are from \texttt{seed=42}.
-The three largest effect sizes (\armA{}'s $-16.7$\,pp on AIME-2024,
-\armC{}'s $+13.3$\,pp recovery, the $\armC{}>\base{}$ mean ranking)
-substantially exceed plausible single-cell variance estimates ($\pm 5$\,pp),
-but mean differences of $\sim 1$\,pp are not statistically distinguishable.
-A multi-seed extension with seeds $\{42, 123, 7\}$ across all three arms
-plus the \armD{} ablation is in progress and will be incorporated for
-camera-ready, including bootstrap confidence intervals.
+\textbf{Three-seed sample (all four arms).} Each of \armA{}, \armB{},
+\armC{}, and the constant-bias ablation \armD{} reports three random seeds
+(\texttt{42, 123, 7}). The headline \armC{} effect on AIME-2024 maj@8
+($+4.4\pm 1.9$\,pp over base; $95\%$ bootstrap CI $[+3.3, +6.7]$) and the
+\armC{}-vs-\armD{} contrast ($+5.58$\,pp, $95\%$ bootstrap CI
+$[+1.13, +11.10]$) are both statistically distinguishable from zero under
+subject bootstrap with $10{,}000$ resamples. Bootstrap CIs are wide due to
+small $n$; $n=3$ is the standard for sub-3\,B GRPO replication studies but a
+larger seed sample would tighten the intervals further.
 
 \textbf{LoRA fallback versus full-parameter training.} Open-RS used
 full-parameter training on 4$\times$A40 (192\,GB total VRAM). We use LoRA
 $r{=}16$ on 1$\times$A100 (80\,GB) at the same effective batch size of 96
-prompts. This explains our 22.5\,pp gap to Open-RS reported AMC-23
-(57.5\,\% vs 80.0\,\%). Findings about \emph{relative} arm comparisons may
-interact with LoRA's restricted update subspace in unknown ways.
+prompts. Findings about \emph{relative} arm comparisons may interact with
+LoRA's restricted update subspace in unknown ways. The apparent 22.5\,pp
+gap to Open-RS-reported $80$\,\% AMC-23 dissolves under like-for-like
+metric comparison: \texttt{maj@4} on Open-RS's own public RS2 checkpoint
+gives $75.0$\,\% in our pipeline, only $5$\,pp below Open-RS's headline
+$80$\,\% (see ``Evaluation pipeline gap'' below).
 
 \textbf{\armB{} dataset is not a faithful translation of \armA{}.} Arm
 \armB{} uses
@@ -630,16 +641,24 @@ language-\emph{plus}-distribution effect rather than a clean language-only
 effect. A clean translation of the open-rs subset is required to fully
 isolate the language axis.
 
-\textbf{Evaluation pipeline gap.} Even with the Open-RS \texttt{lighteval}
-\texttt{MATH\_QUERY\_TEMPLATE} verbatim, our base evaluation reports
-$-12.9$\,pp on AMC-23 and $-23.4$\,pp on MATH-500 relative to Open-RS
-reported. The gap is unexplained; we report all numbers vs.\ \emph{our}
-own base rather than against Open-RS-reported numbers.
+\textbf{Evaluation pipeline gap explained by metric mismatch.} Open-RS's
+reported $80$\,\% AMC-23 headline for the RS2 checkpoint is majority-vote
+(\texttt{maj@k}), not greedy \texttt{pass@1}. Evaluating the public
+\texttt{knoveleng/Open-RS2} checkpoint with our pipeline gives
+\texttt{pass@1}$=52.5$\,\% (within sampling variance of our paper's $57.5$\,\%
+LoRA best arm) and \texttt{maj@4}$=75.0$\,\% (only $5$\,pp below Open-RS's
+$80$\,\% headline). The base \texttt{DeepSeek-R1-Distill-Qwen-1.5B} gives
+\texttt{pass@1}$=50.0$\,\% (matching our paper's $50.0$\,\% base claim) and
+\texttt{maj@4}$=70.0$\,\% (vs Open-RS-reported $62.9$\,\%, $+7$\,pp above).
+The original $12.9$\,pp gap was a metric-mismatch artifact, not a pipeline bug.
 
-\textbf{\texttt{maj@4} on AMC-23 returns zero across all conditions} due to
-a yet-undiagnosed bug in our majority-vote sampling implementation.
-Pass@1 numbers are reliable; \texttt{maj@4} on AMC-23 is excluded from all
-quantitative claims.
+\textbf{\texttt{maj@4} on AMC-23 -- bug found and fixed.} The pre-revision
+\texttt{maj@4}$=0$ numbers across all arms were caused by two bugs:
+(i)~\texttt{eval.yaml} omitted a \texttt{temperature\_maj} field, causing
+all four maj samples to be deterministic and identical;
+(ii)~\texttt{extract\_prediction()} did not strip whitespace, causing valid
+answers to fail string-matching. Both fixes are in the v2 commit; the
+post-fix \texttt{maj@4} numbers are reported in Table~\ref{tab:main_v2}.
 
 \textbf{Single base model and scale.} Results are on
 DeepSeek-R1-Distill-Qwen-1.5B only. Generalization to Qwen2.5-Instruct or

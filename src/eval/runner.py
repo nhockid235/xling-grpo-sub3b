@@ -1,4 +1,4 @@
-"""Eval runner -- vLLM batch generation + scoring orchestration.
+"""Eval runner — vLLM batch generation + scoring orchestration.
 
 Usage:
     python src/eval/runner.py \\
@@ -11,7 +11,7 @@ Output JSON file per benchmark (per language for multilingual):
     {output_dir}/{run_id}_{benchmark}.json                 (single-lang)
     {output_dir}/{run_id}_{benchmark}_{lang}.json          (multilingual)
 
-Always writes the `responses` array.
+Schema follows CLAUDE.md § Logging schema. ALWAYS includes `responses` array.
 """
 
 from __future__ import annotations
@@ -31,9 +31,10 @@ _BENCHMARK_MODULES = {
     "gsm8k": "src.eval.gsm8k",
     "math500": "src.eval.math500",
     "aime2024": "src.eval.aime",
-    "amc23": "src.eval.amc23",
+    "amc23": "src.eval.amc23",                # W2 gating
     "mgsm": "src.eval.mgsm",
     "msvamp": "src.eval.msvamp",
+    "math500_vi_hand": "src.eval.math500_vi_hand",  # Phase 9: hand-translated VI
 }
 
 _MULTILINGUAL = {"mgsm", "msvamp"}
@@ -76,7 +77,7 @@ def _build_sampling_params(SamplingParams, gen_cfg: dict[str, Any], seed: int):
 
 
 def _build_sampling_params_maj(SamplingParams, gen_cfg: dict[str, Any], seed: int):
-    """Stochastic sampling params for maj@K (temperature > 0)."""
+    """Stochastic sampling params cho maj@K (temperature > 0)."""
     return SamplingParams(
         temperature=gen_cfg.get("temperature_maj", 0.7),
         top_p=gen_cfg.get("top_p_maj", 0.95),
@@ -150,6 +151,7 @@ def run_benchmark(
     elif benchmark == "amc23":
         result = module.evaluate(
             n_seeds_for_maj=bench_cfg.get("n_seeds_for_maj", 4),
+            sampling_params_maj=sampling_params_maj,   # Phase 9.1: fix maj@4=0 bug
             **common_kwargs,
         )
         out = _output_path(output_dir, run_id, benchmark, None)
@@ -187,7 +189,8 @@ def main() -> None:
     seed_everything(args.seed)
     cfg = load_config(args.config)
 
-    # E.g. results/grpo/qwen15b_en_42/checkpoint-500 -> "qwen15b_en_42"
+    # Derive run_id từ checkpoint path nếu không truyền explicit.
+    # E.g. results/grpo/qwen15b_en_42/checkpoint-500 → "qwen15b_en_42"
     run_id = args.run_id
     if run_id is None:
         ckpt = args.checkpoint
@@ -201,9 +204,16 @@ def main() -> None:
     vllm_cfg = cfg.get("vllm", {})
     gen_cfg = cfg.get("generation", {})
 
-    print(f"[runner] Loading vLLM model from {args.checkpoint}", file=sys.stderr)
+    eval_path = args.checkpoint
+    if (eval_path / "adapter_config.json").exists():
+        from src.trainers.checkpoint_utils import merge_lora_if_needed
+        print(f"[runner] LoRA adapter detected; merging before vLLM load", file=sys.stderr)
+        eval_path = merge_lora_if_needed(args.checkpoint)
+        print(f"[runner] Using merged weights at {eval_path}", file=sys.stderr)
+
+    print(f"[runner] Loading vLLM model from {eval_path}", file=sys.stderr)
     model = LLM(
-        model=str(args.checkpoint),
+        model=str(eval_path),
         dtype=vllm_cfg.get("dtype", "bfloat16"),
         gpu_memory_utilization=vllm_cfg.get("gpu_memory_utilization", 0.85),
         max_model_len=vllm_cfg.get("max_model_len", 4096),
@@ -215,7 +225,7 @@ def main() -> None:
     sampling_params = _build_sampling_params(SamplingParams, gen_cfg, args.seed)
     sampling_params_maj = _build_sampling_params_maj(SamplingParams, gen_cfg, args.seed)
 
-    tok = _try_load_tokenizer(args.checkpoint)
+    tok = _try_load_tokenizer(eval_path)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 

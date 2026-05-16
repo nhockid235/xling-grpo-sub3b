@@ -1,20 +1,22 @@
-"""Reward functions for GRPOTrainer.
+"""Reward functions cho GRPOTrainer.
 
-All reward functions follow the TRL 0.14+ signature:
+All reward functions follow TRL 0.14+ signature:
     def reward(prompts: list[str], completions: list[str], **kwargs) -> list[float]
 
-The returned list MUST have length == len(prompts). Returning a scalar / tensor /
-numpy array silently breaks reward aggregation in TRL.
+Return list MUST have length == len(prompts). Returning scalar / tensor / numpy
+silently breaks reward aggregation in TRL.
 
-The registry maps name -> callable; configs/grpo_*.yaml references rewards by name."""
+Registry maps name → callable. configs/grpo_*.yaml references rewards by name.
+"""
 
 from typing import Callable
 
+# Registry — populated when modules are imported. Phase 2 fills in implementations.
 REWARD_REGISTRY: dict[str, Callable] = {}
 
 
 def register(name: str):
-    """Decorator to register a reward callable under ``name``."""
+    """Decorator để add reward function vào registry."""
     def _wrap(fn: Callable) -> Callable:
         REWARD_REGISTRY[name] = fn
         return fn
@@ -22,7 +24,7 @@ def register(name: str):
 
 
 def get_reward(name: str) -> Callable:
-    """Look up a reward callable by name. Raises KeyError if not registered."""
+    """Lookup reward by name; raises KeyError nếu chưa registered."""
     if name not in REWARD_REGISTRY:
         raise KeyError(
             f"Reward '{name}' not registered. Available: {sorted(REWARD_REGISTRY)}"
@@ -30,6 +32,7 @@ def get_reward(name: str) -> Callable:
     return REWARD_REGISTRY[name]
 
 
-from src.rewards import correctness, format, length, tag, lang  # noqa: E402, F401
+# Import sub-modules để trigger @register decorators
+from src.rewards import correctness, format, length, tag, lang, bias_const  # noqa: E402, F401
 
 __all__ = ["REWARD_REGISTRY", "register", "get_reward"]

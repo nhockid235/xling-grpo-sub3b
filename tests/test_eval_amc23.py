@@ -164,6 +164,20 @@ def test_amc23_runner_dispatch_includes_amc23():
     assert _BENCHMARK_MODULES["amc23"] == "src.eval.amc23"
 
 
+def test_runner_passes_sampling_params_maj_to_amc23():
+    """Phase 9.1 fix: runner phải pass sampling_params_maj cho amc23 dispatch.
+    Bug trước đây: maj@4 luôn 0 vì sampling_params_maj=None → all 4 samples identical.
+    """
+    import inspect
+    from src.eval import runner as runner_module
+    src = inspect.getsource(runner_module.run_benchmark)
+    # Verify dispatch path cho amc23 mention sampling_params_maj
+    amc23_block = src[src.find('elif benchmark == "amc23"'):src.find("else:", src.find('elif benchmark == "amc23"'))]
+    assert "sampling_params_maj=sampling_params_maj" in amc23_block, (
+        "runner.py amc23 dispatch must pass sampling_params_maj to fix maj@N bug"
+    )
+
+
 def test_amc23_empty_dataset_returns_empty_result(mock_records):
     """Empty dataset -> schema-compliant empty result."""
     model = _MockLLM([])

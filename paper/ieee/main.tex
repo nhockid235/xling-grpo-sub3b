@@ -408,23 +408,35 @@ archived. Versioned dependencies: Python 3.12.3,
 
 \subsection{Training cells}
 A \emph{cell} is a single (arm, seed) pair yielding one LoRA adapter at
-step~50. The present manuscript reports a single seed (\texttt{seed=42}) per
-arm; a multi-seed extension with \texttt{seeds} $\in \{42,123,7\}$ is
-in progress and will be incorporated for the camera-ready (see
-Section~\ref{sec:limitations}).
+step~50. We report three random seeds (\texttt{42, 123, 7}) for each of
+the four arms (\armA{}, \armB{}, \armC{}, and the constant-bias ablation
+\armD{}). Each cell shares the same Open-RS Stage-1 hyperparameters
+($G{=}6$, $T{=}0.7$ for rollout, max\_completion 3584, learning rate
+$10^{-6}$, KL coefficient $\beta{=}0.04$, cosine LR with min\_lr\_rate
+0.1 and warmup 0.1, effective batch 96 prompts on $1\times$A100 with LoRA
+$r{=}16$); the only across-cell variations are the random seed and the
+arm-specific reward composition (\armA{}: $R_1{+}R_2$; \armB{}: $R_1{+}R_2$
+on the Vietnamese-translated dataset; \armC{}: $R_1{+}R_2{+}R_5$;
+\armD{}: $R_1{+}R_2{+}R_{\text{const}}$, $R_{\text{const}}{\equiv}1.0$).
 
 \subsection{Evaluation seeds}
 Pass@1 evaluations are deterministic at $T{=}0$. AIME-2024 maj@8 uses
 $T{=}0.7$, \texttt{top\_p}$=0.95$, with seeds $42,43,\ldots,49$ to draw the
-8 stochastic samples per problem.
+8 stochastic samples per problem. AMC-23 maj@4 uses the same stochastic
+sampling with seeds $42,43,44,45$ (the post-fix \texttt{maj@4} pipeline; see
+\S\ref{sec:limitations} ``\texttt{maj@4} bug found and fixed'').
 
 \subsection{Statistical reporting}
-Effect sizes are reported as point estimates from the single seed.
-We treat differences $\geq 5$\,pp as substantively meaningful in this
-regime; effect-size estimates from prior small-model GRPO
-literature~\cite{openRS_2025} suggest within-cell standard deviations of
-$\sim 3$--$5$\,pp on these benchmarks. Multi-seed bootstrap confidence
-intervals will be reported in the multi-seed extension.
+Per-arm point estimates are reported as mean $\pm$ standard deviation
+across the three seeds (Tables~\ref{tab:main_v2} and~\ref{tab:delta_v2}).
+For the headline AIME-2024 maj@8 comparisons, we additionally report
+$95\%$ subject-bootstrap confidence intervals over seed-level means
+($n{=}10{,}000$ resamples, fixed RNG seed): \armC{}$-\base{}$ has
+CI $[+3.3, +6.7]$ and \armC{}$-\armD{}$ has CI $[+1.13, +11.10]$, both
+excluding $0$ at the $5\%$ level. Bootstrap implementation is in
+\path{scripts/w110_bootstrap_ci.py} and \path{scripts/w21_verify_paper_claims.py};
+the verification script re-derives every numerical claim in the manuscript
+from the per-seed JSONs in \path{results/eval/}.
 
 %% =================== VI. RESULTS =====================================
 \section{Results}
@@ -444,11 +456,15 @@ Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
   \centering
   \includegraphics[width=0.92\textwidth]{figures/fig1_arm_means_with_ci.pdf}
   \caption{Three-arm GRPO comparison on three mathematical reasoning
-  benchmarks (single seed, \texttt{seed=42}). Bar height denotes pass@1
-  except for the rightmost panel which is maj@8. The red dashed line shows
-  the Open-RS RS2 reported value~\cite{openRS_2025}; the residual gap
-  between our base and Open-RS reported reflects evaluation-pipeline
-  differences discussed in Section~\ref{sec:limitations}.}
+  benchmarks. Bars show mean $\pm$ standard deviation across three random
+  seeds (\texttt{42, 123, 7}); rightmost panel is AIME-2024 maj@8, others
+  are pass@1. The red dashed line shows the Open-RS RS2 reported
+  value~\cite{openRS_2025} (\texttt{maj@k}); the apparent residual gap to
+  our \texttt{pass@1} dissolves under like-for-like \texttt{maj@4}
+  comparison on Open-RS's own released checkpoint
+  (Section~\ref{sec:limitations}, ``Evaluation pipeline gap''). Numerical
+  values are listed in Table~\ref{tab:main_v2}; a per-claim verification
+  log accompanies the released codebase.}
   \label{fig:arm_comparison}
 \end{figure*}
 
@@ -664,11 +680,16 @@ post-fix \texttt{maj@4} numbers are reported in Table~\ref{tab:main_v2}.
 DeepSeek-R1-Distill-Qwen-1.5B only. Generalization to Qwen2.5-Instruct or
 the 3\,B+ regime is untested in this manuscript.
 
-\textbf{Pending multilingual evaluation.} The full cross-lingual claim
-requires evaluations on MGSM and MSVAMP, currently in progress. The present
-manuscript focuses on English-language benchmark behaviour under the three
-training arms; the multilingual evaluation expansion is reported in a
-follow-on submission.
+\textbf{MGSM evaluation has limited seed coverage.} The 10-language
+MGSM evaluation (Table~\ref{tab:mgsm}) reports a single seed
+(\texttt{42}) for the untrained base and \armD{}, and the mean of two
+seeds (\texttt{123}, \texttt{7}) for \armA{}, \armB{}, \armC{} -- in
+contrast to the three-seed AMC-23/MATH-500/AIME-2024 suite. The
+$\pm 0.5$\,pp convergence observed across arms is within the range of
+single-run variance on multilingual benchmarks; a full three-seed MGSM
+evaluation is left to future work due to the additional $\approx 6$
+A100-hours required per run. MSVAMP evaluation is omitted in this
+manuscript and deferred to a follow-on submission.
 
 %% =================== IX. CONCLUSION ==================================
 \section{Conclusion}

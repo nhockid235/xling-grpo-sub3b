@@ -70,9 +70,12 @@ cloud infrastructure. Total wallclock for the three arms (50 steps each
 plus ckpt-50 evaluation on three benchmarks): 11 hours 39 minutes.
 
 \subsection{Random seeds}
-All training: \texttt{seed=42}. AIME-2024 maj@8 uses seeds 42--49 (8 stochastic
-samples per problem). The single-seed limitation is the most significant
-threat to validity; we plan a 3-seed extension (seeds 42, 123, 7) for camera-ready.
+Each cell (arm, seed) uses one of \texttt{seed} $\in \{42, 123, 7\}$ for
+GRPO training. AIME-2024 \texttt{maj@8} uses seeds 42--49 (8 stochastic
+samples per problem). AMC-23 \texttt{maj@4} uses seeds 42--45. Pass@1
+evaluations are deterministic ($T{=}0$) and seed-independent. The
+$\base$/\armD{} AMC-23 \texttt{pass@1} cells are single-seed
+(\texttt{42}); all other cells report three seeds.
 
 \subsection{Software versions}
 Python 3.12.3, \texttt{torch==2.5.1+cu124}, \texttt{transformers==4.49.0},
@@ -107,15 +110,17 @@ device.
 
 \subsection{Limitations not in main text}
 \begin{itemize}\itemsep0pt
-\item \texttt{maj@4} on AMC23 returns 0 across all conditions including base --- likely
-a sampling-seed handling bug in our majority-vote implementation; pass@1 numbers
-verified independent of this bug.
-\item Eval pipeline reports a $-12.9$ pp gap to Open-RS reported AMC23 base
-(50.0\% vs 62.9\%) and a $-23.4$ pp gap on MATH-500 (59.4\% vs 82.8\%) even with
-verbatim Open-RS \texttt{lighteval} prompt. Suspected causes: \texttt{Math-Verify}
-configuration differences between our adapter and Open-RS's parser config (boxed-match
-priority), or vLLM tokenizer edge cases. We report numbers vs our own base rather
-than vs Open-RS reported.
-\item AIME-2024 baseline is closer to Open-RS reported ($26.7$\% vs $28.8$\%, gap
-$-2.1$ pp), suggesting eval pipeline issues are problem-difficulty-dependent.
+\item \textbf{Evaluation gap to Open-RS at base.} Even with verbatim Open-RS
+\texttt{lighteval} prompt, our base \texttt{pass@1} differs from
+Open-RS-reported numbers by $-12.9$\,pp on AMC-23 (50.0\,\% vs 62.9\,\%) and
+$-23.4$\,pp on MATH-500 (59.4\,\% vs 82.8\,\%). The gap closes under
+like-for-like \texttt{maj@k} comparison
+(Section~\ref{sec:limitations}, ``Eval pipeline gap explained by metric
+mismatch''). Suspected residual causes: Math-Verify configuration differences
+between our adapter and Open-RS's parser (boxed-match priority), or vLLM
+tokenizer edge cases. We report numbers vs.\ our own base rather than vs.\
+Open-RS reported.
+\item \textbf{AIME-2024 baseline closer to Open-RS.} $26.7$\,\% vs $28.8$\,\%,
+gap $-2.1$\,pp --- suggesting evaluation pipeline issues are
+problem-difficulty-dependent.
 \end{itemize}

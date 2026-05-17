@@ -1,230 +1,158 @@
-% Bibliography for main.tex
+% =====================================================================
+% Bibliography for "Beyond English-Only GRPO" (main.tex and ieee/main.tex)
+% Single canonical entry per work; no duplicates.
+% =====================================================================
+
+%% ===== Datasets and benchmarks ==========================================
 
 @misc{amc23_dataset,
-  title = {{AMC-23}: 2023 American Mathematics Competition Problems},
-  author = {{AoPS Wiki contributors} and Knoveleng},
-  year = {2024},
-  howpublished = {Hugging Face Hub},
-  url = {https://huggingface.co/datasets/knoveleng/AMC-23},
-  note = {2023 AMC 12A and 12B, 40 problems}
-}
-
-@inproceedings{lightman2024verify,
-  title = {Let's Verify Step by Step},
-  author = {Lightman, Hunter and Kosaraju, Vineet and Burda, Yura and
-    Edwards, Harri and Baker, Bowen and Lee, Teddy and Leike, Jan and
-    Schulman, John and Sutskever, Ilya and Cobbe, Karl},
-  booktitle = {International Conference on Learning Representations (ICLR)},
-  year = {2024},
-  eprint = {2305.20050},
-  archivePrefix = {arXiv}
+  title         = {{AMC-23}: 2023 American Mathematics Competition Problems},
+  author        = {{AoPS Wiki contributors} and Knoveleng},
+  year          = {2024},
+  howpublished  = {Hugging Face Hub},
+  url           = {https://huggingface.co/datasets/knoveleng/AMC-23},
+  note          = {2023 AMC 12A and 12B, 40 problems}
 }
 
 @misc{aime2024_dataset,
-  title = {{AIME 2024} Problems},
-  author = {{Mathematical Association of America}},
-  year = {2024},
-  howpublished = {Hugging Face Hub},
-  url = {https://huggingface.co/datasets/Maxwell-Jia/AIME_2024},
-  note = {30 problems from AIME I + AIME II 2024}
+  title         = {{AIME 2024} Problems},
+  author        = {{Mathematical Association of America}},
+  year          = {2024},
+  howpublished  = {Hugging Face Hub},
+  url           = {https://huggingface.co/datasets/Maxwell-Jia/AIME_2024},
+  note          = {30 problems from AIME I + AIME II 2024}
 }
 
-
-@article{deepseekR1_2025,
-  title = {DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning},
-  author = {DeepSeek-AI},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2501.12948},
+@inproceedings{lightman2024verify,
+  title         = {Let's Verify Step by Step},
+  author        = {Lightman, Hunter and Kosaraju, Vineet and Burda, Yura and
+                   Edwards, Harri and Baker, Bowen and Lee, Teddy and
+                   Leike, Jan and Schulman, John and Sutskever, Ilya and
+                   Cobbe, Karl},
+  booktitle     = {International Conference on Learning Representations (ICLR)},
+  year          = {2024},
+  eprint        = {2305.20050},
   archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
+  primaryClass  = {cs.LG}
 }
 
-@article{deepseekmath_2024,
-  title = {DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models},
-  author = {Shao, Zhihong and others},
-  journal = {arXiv preprint},
-  year = {2024},
-  eprint = {2402.03300},
+@inproceedings{mgsm_2022,
+  title         = {Language Models are Multilingual Chain-of-Thought Reasoners},
+  author        = {Shi, Freda and Suzgun, Mirac and Freitag, Markus and
+                   Wang, Xuezhi and Srivats, Suraj and Vosoughi, Soroush and
+                   Chung, Hyung Won and Tay, Yi and Ruder, Sebastian and
+                   Zhou, Denny and Das, Dipanjan and Wei, Jason},
+  booktitle     = {International Conference on Learning Representations (ICLR)},
+  year          = {2023},
+  eprint        = {2210.03057},
   archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{openRS_2025,
-  title = {Reinforcement Learning for Reasoning in Small LLMs: What Works and What Doesn't},
-  author = {Dang, Quy-Anh and Ngo, Chris},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2503.16219},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.LG},
-  note = {AAAI 2026}
-}
-
-@article{park2025crosslingualcollapse,
-  title = {Cross-lingual Collapse: How Language-Centric Foundation Models
-           Shape Reasoning in Large Language Models},
-  author = {Park, Cheonbok and Kim, Jeonghoon and Lee, Joosung and
-             Bae, Sanghwan and Choo, Jaegul and Yoo, Kang Min},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2506.05850},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{zhang2025mthinker,
-  title = {Think Natively: Unlocking Multilingual Reasoning with
-           Consistency-Enhanced Reinforcement Learning},
-  author = {Zhang, Xue and Liang, Yunlong and Meng, Fandong and
-             Zhang, Songming and Huang, Kaiyu and Chen, Yufeng and
-             Xu, Jinan and Zhou, Jie},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2510.07300},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{mgsm_2022,
-  title = {Language Models are Multilingual Chain-of-Thought Reasoners},
-  author = {Shi, Freda and others},
-  journal = {arXiv preprint},
-  year = {2022},
-  eprint = {2210.03057},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{openmathinstruct2_2024,
-  title = {OpenMathInstruct-2},
-  author = {Toshniwal, Shubham and others},
-  journal = {arXiv preprint},
-  year = {2024},
-  eprint = {2410.01560},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{zhang2024lingualift,
-  title = {LinguaLIFT: An Effective Two-stage Instruction Tuning
-           Framework for Low-Resource Language Tasks},
-  author = {Zhang, Hongbin and Chen, Kehai and Bai, Xuefeng and
-             Xiang, Yang and Zhang, Min},
-  journal = {arXiv preprint},
-  year = {2024},
-  eprint = {2412.12499},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{yong2025crosslingualtesttime,
-  title = {Crosslingual Reasoning through Test-Time Scaling},
-  author = {Yong, Zheng-Xin and Adilazuarda, M. Farid and Mansurov, Jonibek
-             and Zhang, Ruochen and Muennighoff, Niklas and Eickhoff, Carsten
-             and Winata, Genta Indra and Kreutzer, Julia and Bach, Stephen H.
-             and Aji, Alham Fikri},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2505.05408},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CL}
-}
-
-@article{drgrpo_2025,
-  title = {Understanding {R1-Zero-Like} Training: A Critical Perspective},
-  author = {Liu, Zichen and others},
-  journal = {Conference on Language Modeling (COLM)},
-  year = {2025},
-  eprint = {2503.20783},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.LG},
-  note = {COLM 2025; introduces Dr.~GRPO variance-free variant}
-}
-
-@article{dapo_2025,
-  title = {{DAPO}: An Open-Source LLM Reinforcement Learning System at Scale},
-  author = {Yu, Qiying and others},
-  journal = {arXiv preprint},
-  year = {2025},
-  eprint = {2503.14476},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.LG}
+  primaryClass  = {cs.CL}
 }
 
 @misc{nuninamath_cot_2024,
-  title = {NuminaMath-CoT},
-  author = {AI-MO Team},
-  year = {2024},
-  url = {https://huggingface.co/datasets/AI-MO/NuminaMath-CoT},
-  note = {860K English math CoT corpus, Apache-2.0}
+  title         = {NuminaMath-CoT},
+  author        = {{AI-MO Team}},
+  year          = {2024},
+  url           = {https://huggingface.co/datasets/AI-MO/NuminaMath-CoT},
+  note          = {860K English math chain-of-thought corpus, Apache-2.0}
 }
 
 @misc{metamathqa_vi_2024,
-  title = {Vietnamese MetaMathQA-40K (Google-translated)},
-  author = {{5CD-AI}},
-  year = {2024},
-  url = {https://huggingface.co/datasets/5CD-AI/Vietnamese-meta-math-MetaMathQA-40K-gg-translated}
+  title         = {Vietnamese {MetaMathQA-40K} (Google-translated)},
+  author        = {{5CD-AI}},
+  year          = {2024},
+  url           = {https://huggingface.co/datasets/5CD-AI/Vietnamese-meta-math-MetaMathQA-40K-gg-translated},
+  note          = {Vietnamese translation of the MetaMathQA dataset}
 }
 
-@misc{trl_2025,
-  title = {TRL: Transformer Reinforcement Learning},
-  author = {{Hugging Face}},
-  year = {2025},
-  url = {https://github.com/huggingface/trl},
-  note = {GRPOTrainer first appeared in v0.14.0 (2025-01-29)}
+%% ===== GRPO and reasoning-RL methodology ===============================
+
+@article{deepseekR1_2025,
+  title         = {{DeepSeek-R1}: Incentivizing Reasoning Capability in {LLMs}
+                   via Reinforcement Learning},
+  author        = {{DeepSeek-AI} and Guo, Daya and Yang, Dejian and Zhang, Haowei
+                   and Song, Junxiao and Zhang, Ruoyu and Xu, Runxin and
+                   Zhu, Qihao and Ma, Shirong and others},
+  journal       = {arXiv preprint},
+  year          = {2025},
+  eprint        = {2501.12948},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
 }
 
-@misc{vllm_2024,
-  title = {vLLM: Easy, Fast, and Cheap LLM Serving},
-  author = {{vLLM Project}},
-  year = {2024},
-  url = {https://github.com/vllm-project/vllm}
+@article{deepseekmath_2024,
+  title         = {{DeepSeekMath}: Pushing the Limits of Mathematical Reasoning
+                   in Open Language Models},
+  author        = {Shao, Zhihong and Wang, Peiyi and Zhu, Qihao and Xu, Runxin
+                   and Song, Junxiao and Bi, Xiao and Zhang, Haowei and
+                   Zhang, Mingchuan and Li, Y.~K. and Wu, Y. and Guo, Daya},
+  journal       = {arXiv preprint},
+  year          = {2024},
+  eprint        = {2402.03300},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@article{openRS_2025,
+  title         = {Reinforcement Learning for Reasoning in Small {LLMs}:
+                   What Works and What Doesn't},
+  author        = {Dang, Quy-Anh and Ngo, Chris},
+  journal       = {arXiv preprint},
+  year          = {2025},
+  eprint        = {2503.16219},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  note          = {AAAI 2026}
+}
+
+@article{drgrpo_2025,
+  title         = {Understanding {R1-Zero-Like} Training: A Critical Perspective},
+  author        = {Liu, Zichen and Chen, Changyu and Li, Wenjun and Qi, Penghui
+                   and Pang, Tianyu and Du, Chao and Lee, Wee Sun and
+                   Lin, Min},
+  journal       = {Conference on Language Modeling (COLM)},
+  year          = {2025},
+  eprint        = {2503.20783},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  note          = {Introduces {Dr.~GRPO} variance-free variant.}
+}
+
+@article{dapo_2025,
+  title         = {{DAPO}: An Open-Source {LLM} Reinforcement Learning System
+                   at Scale},
+  author        = {Yu, Qiying and Zhang, Zheng and Zhu, Ruofei and Yuan, Yufeng
+                   and Zuo, Xiaochen and Yue, Yu and Fan, Tiantian and
+                   Liu, Gaohong and Liu, Lingjun and Liu, Xin and
+                   Lin, Haibin and others},
+  journal       = {arXiv preprint},
+  year          = {2025},
+  eprint        = {2503.14476},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
 }
 
 @article{sober_look_2025,
-  title = {A Sober Look at Progress in Language Model Reasoning: Pitfalls and Paths to Reproducibility},
-  author = {Hochlehnert, Andreas and Bhatnagar, Hardik and Udandarao, Vishaal and Albanie, Samuel and Prabhu, Ameya and Bethge, Matthias},
-  journal = {Conference on Language Modeling (COLM)},
-  year = {2025},
-  eprint = {2504.07086},
+  title         = {A Sober Look at Progress in Language Model Reasoning:
+                   Pitfalls and Paths to Reproducibility},
+  author        = {Hochlehnert, Andreas and Bhatnagar, Hardik and
+                   Udandarao, Vishaal and Albanie, Samuel and Prabhu, Ameya
+                   and Bethge, Matthias},
+  journal       = {Conference on Language Modeling (COLM)},
+  year          = {2025},
+  eprint        = {2504.07086},
   archivePrefix = {arXiv},
-  primaryClass = {cs.CL},
-  note = {COLM 2025; established the multi-seed methodology that this work applies}
+  primaryClass  = {cs.CL},
+  note          = {Established the multi-seed methodology this work applies.}
 }
 
-@article{zheng_intrinsic_2018,
-  title = {On Learning Intrinsic Rewards for Policy Gradient Methods},
-  author = {Zheng, Zeyu and Oh, Junhyuk and Singh, Satinder},
-  journal = {Advances in Neural Information Processing Systems (NeurIPS)},
-  year = {2018},
-  eprint = {1804.06459},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.LG},
-  note = {Constant-bias reward baselines in PPO; relevant prior art for our $\armD{}$ ablation}
-}
-
-@misc{dang_v1_preprint_2026,
-  title = {Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning (v1, preliminary single-seed version)},
-  author = {Dang, Vu},
-  year = {2026},
-  publisher = {Zenodo},
-  doi = {10.5281/zenodo.20061328},
-  url = {https://doi.org/10.5281/zenodo.20061328},
-  note = {Preliminary single-seed preprint; superseded by present multi-seed work.}
-}
-
-% ===== Aliases for short cite keys used in main.tex =====
-% These entries duplicate the canonical entries above to provide stable
-% short-form cite keys (e.g., \cite{xlingual_collapse_2025}) used in the
-% manuscript text. Keeping both forms avoids text rewrites when the IEEE
-% bibliography style demands the long-form authoryear keys.
+%% ===== Cross-lingual reasoning =========================================
 
 @article{xlingual_collapse_2025,
-  title  = {Cross-lingual Collapse: How Language-Centric Foundation Models
-            Shape Reasoning in Large Language Models},
-  author = {Park, Cheonbok and Kim, Jeonghoon and Lee, Joosung and
-            Bae, Sanghwan and Choo, Jaegul and Yoo, Kang Min},
+  title         = {Cross-lingual Collapse: How Language-Centric Foundation Models
+                   Shape Reasoning in Large Language Models},
+  author        = {Park, Cheonbok and Kim, Jeonghoon and Lee, Joosung and
+                   Bae, Sanghwan and Choo, Jaegul and Yoo, Kang Min},
   journal       = {arXiv preprint},
   year          = {2025},
   eprint        = {2506.05850},
@@ -233,11 +161,11 @@
 }
 
 @article{mthinker_2025,
-  title  = {Think Natively: Unlocking Multilingual Reasoning with
-            Consistency-Enhanced Reinforcement Learning},
-  author = {Zhang, Xue and Liang, Yunlong and Meng, Fandong and
-            Zhang, Songming and Huang, Kaiyu and Chen, Yufeng and
-            Xu, Jinan and Zhou, Jie},
+  title         = {Think Natively: Unlocking Multilingual Reasoning with
+                   Consistency-Enhanced Reinforcement Learning},
+  author        = {Zhang, Xue and Liang, Yunlong and Meng, Fandong and
+                   Zhang, Songming and Huang, Kaiyu and Chen, Yufeng and
+                   Xu, Jinan and Zhou, Jie},
   journal       = {arXiv preprint},
   year          = {2025},
   eprint        = {2510.07300},
@@ -246,10 +174,10 @@
 }
 
 @article{lingualift_2024,
-  title  = {LinguaLIFT: An Effective Two-stage Instruction Tuning
-            Framework for Low-Resource Language Tasks},
-  author = {Zhang, Hongbin and Chen, Kehai and Bai, Xuefeng and
-            Xiang, Yang and Zhang, Min},
+  title         = {{LinguaLIFT}: An Effective Two-stage Instruction Tuning
+                   Framework for Low-Resource Language Tasks},
+  author        = {Zhang, Hongbin and Chen, Kehai and Bai, Xuefeng and
+                   Xiang, Yang and Zhang, Min},
   journal       = {arXiv preprint},
   year          = {2024},
   eprint        = {2412.12499},
@@ -258,14 +186,177 @@
 }
 
 @article{xreasoning_test_time_2025,
-  title  = {Crosslingual Reasoning through Test-Time Scaling},
-  author = {Yong, Zheng-Xin and Adilazuarda, M. Farid and Mansurov, Jonibek
-            and Zhang, Ruochen and Muennighoff, Niklas and Eickhoff, Carsten
-            and Winata, Genta Indra and Kreutzer, Julia and
-            Bach, Stephen H. and Aji, Alham Fikri},
+  title         = {Crosslingual Reasoning through Test-Time Scaling},
+  author        = {Yong, Zheng-Xin and Adilazuarda, M. Farid and
+                   Mansurov, Jonibek and Zhang, Ruochen and
+                   Muennighoff, Niklas and Eickhoff, Carsten and
+                   Winata, Genta Indra and Kreutzer, Julia and
+                   Bach, Stephen H. and Aji, Alham Fikri},
   journal       = {arXiv preprint},
   year          = {2025},
   eprint        = {2505.05408},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CL}
+}
+
+@article{openmathinstruct2_2024,
+  title         = {{OpenMathInstruct-2}: Accelerating {AI} for Math with
+                   Massive Open-Source Instruction Data},
+  author        = {Toshniwal, Shubham and Du, Wei and Moshkov, Ivan and
+                   Kisacanin, Branislav and Ayrapetyan, Alexan and
+                   Gitman, Igor},
+  journal       = {arXiv preprint},
+  year          = {2024},
+  eprint        = {2410.01560},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@article{mathoctopus_2024,
+  title         = {{MathOctopus}: Building Open-Source Mathematical Reasoning
+                   Models for Multilingual Reasoning},
+  author        = {Chen, Nuo and Zheng, Zinan and Wu, Ning and Gong, Ming and
+                   Song, Yangqiu and Zhang, Dongmei and Li, Jia},
+  journal       = {arXiv preprint},
+  year          = {2024},
+  eprint        = {2310.20246},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@article{mapo_2024,
+  title         = {{MAPO}: Advancing Multilingual Reasoning through Multilingual
+                   Alignment-as-Preference Optimization},
+  author        = {She, Shuaijie and Zou, Wei and Huang, Shujian and
+                   Zhu, Wenhao and Liu, Xiang and Geng, Xiang and
+                   Chen, Jiajun},
+  journal       = {arXiv preprint},
+  year          = {2024},
+  eprint        = {2401.06838},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+%% ===== RL fundamentals and reward shaping ==============================
+
+@article{schulman2017ppo,
+  title         = {Proximal Policy Optimization Algorithms},
+  author        = {Schulman, John and Wolski, Filip and Dhariwal, Prafulla and
+                   Radford, Alec and Klimov, Oleg},
+  journal       = {arXiv preprint},
+  year          = {2017},
+  eprint        = {1707.06347},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
+}
+
+@inproceedings{ng1999policy,
+  title         = {Policy Invariance Under Reward Transformations:
+                   Theory and Application to Reward Shaping},
+  author        = {Ng, Andrew Y. and Harada, Daishi and Russell, Stuart},
+  booktitle     = {International Conference on Machine Learning (ICML)},
+  year          = {1999},
+  pages         = {278--287}
+}
+
+@inproceedings{skalse2022rewardhacking,
+  title         = {Defining and Characterizing Reward Hacking},
+  author        = {Skalse, Joar and Howe, Nikolaus H.~R. and Krasheninnikov, Dmitrii
+                   and Krueger, David},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year          = {2022},
+  eprint        = {2209.13085},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
+}
+
+@inproceedings{zheng_intrinsic_2018,
+  title         = {On Learning Intrinsic Rewards for Policy Gradient Methods},
+  author        = {Zheng, Zeyu and Oh, Junhyuk and Singh, Satinder},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year          = {2018},
+  eprint        = {1804.06459},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  note          = {Constant-bias reward baselines in policy gradients;
+                   prior art relevant to our \armD{} ablation.}
+}
+
+%% ===== LoRA and training infrastructure ================================
+
+@inproceedings{hu2022lora,
+  title         = {{LoRA}: Low-Rank Adaptation of Large Language Models},
+  author        = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and
+                   Allen-Zhu, Zeyuan and Li, Yuanzhi and Wang, Shean and
+                   Wang, Lu and Chen, Weizhu},
+  booktitle     = {International Conference on Learning Representations (ICLR)},
+  year          = {2022},
+  eprint        = {2106.09685},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL}
+}
+
+@misc{trl_2025,
+  title         = {{TRL}: Transformer Reinforcement Learning},
+  author        = {von Werra, Leandro and Belkada, Younes and
+                   Tunstall, Lewis and Beeching, Edward and Thrush, Tristan
+                   and Lambert, Nathan and Huang, Shengyi and Rasul, Kashif
+                   and Gallouedec, Quentin},
+  year          = {2020},
+  howpublished  = {GitHub},
+  url           = {https://github.com/huggingface/trl},
+  note          = {\texttt{GRPOTrainer} first appeared in v0.14.0
+                   (January 2025); we use v0.15.2.}
+}
+
+@inproceedings{kwon2023vllm,
+  title         = {Efficient Memory Management for Large Language Model Serving
+                   with {PagedAttention}},
+  author        = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and
+                   Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and
+                   Gonzalez, Joseph E. and Zhang, Hao and Stoica, Ion},
+  booktitle     = {ACM Symposium on Operating Systems Principles (SOSP)},
+  year          = {2023},
+  eprint        = {2309.06180},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG}
+}
+
+@misc{mathverify_2024,
+  title         = {Math-Verify: A Robust Symbolic Equivalence Checker for
+                   Mathematical Reasoning},
+  author        = {{Hugging Face}},
+  year          = {2024},
+  howpublished  = {GitHub},
+  url           = {https://github.com/huggingface/Math-Verify},
+  note          = {Used as the verifier underlying $R_1$.}
+}
+
+@inproceedings{joulin2017fasttext,
+  title         = {Bag of Tricks for Efficient Text Classification},
+  author        = {Joulin, Armand and Grave, Edouard and Bojanowski, Piotr
+                   and Mikolov, Tomas},
+  booktitle     = {Conference of the European Chapter of the Association for
+                   Computational Linguistics (EACL)},
+  year          = {2017},
+  eprint        = {1607.01759},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  note          = {Underlies the \texttt{lid.176.bin} language identifier
+                   used by $R_5$.}
+}
+
+%% ===== Earlier preprint (self-cite, optional) ===========================
+
+@misc{dang_v1_preprint_2026,
+  title         = {Beyond English-Only {GRPO}: Training Language and Auxiliary
+                   Reward as Implicit Regularizers in Sub-3{B} Math Reasoning
+                   (v1, single-seed preliminary version)},
+  author        = {Dang, Vu},
+  year          = {2026},
+  publisher     = {Zenodo},
+  doi           = {10.5281/zenodo.20061328},
+  url           = {https://doi.org/10.5281/zenodo.20061328},
+  note          = {Preliminary single-seed preprint; superseded by the
+                   present multi-seed work.}
 }

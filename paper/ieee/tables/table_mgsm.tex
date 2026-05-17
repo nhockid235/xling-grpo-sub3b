@@ -1,16 +1,18 @@
 \begin{table*}[t]
 \centering\small
-\caption{MGSM multilingual evaluation (pass@1, 250 problems per language). Mean across seeds.}
+\caption{MGSM multilingual evaluation (\texttt{pass@1}, 250 problems per
+language). The \base{} and \armD{} rows are single-seed (\texttt{42});
+\armA{}, \armB{}, \armC{} are the mean of two seeds (\texttt{123, 7}).}
 \label{tab:mgsm}
 \begin{tabular}{lccccccccccc}
 \toprule
 Arm & \textsc{en} & \textsc{es} & \textsc{fr} & \textsc{de} & \textsc{ru} & \textsc{zh} & \textsc{ja} & \textsc{th} & \textsc{sw} & \textsc{bn} & Mean \\
 \midrule
-\textsc{Base} & 80.4 & 65.6 & 61.2 & 57.2 & 58.8 & 68.8 & 37.2 & 23.6 & 2.4 & 18.0 & 47.3 \\
-\textsc{A1} & 80.6 & 63.6 & 62.4 & 56.2 & 59.2 & 67.6 & 36.8 & 23.4 & 2.2 & 20.4 & 47.2 \\
-\textsc{A2} & 80.2 & 66.4 & 61.0 & 54.4 & 59.4 & 68.0 & 36.4 & 22.4 & 2.2 & 18.8 & 46.9 \\
-\textsc{A3} & 81.0 & 64.0 & 60.2 & 56.0 & 56.4 & 69.0 & 35.2 & 24.0 & 3.0 & 19.0 & 46.8 \\
-\textsc{A4} & 82.4 & 64.8 & 64.4 & 55.6 & 58.8 & 68.8 & 34.8 & 23.6 & 3.2 & 18.4 & 47.5 \\
+\base{} & 80.4 & 65.6 & 61.2 & 57.2 & 58.8 & 68.8 & 37.2 & 23.6 & 2.4 & 18.0 & 47.3 \\
+\armA{} & 80.6 & 63.6 & 62.4 & 56.2 & 59.2 & 67.6 & 36.8 & 23.4 & 2.2 & 20.4 & 47.2 \\
+\armB{} & 80.2 & 66.4 & 61.0 & 54.4 & 59.4 & 68.0 & 36.4 & 22.4 & 2.2 & 18.8 & 46.9 \\
+\armC{} & 81.0 & 64.0 & 60.2 & 56.0 & 56.4 & 69.0 & 35.2 & 24.0 & 3.0 & 19.0 & 46.8 \\
+\armD{} & 82.4 & 64.8 & 64.4 & 55.6 & 58.8 & 68.8 & 34.8 & 23.6 & 3.2 & 18.4 & 47.5 \\
 \bottomrule
 \end{tabular}
 \end{table*}

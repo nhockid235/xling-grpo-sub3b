@@ -16,10 +16,6 @@ Code, configs, and checkpoints for the paper:
 > Zenodo: [doi:10.5281/zenodo.20061328](https://doi.org/10.5281/zenodo.20061328)
 > · PDF: [paper/main.pdf](paper/main.pdf)
 
-**v2 (May 2026):** Multi-seed extension with A4 constant-bias ablation
-(3 seeds) and 10-language MGSM evaluation. The v1 single-seed findings
-have been weakened or refuted; this document reflects v2.
-
 We compare four GRPO post-training arms at sub-3B scale on a single
 A100 + LoRA constraint, across three random seeds per arm.
 
@@ -87,7 +83,6 @@ xling-grpo-sub3b/
 ├── README.md           — this file
 ├── LICENSE             — Apache-2.0
 ├── CITATION.cff        — citation metadata
-├── CHANGELOG.md        — version history
 ├── CONTRIBUTING.md     — contribution guidelines
 ├── VERIFICATION.md     — per-component data audit trail
 ├── pyproject.toml      — Python deps (pinned versions)
@@ -97,11 +92,10 @@ xling-grpo-sub3b/
 ├── data/               — dataset prep, decontamination scripts
 ├── docs/               — project docs (paper checklist, pipeline, submission guide)
 ├── paper/              — LaTeX source, figures, tables, compiled PDFs
-│   ├── main.tex/.pdf   — primary manuscript (v2)
-│   ├── ieee/           — IEEE Access submission version (v2)
-│   ├── archive/        — v1 Phase 8 PDF (historical)
-│   ├── tables/         — auto-generated LaTeX tables
-│   └── figures/        — multi-seed figures (PDF)
+│   ├── main.tex/.pdf   — primary manuscript (ACL/arXiv style)
+│   ├── ieee/           — IEEE Access submission rendering of the same paper
+│   ├── tables/         — LaTeX tables
+│   └── figures/        — figures (PDF)
 ├── reports/            — internal development notes (gitignored)
 ├── results/            — eval JSONs (in git) + LoRA adapters (local only)
 ├── scripts/            — training + eval + integrity pipeline scripts

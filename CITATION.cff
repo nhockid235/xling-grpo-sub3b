@@ -1,29 +1,29 @@
 cff-version: 1.2.0
 message: "If you use this code or paper, please cite it as below."
-title: "Beyond English-Only GRPO: A Multi-Seed Empirical Study at Sub-3B Scale"
-version: "2.0"
+title: "Beyond English-Only GRPO: Training Language and Auxiliary Reward as Implicit Regularizers in Sub-3B Math Reasoning"
 type: software
 authors:
   - family-names: "Dang"
     given-names: "Vu"
     email: "vu.dh4494@gmail.com"
     affiliation: "Independent Researcher"
-date-released: "2026-05-11"
+    orcid: "https://orcid.org/0009-0005-2344-1030"
+date-released: "2026-05-18"
 license: Apache-2.0
 repository-code: "https://github.com/vudang4494/xling-grpo-sub3b"
 abstract: >-
-  Multi-seed empirical study (v2) of GRPO post-training at sub-3B scale on a
+  Multi-seed empirical study of GRPO post-training at sub-3B scale on a
   single-GPU LoRA constraint. Compares four arms across three random seeds on
   AMC-23, MATH-500, AIME-2024, and 10-language MGSM. Three orthogonal findings:
   (i) the language-consistency reward arm (A3) achieves the highest mean AIME
   maj@8 with +4.4pp over base, robust across seeds; (ii) vanilla English GRPO
   exhibits sigma=11.3pp seed variance on AMC-23, confirming single-seed claims
   unreliable at this scale; (iii) all training arms ≈ base on 10-language MGSM,
-  indicating no cross-lingual transfer. A4 constant-bias ablation partially
-  refutes a pure reward-magnitude mechanism interpretation. Source code and
-  manuscript prepared with AI assistance (Anthropic Claude via Claude Code
-  CLI); all empirical results independently verified. See README and
-  VERIFICATION.md for full AI-assistance disclosure.
+  indicating no cross-lingual transfer. A constant-bias ablation (A4) refutes
+  a pure reward-magnitude mechanism interpretation (CI [+1.13,+11.10] excludes
+  0 on AIME maj@8). Source code and manuscript prepared with AI assistance
+  (Anthropic Claude via Claude Code CLI); all empirical results independently
+  verified. See README and VERIFICATION.md for full AI-assistance disclosure.
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20061328"

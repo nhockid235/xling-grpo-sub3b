@@ -451,7 +451,7 @@ sampling with seeds $42,43,44,45$ (the post-fix \texttt{maj@4} pipeline; see
 
 \subsection{Statistical reporting}
 Per-arm point estimates are reported as mean $\pm$ standard deviation
-across the three seeds (Tables~\ref{tab:main_v2} and~\ref{tab:delta_v2}).
+across the three seeds (Tables~\ref{tab:main} and~\ref{tab:delta}).
 For the headline AIME-2024 maj@8 comparisons, we additionally report
 $95\%$ subject-bootstrap confidence intervals over seed-level means
 ($n{=}10{,}000$ resamples, fixed RNG seed): \armC{}$-\base{}$ has
@@ -466,13 +466,13 @@ from the per-seed JSONs in \path{results/eval/}.
 \label{sec:results}
 
 \subsection{Three-arm pass@1 across math benchmarks}
-Table~\ref{tab:main_v2} reports pass@1 on the three benchmarks
+Table~\ref{tab:main} reports pass@1 on the three benchmarks
 for the untrained base, our three trained arms, and the Open-RS RS2 reported
 numbers as an upper bound at the larger 4$\times$A40 budget.
 Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
 
-\input{tables/table_main_v2}
-\input{tables/table_delta_v2}
+\input{tables/table_main}
+\input{tables/table_delta}
 \input{tables/table_mgsm}
 
 \begin{figure*}[t]
@@ -486,7 +486,7 @@ Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
   our \texttt{pass@1} dissolves under like-for-like \texttt{maj@4}
   comparison on Open-RS's own released checkpoint
   (Section~\ref{sec:limitations}, ``Evaluation pipeline gap''). Numerical
-  values are listed in Table~\ref{tab:main_v2}; a per-claim verification
+  values are listed in Table~\ref{tab:main}; a per-claim verification
   log accompanies the released codebase.}
   \label{fig:arm_comparison}
 \end{figure*}
@@ -495,7 +495,7 @@ Figure~\ref{fig:arm_comparison} visualizes the differences relative to base.
 \label{sec:finding1}
 Averaged over three seeds, \armA{} gains $+6.7 \pm 11.3$\,pp on AMC-23 and
 loses $-12.2 \pm 7.7$\,pp on AIME-2024 \texttt{pass@1} relative to the
-untrained base (Table~\ref{tab:delta_v2}). The AMC-23 lift is not
+untrained base (Table~\ref{tab:delta}). The AMC-23 lift is not
 statistically distinguishable from zero given the variance, but the
 AIME-2024 \texttt{pass@1} degradation is robust: $3/3$ seeds fall below
 base. AIME-2024 \texttt{maj@8} (which averages over eight stochastic
@@ -724,8 +724,8 @@ The original $12.9$\,pp gap was a metric-mismatch artifact, not a pipeline bug.
 (i)~\texttt{eval.yaml} omitted a \texttt{temperature\_maj} field, causing
 all four maj samples to be deterministic and identical;
 (ii)~\texttt{extract\_prediction()} did not strip whitespace, causing valid
-answers to fail string-matching. Both fixes are in the v2 commit; the
-post-fix \texttt{maj@4} numbers are reported in Table~\ref{tab:main_v2}.
+answers to fail string-matching. Both fixes are in the current codebase;
+the post-fix \texttt{maj@4} numbers are reported in Table~\ref{tab:main}.
 
 \textbf{Single base model and scale.} Results are on
 DeepSeek-R1-Distill-Qwen-1.5B only. Generalization to Qwen2.5-Instruct or

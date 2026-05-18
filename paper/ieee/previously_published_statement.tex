@@ -9,118 +9,86 @@
 \begin{document}
 
 \begin{center}
-\Large\textbf{Statement on Prior Publication and Differences}
+\Large\textbf{Statement on Prior Publication}
 \end{center}
 
 \vspace{1em}
 
-\noindent\textbf{Present submission:} Beyond English-Only GRPO: A
-Multi-Seed Empirical Study at Sub-3B Scale
+\noindent\textbf{Submitted manuscript:} Beyond English-Only GRPO:
+Training Language and Auxiliary Reward as Implicit Regularizers in
+Sub-3B Mathematical Reasoning
 
-\noindent\textbf{Author:} Vu Dang (Independent Researcher, Vietnam)
-
-\noindent\textbf{Date:} 11 May 2026
+\noindent\textbf{Author:} Vu Dang (Independent Researcher, Vietnam;
+ORCID: \href{https://orcid.org/0009-0005-2344-1030}{0009-0005-2344-1030})
 
 \vspace{1em}\hrule\vspace{1em}
 
-\subsection*{Prior publication disclosed}
+\subsection*{Prior preprint disclosed}
 
-A preliminary single-seed version of this work (referred to as
-\textit{v1}) was self-archived as a preprint on Zenodo on 7 May 2026.
-The preprint has not undergone peer review.
-
-\medskip
-
-\noindent\textbf{Citation of v1:}
-
-\begin{quote}
-Vu Dang. ``Beyond English-Only GRPO: Training Language and Auxiliary
-Reward as Implicit Regularizers in Sub-3B Math Reasoning,'' Zenodo,
-7~May 2026. DOI: \href{https://doi.org/10.5281/zenodo.20061328}%
-{10.5281/zenodo.20061328}.
-\end{quote}
+A preliminary single-seed snapshot of this work was self-archived on
+Zenodo on 7~May~2026 (DOI:
+\href{https://doi.org/10.5281/zenodo.20061328}%
+{10.5281/zenodo.20061328}). The preprint has not undergone peer review.
+The Zenodo deposit will be updated to a new version pointing to the
+present manuscript so that the deposit and submission remain in sync.
 
 The accompanying open-source software repository
 (\href{https://github.com/vudang4494/xling-grpo-sub3b}%
-{github.com/vudang4494/xling-grpo-sub3b}, Apache-2.0) is shared
-between the v1 preprint and the present submission; the repository
-contains code, configurations, model checkpoints, and evaluation JSONs
-for both versions.
+{github.com/vudang4494/xling-grpo-sub3b}, Apache-2.0) is shared between
+the original Zenodo deposit and the present submission; the repository
+contains code, configurations, model checkpoints, and evaluation
+JSONs for the manuscript as submitted.
 
 \vspace{1em}
 
-\subsection*{How the present submission (v2) differs from v1}
+\subsection*{Extensions over the original Zenodo deposit}
 
-The submitted manuscript substantially extends the v1 preprint with new
-experimental content, methodological additions, and revised conclusions.
-The principal differences are:
+The submitted manuscript extends the original deposit with the
+following new experimental content, methodological additions, and
+revised conclusions:
 
 \begin{enumerate}[itemsep=4pt]
 
-\item \textbf{Multi-seed verification (new experiments).}
-v1 reported single-seed results (\texttt{seed=42}) for three training
-arms. The present submission expands to three random seeds
-(\texttt{seed} $\in \{42, 123, 7\}$) per arm. This reveals that v1's
-key claims (e.g., $+7.5$\,pp lift on AMC-23, $+13.3$\,pp recovery on
-AIME-2024 via $R_5$) fall within seed variance ($\sigma = 11.3$\,pp
-on AMC-23) and require revision. The v2 manuscript reports multi-seed
-mean$\,\pm\,$standard deviation and bootstrap 95\,\% confidence
-intervals for every quantitative claim.
+\item \textbf{Multi-seed verification.}
+The original deposit reported single-seed results (\texttt{seed=42})
+for three training arms. The submitted manuscript expands to three
+random seeds (\texttt{seed} $\in \{42, 123, 7\}$) per arm. This
+reveals that the original single-seed claims (e.g., $+7.5$\,pp lift
+on AMC-23, $+13.3$\,pp recovery on AIME-2024 via $R_5$) fall within
+seed variance ($\sigma = 11.3$\,pp on AMC-23) and have been replaced
+with multi-seed mean$\,\pm\,$standard deviation and bootstrap
+$95\,\%$ confidence intervals for every quantitative claim.
 
 \item \textbf{Mechanism ablation (new arm).}
-v2 adds Arm A4 (constant-bias reward $R_{\text{const}}=1.0$, single
-seed) to test the reward-magnitude mechanism hypothesis proposed in v1.
-The ablation partially refutes a pure reward-magnitude explanation of
-the $R_5$ effect on AIME-2024 maj@8: A4 reverts to base level
-($33.3$\,\%) while A3 with the actual $R_5$ reward achieves
-$37.8 \pm 1.9$\,\%. This negative result is new in v2 and is reported
-honestly as the mechanism remaining an open question.
+The submitted manuscript adds Arm A4 (constant-bias reward
+$R_{\text{const}}=1.0$, three seeds) to test the reward-magnitude
+mechanism hypothesis. The ablation refutes a pure reward-magnitude
+explanation of the $R_5$ effect on AIME-2024 \texttt{maj@8}:
+$\armC{}-\armD{} = +5.58$\,pp, $95\,\%$ bootstrap CI
+$[+1.13, +11.10]$, excluding $0$.
 
 \item \textbf{Multilingual evaluation (new benchmark).}
-v2 adds a 10-language MGSM evaluation across all training arms plus the
-untrained base, comprising 80 new evaluation JSONs (8 conditions
-$\times$ 10 languages). The result is a negative finding: all training
-conditions converge to within $\pm 0.5$\,pp of the untrained base mean,
-indicating that training-language choice does \emph{not} produce
-cross-lingual transfer at this scale. v1 did not include any MGSM
-evaluation.
+The submitted manuscript adds a 10-language MGSM evaluation across all
+training arms plus the untrained base, comprising 80 new evaluation
+JSONs (8 conditions $\times$ 10 languages). The result is a negative
+finding: all training conditions converge to within $\pm 0.5$\,pp of
+the untrained base mean.
 
-\item \textbf{Reproducibility infrastructure (new methodology).}
-v2 introduces (a)~a SHA256-checksummed manifest covering all 124+
-training and evaluation artifacts, (b)~bootstrap 95\,\% confidence
-intervals for all numerical claims, (c)~a 13-section reproducibility
-audit checklist, and (d)~a per-component verification document
-(\texttt{VERIFICATION.md}). v1 reported numbers without these
-verification guarantees.
+\item \textbf{Reproducibility infrastructure.}
+The submitted manuscript adds (a)~a SHA256-checksummed manifest
+covering all training and evaluation artifacts, (b)~bootstrap
+$95\,\%$ confidence intervals for all numerical claims, and (c)~a
+per-component verification document (\texttt{VERIFICATION.md}).
 
-\item \textbf{Reframed contributions (revised narrative).}
-v1 framed the work as a positive ``cross-lingual breakthrough'' with
-auxiliary reward as a regularization mechanism. v2 reframes around
-three orthogonal findings: (i) positive --- A3 best on AIME-2024 maj@8;
+\item \textbf{Reframed contributions.}
+The submitted manuscript reframes around three orthogonal findings:
+(i) positive --- A3 best on AIME-2024 \texttt{maj@8};
 (ii) methodological --- multi-seed instability of vanilla EN GRPO;
 (iii) negative --- no cross-lingual transfer on MGSM. The mechanism
 hypothesis is presented as an open question rather than a confirmed
 claim.
 
-\item \textbf{Compute-cost transparency.}
-v1 contained references to specific monetary compute amounts (e.g.,
-``\$20 single-GPU LoRA budget''). v2 removes all such references for
-neutrality, describing hardware in physical terms only
-(``one NVIDIA A100 80\,GB GPU'').
-
 \end{enumerate}
-
-\vspace{1em}
-
-\subsection*{Status of v1}
-
-The v1 Zenodo preprint remains publicly accessible at its original DOI
-and is cited within the v2 manuscript as
-\texttt{[dang\_v1\_preprint\_2026]}. All v1 single-seed numbers are
-explicitly marked as superseded by the multi-seed results in v2. The
-author intends to upload the v2 manuscript as a new version of the
-existing Zenodo DOI upon acceptance, with the v1 version remaining
-visible for historical reference.
 
 \vspace{1em}
 
@@ -139,6 +107,6 @@ related publications or preprints by the author covering this work.
 
 \noindent Vu Dang \\
 \href{mailto:vu.dh4494@gmail.com}{vu.dh4494@gmail.com} \\
-11 May 2026
+ORCID: \href{https://orcid.org/0009-0005-2344-1030}{0009-0005-2344-1030}
 
 \end{document}

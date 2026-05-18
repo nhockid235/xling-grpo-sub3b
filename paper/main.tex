@@ -144,8 +144,7 @@ The behaviour of GRPO when either assumption is perturbed has received
 limited systematic attention at the sub-3\,B scale most relevant to
 deployed systems and to independent researchers on commodity cloud
 budgets. This paper supplies a multi-seed controlled study at that
-scale, building on a single-seed preliminary
-preprint~\cite{dang_v1_preprint_2026}.
+scale.
 
 \boxedclaim{%
 \textbf{Main claim.} Multi-seed evaluation reveals three orthogonal
@@ -399,16 +398,16 @@ MGSM~\cite{mgsm_2022} (250 problems each in 10 languages,
 
 \subsection{Multi-seed English benchmarks}
 \label{sec:multiseed_en}
-Table~\ref{tab:main_v2} reports mean $\pm$ standard deviation across
+Table~\ref{tab:main} reports mean $\pm$ standard deviation across
 three random seeds (\texttt{42, 123, 7}) for each arm, plus the
-untrained base. Table~\ref{tab:delta_v2} reports the effect $\Delta$
+untrained base. Table~\ref{tab:delta} reports the effect $\Delta$
 relative to base. Figures~\ref{fig:arm_means}, \ref{fig:variance_ratios},
 and~\ref{fig:aime_focus} visualize means with confidence intervals,
 seed variances, and the AIME-2024 per-seed breakdown.
 
-\input{tables/table_main_v2}
+\input{tables/table_main}
 
-\input{tables/table_delta_v2}
+\input{tables/table_delta}
 
 \begin{figure*}[t]
   \centering
@@ -444,7 +443,7 @@ seed variances, and the AIME-2024 per-seed breakdown.
 \label{sec:finding1}
 Averaged over three seeds, \armA{} gains $+6.7 \pm 11.3$\,pp on AMC-23
 and loses $-12.2 \pm 7.7$\,pp on AIME-2024 \texttt{pass@1} relative to
-base (Table~\ref{tab:delta_v2}). The AMC-23 lift is not statistically
+base (Table~\ref{tab:delta}). The AMC-23 lift is not statistically
 distinguishable from zero given the variance, but the AIME-2024
 degradation is robust: $3/3$ seeds fall below base. AIME-2024
 \texttt{maj@8} (averaged over eight stochastic samples) shows a smaller
@@ -638,8 +637,8 @@ by two bugs: (i)~\texttt{eval.yaml} omitted a \texttt{temperature\_maj}
 field, causing all four majority samples to be deterministic and
 identical; and (ii)~\texttt{extract\_prediction()} did not strip
 whitespace, causing valid answers to fail string matching. Both fixes
-are in the v2 commit; the post-fix \texttt{maj@4} numbers appear in
-Table~\ref{tab:main_v2}.
+are in the current codebase; the post-fix \texttt{maj@4} numbers appear
+in Table~\ref{tab:main}.
 
 \paragraph{Single base model and scale.}
 All experiments use
